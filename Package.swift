@@ -9,10 +9,11 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "FeatureFlag",
-            targets: ["FeatureFlag"]),
+            targets: ["FeatureFlag"]
+        ),
     ],
     dependencies: [
-       .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .exact("0.50500.0")),
+        .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .exact("0.50500.0")),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -22,10 +23,12 @@ let package = Package(
         .target(
             name: "FeatureFlag",
             dependencies: [
-               "SwiftSyntax",
-            ]),
+                "SwiftSyntax",
+            ]
+        ),
         .testTarget(
             name: "FeatureFlagTests",
-            dependencies: ["FeatureFlag"]),
+            dependencies: ["FeatureFlag"]
+        ),
     ]
 )

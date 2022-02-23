@@ -1,58 +1,55 @@
 import Foundation
 import SwiftSyntax
 
-protocol FeatureFlagValueRepresentable {
-  
-}
+protocol FeatureFlagValueRepresentable {}
 
 protocol FeatureFlagStore {
-
-  func get<Value: FeatureFlagValueRepresentable>(key: String) -> Value?
-  func set<Value: FeatureFlagValueRepresentable>(object: Value, for key: String)
+    func get<Value: FeatureFlagValueRepresentable>(key: String) -> Value?
+    func set<Value: FeatureFlagValueRepresentable>(object: Value, for key: String)
 }
 
 extension UserDefaults: FeatureFlagStore {
-  func get<Value>(key: String) -> Value? where Value : FeatureFlagValueRepresentable {
-    return object(forKey: key) as? Value
-  }
-  
-  func set<Value>(object: Value, for key: String) where Value : FeatureFlagValueRepresentable {
-    set(object, forKey: key)
-  }
+    func get<Value>(key: String) -> Value? where Value: FeatureFlagValueRepresentable {
+        object(forKey: key) as? Value
+    }
+
+    func set<Value>(object: Value, for key: String) where Value: FeatureFlagValueRepresentable {
+        set(object, forKey: key)
+    }
 }
 
 class FeatureFlagManager {
-  static let manager = FeatureFlagManager()
-  var store: FeatureFlagStore = UserDefaults.standard
+    static let manager = FeatureFlagManager()
+    var store: FeatureFlagStore = UserDefaults.standard
 }
 
 @propertyWrapper
 struct FeatureFlag<Value: FeatureFlagValueRepresentable> {
-  
-  var key: String
-  var defaultValue: Value
-  var wrappedValue: Value {
-    get { FeatureFlagManager.manager.store.get(key: key) ?? defaultValue }
-    set { FeatureFlagManager.manager.store.set(object: newValue, for: key) }
-  }
+    var key: String
+    var defaultValue: Value
+    var wrappedValue: Value {
+        get { FeatureFlagManager.manager.store.get(key: key) ?? defaultValue }
+        set { FeatureFlagManager.manager.store.set(object: newValue, for: key) }
+    }
 
-  init(key: String, defaultValue: Value) {
-    print("INIT", key)
-    self.key = key
-    self.defaultValue = defaultValue
-  }
+    init(key: String, defaultValue: Value) {
+        print("INIT", key)
+        self.key = key
+        self.defaultValue = defaultValue
+    }
 }
 
 extension Bool: FeatureFlagValueRepresentable {}
 
-struct FeatureFlags {
-  @FeatureFlag(key: "isOnboardingEnabled", defaultValue: false)
-  static var isOnboardingEnabled: Bool
+enum FeatureFlags {
+    @FeatureFlag(key: "isOnboardingEnabled", defaultValue: false)
+    static var isOnboardingEnabled: Bool
 }
+
 ///// AddOneToIntegerLiterals will visit each token in the Syntax tree, and
 ///// (if it is an integer literal token) add 1 to the integer and return the
 ///// new integer literal token.
-//class AddOneToIntegerLiterals: SyntaxRewriter {
+// class AddOneToIntegerLiterals: SyntaxRewriter {
 //  override func visit(_ token: TokenSyntax) -> Syntax {
 //    // Only transform integer literals.
 //    guard case .integerLiteral(let text) = token.tokenKind else {
@@ -71,10 +68,10 @@ struct FeatureFlags {
 //    // Return the new integer literal.
 //    return Syntax(newIntegerLiteralToken)
 //  }
-//}
+// }
 //
-//let file = CommandLine.arguments[1]
-//let url = URL(fileURLWithPath: file)
-//let sourceFile = try SyntaxParser.parse(url)
-//let incremented = AddOneToIntegerLiterals().visit(sourceFile)
-//print(incremented)
+// let file = CommandLine.arguments[1]
+// let url = URL(fileURLWithPath: file)
+// let sourceFile = try SyntaxParser.parse(url)
+// let incremented = AddOneToIntegerLiterals().visit(sourceFile)
+// print(incremented)
