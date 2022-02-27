@@ -6,24 +6,26 @@ final class FeatureFlagTests: XCTestCase {
 
     func testDefault() throws {
         FeatureFlagManager.manager.store = mockUserDefault
-        XCTAssertEqual(FeatureFlags.isOnboardingEnabled, false)
+        XCTAssertFalse(FeatureFlags.isOnboardingEnabled)
     }
 
     func testHappyDefault() throws {
         mockUserDefault.set(object: true, for: "isOnboardingEnabled")
         FeatureFlagManager.manager.store = mockUserDefault
-        XCTAssertEqual(FeatureFlags.isOnboardingEnabled, true)
+        XCTAssertTrue(FeatureFlags.isOnboardingEnabled)
     }
 
-    func testSetValue() throws {
+    func testSetAndGetValue() throws {
         FeatureFlagManager.manager.store = mockUserDefault
+        XCTAssertFalse(FeatureFlags.isOnboardingEnabled)
         FeatureFlags.isOnboardingEnabled = true
-        XCTAssertEqual(FeatureFlags.isOnboardingEnabled, true)
+        XCTAssertTrue(FeatureFlags.isOnboardingEnabled)
         XCTAssertTrue(mockUserDefault.bool(forKey: "isOnboardingEnabled"))
     }
 
     override func tearDown() {
         super.tearDown()
+        // Clear store
         mockUserDefault.dictionaryRepresentation().forEach {
             mockUserDefault.removeObject(forKey: $0.key)
         }
