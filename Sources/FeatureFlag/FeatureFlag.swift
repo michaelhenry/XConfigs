@@ -40,7 +40,4 @@ struct FeatureFlag<Value: FeatureFlagValueRepresentable> {
 
 extension Bool: FeatureFlagValueRepresentable {}
 
-enum FeatureFlags {
-    @FeatureFlag(key: "isOnboardingEnabled", defaultValue: false)
-    static var isOnboardingEnabled: Bool
-}
+extension String: FeatureFlagValueRepresentable {}
