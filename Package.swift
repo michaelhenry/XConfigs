@@ -4,16 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "FeatureFlag",
+    name: "RemoteConfig",
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "FeatureFlag",
-            targets: ["FeatureFlag"]
+            name: "RemoteConfig",
+            targets: ["RemoteConfig"]
         ),
     ],
     dependencies: [
-        .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .exact("0.50500.0")),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -21,14 +20,13 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "FeatureFlag",
+            name: "RemoteConfig",
             dependencies: [
-                "SwiftSyntax",
             ]
         ),
         .testTarget(
-            name: "FeatureFlagTests",
-            dependencies: ["FeatureFlag"]
+            name: "RemoteConfigTests",
+            dependencies: ["RemoteConfig"]
         ),
     ]
 )
