@@ -16,6 +16,8 @@ final class FeatureFlagTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
                 .textInput(.init(key: "apiHost", value: "https://google.com")),
                 .optionSelection(.init(key: "region", value: "north", choices: ["north", "south", "east", "west"])),
+                .textInput(.init(key: "maxRetry", value: "10")),
+                .textInput(.init(key: "rate", value: "2.5")),
             ]),
         ])
     }
@@ -54,6 +56,12 @@ struct MockFeatureFlags: RemoteConfigSpec {
 
     @RemoteConfig(key: "region", defaultValue: .north)
     var region: Region
+
+    @RemoteConfig(key: "maxRetry", defaultValue: 10)
+    var maxRetry: Int
+
+    @RemoteConfig(key: "rate", defaultValue: 2.5)
+    var rate: Double
 }
 
 enum Region: String, CaseIterable, RawStringRepresentable {
