@@ -17,6 +17,7 @@ final class FeatureFlagTests: XCTestCase {
                 .textInput(.init(key: "apiHost", value: "https://google.com")),
                 .optionSelection(.init(key: "region", value: "north", choices: ["north", "south", "east", "west"])),
                 .textInput(.init(key: "maxRetry", value: "10")),
+                .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
             ]),
         ])
@@ -59,6 +60,9 @@ struct MockFeatureFlags: RemoteConfigSpec {
 
     @RemoteConfig(key: "maxRetry", defaultValue: 10)
     var maxRetry: Int
+
+    @RemoteConfig(key: "threshold", defaultValue: 1)
+    var threshold: Int
 
     @RemoteConfig(key: "rate", defaultValue: 2.5)
     var rate: Double
