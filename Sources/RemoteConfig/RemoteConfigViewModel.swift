@@ -34,9 +34,7 @@ struct RemoteConfigViewModel {
         let instance = spec.init()
         let mirror = Mirror(reflecting: instance)
 
-        let infos = mirror.children.compactMap {
-            $0.value as? ExtractableInformation
-        }
+        let infos = mirror.children.compactMap { $0.value as? ExtractableConfigInformation }
 
         let items = infos.compactMap { info -> Item? in
             let key = info.extractedKey
@@ -45,10 +43,8 @@ struct RemoteConfigViewModel {
                 return .toggle(.init(key: key, value: val))
             case let val as any CaseIterable & RawStringRepresentable:
                 return .optionSelection(.init(key: key, value: val.rawString, choices: val.allChoices))
-            case let val as RawStringRepresentable:
-                return .textInput(.init(key: key, value: val.rawString))
             default:
-                return nil
+                return .textInput(.init(key: key, value: info.extractedValue.rawString))
             }
         }
         sectionItemsModels = [.init(section: .main, items: items)]

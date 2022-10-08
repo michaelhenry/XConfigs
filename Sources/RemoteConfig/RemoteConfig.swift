@@ -1,7 +1,7 @@
 import Foundation
 
 @propertyWrapper
-struct RemoteConfig<Value: RawStringRepresentable>: ExtractableInformation {
+struct RemoteConfig<Value: RawStringRepresentable>: ExtractableConfigInformation {
     let key: String
     let defaultValue: Value
 
@@ -18,11 +18,11 @@ struct RemoteConfig<Value: RawStringRepresentable>: ExtractableInformation {
         key
     }
 
-    var extractedValue: Any {
+    var extractedValue: RawStringRepresentable {
         wrappedValue
     }
 
-    var extractedDefaultValue: Any {
+    var extractedDefaultValue: RawStringRepresentable {
         defaultValue
     }
 }
