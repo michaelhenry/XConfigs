@@ -21,4 +21,8 @@ struct RemoteConfig<Value: RawStringRepresentable>: ExtractableInformation {
     var extractedValue: Any {
         wrappedValue
     }
+
+    var extractedDefaultValue: Any {
+        defaultValue
+    }
 }
