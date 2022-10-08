@@ -5,5 +5,3 @@ extension CaseIterable where Self: RawStringRepresentable {
         Self.allCases.map(\.rawString)
     }
 }
-
-g
