@@ -1,21 +1,5 @@
 import Foundation
 
-struct ToggleModel: Hashable {
-    let key: String
-    let value: Bool
-}
-
-struct InputModel: Hashable {
-    let key: String
-    let value: String
-}
-
-struct OptionSelectionModel: Hashable {
-    let key: String
-    let value: String
-    let choices: [String]
-}
-
 struct RemoteConfigViewModel {
     enum Section: Hashable {
         case main
@@ -24,7 +8,7 @@ struct RemoteConfigViewModel {
 
     enum Item: Hashable {
         case toggle(ToggleModel)
-        case textInput(InputModel)
+        case textInput(TextInputModel)
         case optionSelection(OptionSelectionModel)
     }
 
