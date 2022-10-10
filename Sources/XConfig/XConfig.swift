@@ -1,12 +1,12 @@
 import Foundation
 
 @propertyWrapper
-struct RemoteConfig<Value: RawStringRepresentable>: ExtractableConfigInformation {
+struct XConfig<Value: RawStringRepresentable>: ConfigInfo {
     let key: String
     let defaultValue: Value
 
     var wrappedValue: Value {
-        RemoteConfigManager.manager.valueProvider.get(key: key) ?? defaultValue
+        XConfigUseCase.shared.get(for: key) ?? defaultValue
     }
 
     init(key: String, defaultValue: Value) {
@@ -14,15 +14,15 @@ struct RemoteConfig<Value: RawStringRepresentable>: ExtractableConfigInformation
         self.defaultValue = defaultValue
     }
 
-    var extractedKey: String {
+    var configKey: String {
         key
     }
 
-    var extractedValue: RawStringRepresentable {
+    var configValue: RawStringRepresentable {
         wrappedValue
     }
 
-    var extractedDefaultValue: RawStringRepresentable {
+    var configDefaultValue: RawStringRepresentable {
         defaultValue
     }
 }

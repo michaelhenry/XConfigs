@@ -1,5 +1,5 @@
 import Foundation
 
-protocol RemoteConfigSpec {
+protocol XConfigSpec {
     init()
 }

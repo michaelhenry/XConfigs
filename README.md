@@ -1,27 +1,29 @@
-# RemoteConfig
+# XConfig
 
 A description of this package.
 
 ### Example
 
 ```swift
-struct MockFeatureFlags: RemoteConfigSpec {
-
+struct MockConfigs: XConfigSpec {
     static let `default` = Self()
 
-    @RemoteConfig(key: "isOnboardingEnabled", defaultValue: false)
+    @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
 
-    @RemoteConfig(key: "apiHost", defaultValue: "https://google.com")
+    @XConfig(key: "apiHost", defaultValue: "https://google.com")
     var apiHost: String
 
-    @RemoteConfig(key: "region", defaultValue: .north)
+    @XConfig(key: "region", defaultValue: .north)
     var region: Region
 
-    @RemoteConfig(key: "maxRetry", defaultValue: 10)
+    @XConfig(key: "maxRetry", defaultValue: 10)
     var maxRetry: Int
 
-    @RemoteConfig(key: "rate", defaultValue: 2.5)
+    @XConfig(key: "threshold", defaultValue: 1)
+    var threshold: Int
+
+    @XConfig(key: "rate", defaultValue: 2.5)
     var rate: Double
 }
 
@@ -39,5 +41,4 @@ enum Region: String, CaseIterable, RawStringRepresentable {
         rawValue
     }
 }
-
 ```
