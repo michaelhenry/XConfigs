@@ -1,11 +1,11 @@
 import Combine
 import Foundation
 
-class XConfigUseCase {
-    static let shared = XConfigUseCase()
+public class XConfigUseCase {
+    public static let shared = XConfigUseCase()
 
     var isOverriden: Bool = false
-    var localKVStore: (() -> LocalKeyValueStore)?
+    var configStore: (() -> ConfigStoreProtocol)?
     var remoteKVProvider: (() -> RemoteKeyValueProvider)?
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
@@ -17,32 +17,30 @@ class XConfigUseCase {
         return mirror.children.compactMap { $0.value as? ConfigInfo }
     }
 
-    func update(localKVStore: @escaping (() -> LocalKeyValueStore)) {
-        self.localKVStore = localKVStore
+    func update(configStore: @escaping (() -> ConfigStoreProtocol)) {
+        self.configStore = configStore
     }
 
     func update(remoteKVProvider: @escaping (() -> RemoteKeyValueProvider)) {
         self.remoteKVProvider = remoteKVProvider
     }
 
-    //  func provide() -> AnyPublisher<[String : Any], Error> {
-//    return Just([String: Any]())
-//      .setFailureType(to: Error.self)
-//      .eraseToAnyPublisher()
-    //  }
-
-    func get<Value>(for key: String) -> Value? {
-        guard isOverriden else { return remoteKVProvider?().get(for: key) }
-        return localKVStore?().get(key: key)
+    func downloadLatest() {
+        _ = remoteKVProvider?().provide()
     }
 
-    func set<Value>(value: Value, for key: String) {
+    func get<Value>(for key: String) -> Value? {
+        guard isOverriden else { return configStore?().getRemoteValue(for: key) }
+        return configStore?().getDevValue(for: key)
+    }
+
+    func set<Value>(value _: Value, for _: String) {
         guard isOverriden else { return }
-        localKVStore?().set(value: value, for: key)
+//      configStore?().set(value: value, for: key)
     }
 
     func resetLocalValues() {
         guard isOverriden else { return }
-        localKVStore?().deleteAll()
+//        localKVStore?().deleteAll()
     }
 }

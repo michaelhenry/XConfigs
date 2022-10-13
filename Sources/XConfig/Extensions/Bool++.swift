@@ -1,11 +1,11 @@
 import Foundation
 
 extension Bool: RawStringRepresentable {
-    var rawString: String {
+    public var rawString: String {
         "\(self)"
     }
 
-    init(rawString: String) {
+    public init(rawString: String) {
         self = Bool(rawString) ?? false
     }
 }

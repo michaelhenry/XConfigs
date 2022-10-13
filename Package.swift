@@ -16,6 +16,7 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(url: "https://github.com/stephencelis/SQLite.swift", .upToNextMinor(from: "0.13.3")),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -25,6 +26,7 @@ let package = Package(
         .target(
             name: "XConfig",
             dependencies: [
+                .product(name: "SQLite", package: "SQLite.swift"),
             ]
         ),
         .testTarget(

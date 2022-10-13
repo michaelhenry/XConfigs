@@ -1,6 +1,6 @@
 import Foundation
 
-protocol RawStringRepresentable {
+public protocol RawStringRepresentable {
     var rawString: String { get }
 
     init?(rawString: String)

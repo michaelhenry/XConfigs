@@ -1,6 +1,6 @@
 import Foundation
 
-struct XConfigViewModel {
+public struct XConfigsViewModel {
     enum Section: Hashable {
         case main
         case group(String)
@@ -13,8 +13,9 @@ struct XConfigViewModel {
     }
 
     let sectionItemsModels: [SectionItemsModel<Section, Item>]
+    let title = "XConfigs"
 
-    init(useCase: XConfigUseCase, spec: XConfigSpec.Type) {
+    public init(useCase: XConfigUseCase = .shared, spec: XConfigSpec.Type) {
         let items = useCase.getConfigInfos(from: spec).compactMap { info -> Item? in
             let key = info.configKey
             switch info.configValue {

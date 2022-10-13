@@ -6,9 +6,9 @@ final class XConfigTests: XCTestCase {
         let useCase = XConfigUseCase.shared
         let mockLocalStore = MockLocalKVStore()
         let remoteKVProvider = MockRemoteKVProvider()
-        useCase.update(localKVStore: { mockLocalStore })
+        useCase.update(configStore: { mockLocalStore })
         useCase.update(remoteKVProvider: { remoteKVProvider })
-        let vm = XConfigViewModel(useCase: useCase, spec: MockConfigs.self)
+        let vm = XConfigsViewModel(useCase: useCase, spec: MockConfigs.self)
 
         XCTAssertEqual(vm.sectionItemsModels, [
             .init(section: .main, items: [
@@ -60,17 +60,29 @@ enum Region: String, CaseIterable, RawStringRepresentable {
     }
 }
 
-class MockLocalKVStore: LocalKeyValueStore {
-    func get<Value>(key _: String) -> Value? {
+class MockLocalKVStore: ConfigStoreProtocol {
+    func getRemoteValue<Value>(for _: String) -> Value? {
         nil
     }
 
-    func set<Value>(value _: Value, for _: String) {}
+    func getDevValue<Value>(for _: String) -> Value? {
+        nil
+    }
+
+    func get(key _: String) -> Config? {
+        nil
+    }
+
+    func set(value _: Config, for _: String) {}
 
     func deleteAll() {}
 }
 
 class MockRemoteKVProvider: RemoteKeyValueProvider {
+    func provide() -> [String: Any] {
+        [:]
+    }
+
     func get<Value>(for _: String) -> Value? {
         nil
     }
