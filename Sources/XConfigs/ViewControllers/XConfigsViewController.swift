@@ -3,7 +3,7 @@ import UIKit
 public final class XConfigsViewController: UITableViewController {
     private let viewModel: XConfigsViewModel
 
-    public init(viewModel: XConfigsViewModel) {
+    public init(viewModel: XConfigsViewModel = .init()) {
         self.viewModel = viewModel
         super.init(style: .insetGrouped)
     }

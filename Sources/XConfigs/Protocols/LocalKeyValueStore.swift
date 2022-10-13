@@ -7,7 +7,7 @@ struct Config {
     let devValue: String?
 }
 
-protocol ConfigStoreProtocol {
+public protocol ConfigStoreProtocol {
     func getRemoteValue<Value>(for key: String) -> Value?
     func getDevValue<Value>(for key: String) -> Value?
     func deleteAll()

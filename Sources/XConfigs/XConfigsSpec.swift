@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol XConfigSpec {
+public protocol XConfigsSpec {
     init()
 }

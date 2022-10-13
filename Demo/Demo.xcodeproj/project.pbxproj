@@ -16,7 +16,8 @@
 		9920817328F837DD009263C5 /* DemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920817228F837DD009263C5 /* DemoTests.swift */; };
 		9920817D28F837DD009263C5 /* DemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920817C28F837DD009263C5 /* DemoUITests.swift */; };
 		9920817F28F837DD009263C5 /* DemoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920817E28F837DD009263C5 /* DemoUITestsLaunchTests.swift */; };
-		9920819028F83AC1009263C5 /* XConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 9920818F28F83AC1009263C5 /* XConfig */; };
+		9920819328F844EA009263C5 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819228F844EA009263C5 /* FeatureFlags.swift */; };
+		9920819728F845E1009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 9920819628F845E1009263C5 /* XConfigs */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,8 +51,8 @@
 		9920817828F837DD009263C5 /* DemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9920817C28F837DD009263C5 /* DemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUITests.swift; sourceTree = "<group>"; };
 		9920817E28F837DD009263C5 /* DemoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		9920818D28F83A96009263C5 /* XConfig */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfig; path = ..; sourceTree = "<group>"; };
-		9920819128F83AD1009263C5 /* XConfig */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfig; path = ..; sourceTree = "<group>"; };
+		9920819228F844EA009263C5 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
+		9920819528F8457F009263C5 /* XConfigs */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfigs; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9920819028F83AC1009263C5 /* XConfig in Frameworks */,
+				9920819728F845E1009263C5 /* XConfigs in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +113,7 @@
 				9920816428F837DD009263C5 /* Assets.xcassets */,
 				9920816628F837DD009263C5 /* LaunchScreen.storyboard */,
 				9920816928F837DD009263C5 /* Info.plist */,
+				9920819228F844EA009263C5 /* FeatureFlags.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -136,8 +138,7 @@
 		9920818B28F83829009263C5 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				9920818D28F83A96009263C5 /* XConfig */,
-				9920819128F83AD1009263C5 /* XConfig */,
+				9920819528F8457F009263C5 /* XConfigs */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -166,7 +167,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				9920818F28F83AC1009263C5 /* XConfig */,
+				9920819628F845E1009263C5 /* XConfigs */,
 			);
 			productName = Demo;
 			productReference = 9920815828F837DC009263C5 /* Demo.app */;
@@ -285,6 +286,7 @@
 			files = (
 				9920816028F837DC009263C5 /* ViewController.swift in Sources */,
 				9920815C28F837DC009263C5 /* AppDelegate.swift in Sources */,
+				9920819328F844EA009263C5 /* FeatureFlags.swift in Sources */,
 				9920815E28F837DC009263C5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -623,9 +625,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9920818F28F83AC1009263C5 /* XConfig */ = {
+		9920819628F845E1009263C5 /* XConfigs */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = XConfig;
+			productName = XConfigs;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

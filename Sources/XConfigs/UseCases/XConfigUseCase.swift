@@ -7,25 +7,31 @@ public class XConfigUseCase {
     var isOverriden: Bool = false
     var configStore: (() -> ConfigStoreProtocol)?
     var remoteKVProvider: (() -> RemoteKeyValueProvider)?
+    var configsSpec: (() -> XConfigsSpec.Type)?
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
     private init() {}
 
-    func getConfigInfos(from spec: any XConfigSpec.Type) -> [ConfigInfo] {
+    func getConfigInfos() -> [ConfigInfo] {
+        guard let spec = configsSpec?() else { fatalError("Must set the config spec") }
         let instance = spec.init()
         let mirror = Mirror(reflecting: instance)
         return mirror.children.compactMap { $0.value as? ConfigInfo }
     }
 
-    func update(configStore: @escaping (() -> ConfigStoreProtocol)) {
+    public func set(configsSpec: @escaping (() -> XConfigsSpec.Type)) {
+        self.configsSpec = configsSpec
+    }
+
+    public func set(configStore: @escaping (() -> ConfigStoreProtocol)) {
         self.configStore = configStore
     }
 
-    func update(remoteKVProvider: @escaping (() -> RemoteKeyValueProvider)) {
+    public func set(remoteKVProvider: @escaping (() -> RemoteKeyValueProvider)) {
         self.remoteKVProvider = remoteKVProvider
     }
 
-    func downloadLatest() {
+    public func downloadLatest() {
         _ = remoteKVProvider?().provide()
     }
 
@@ -36,11 +42,11 @@ public class XConfigUseCase {
 
     func set<Value>(value _: Value, for _: String) {
         guard isOverriden else { return }
-//      configStore?().set(value: value, for: key)
+        //      configStore?().set(value: value, for: key)
     }
 
     func resetLocalValues() {
         guard isOverriden else { return }
-//        localKVStore?().deleteAll()
+        //        localKVStore?().deleteAll()
     }
 }

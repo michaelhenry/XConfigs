@@ -1,5 +1,5 @@
 import XCTest
-@testable import XConfig
+@testable import XConfigs
 
 final class XConfigTests: XCTestCase {
     func testRegistration() throws {
@@ -23,7 +23,7 @@ final class XConfigTests: XCTestCase {
     }
 }
 
-struct MockConfigs: XConfigSpec {
+struct MockConfigs: XConfigsSpec {
     static let `default` = Self()
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)

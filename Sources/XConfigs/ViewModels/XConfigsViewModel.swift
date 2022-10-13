@@ -15,8 +15,8 @@ public struct XConfigsViewModel {
     let sectionItemsModels: [SectionItemsModel<Section, Item>]
     let title = "XConfigs"
 
-    public init(useCase: XConfigUseCase = .shared, spec: XConfigSpec.Type) {
-        let items = useCase.getConfigInfos(from: spec).compactMap { info -> Item? in
+    public init(useCase: XConfigUseCase = .shared) {
+        let items = useCase.getConfigInfos().compactMap { info -> Item? in
             let key = info.configKey
             switch info.configValue {
             case let val as Bool:
