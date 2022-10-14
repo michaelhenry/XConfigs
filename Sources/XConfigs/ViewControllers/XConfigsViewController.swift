@@ -30,11 +30,6 @@ public final class XConfigsViewController: UITableViewController {
     }
 
     override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellId = "cellId"
-        var cell = tableView.dequeueReusableCell(withIdentifier: cellId)
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: cellId)
-        }
         let item = viewModel.sectionItemsModels[indexPath.section].items[indexPath.row]
         switch item {
         case let .toggle(vm):
