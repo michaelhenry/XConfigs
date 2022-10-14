@@ -16,6 +16,9 @@ public final class XConfigsViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         title = viewModel.title
+        tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
+        tableView.registerCell(UIViewTableWrapperCell<TextInputView>.self)
+        tableView.registerCell(UIViewTableWrapperCell<OptionView>.self)
     }
 
     override public func numberOfSections(in _: UITableView) -> Int {
@@ -33,20 +36,20 @@ public final class XConfigsViewController: UITableViewController {
             cell = UITableViewCell(style: .default, reuseIdentifier: cellId)
         }
         let item = viewModel.sectionItemsModels[indexPath.section].items[indexPath.row]
-        cell?.textLabel?.text = item.displayName
-        return cell ?? UITableViewCell()
-    }
-}
-
-private extension XConfigsViewModel.Item {
-    var displayName: String? {
-        switch self {
-        case let .optionSelection(vm):
-            return vm.key
-        case let .textInput(vm):
-            return vm.key
+        switch item {
         case let .toggle(vm):
-            return vm.key
+            let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
+            cell.configure(with: (vm.key, vm.value))
+            cell.selectionStyle = .none
+            return cell
+        case let .textInput(vm):
+            let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
+            cell.configure(with: (vm.key, vm.value))
+            return cell
+        case let .optionSelection(vm):
+            let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
+            cell.configure(with: (vm.key, vm.value))
+            return cell
         }
     }
 }
