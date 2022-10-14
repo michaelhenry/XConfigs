@@ -1,7 +1,34 @@
+import Combine
 import UIKit
 
 public final class XConfigsViewController: UITableViewController {
-    private let viewModel: XConfigsViewModel
+    typealias ViewModel = XConfigsViewModel
+    typealias DataSource = UITableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+
+    private let viewModel: ViewModel
+    private var subscriptions = Set<AnyCancellable>()
+
+    private lazy var datasource: DataSource = {
+        var ds = DataSource(tableView: tableView) { tableView, indexPath, item in
+            switch item {
+            case let .toggle(vm):
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
+                cell.configure(with: (vm.key, vm.value))
+                cell.selectionStyle = .none
+                return cell
+            case let .textInput(vm):
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
+                cell.configure(with: (vm.key, vm.value))
+                cell.selectionStyle = .none
+                return cell
+            case let .optionSelection(vm):
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
+                cell.configure(with: (vm.key, vm.value))
+                return cell
+            }
+        }
+        return ds
+    }()
 
     public init(viewModel: XConfigsViewModel = .init()) {
         self.viewModel = viewModel
@@ -15,37 +42,24 @@ public final class XConfigsViewController: UITableViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        title = viewModel.title
+        title = "XConfigs"
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<TextInputView>.self)
         tableView.registerCell(UIViewTableWrapperCell<OptionView>.self)
+
+        handleViewModelOutput()
     }
 
-    override public func numberOfSections(in _: UITableView) -> Int {
-        viewModel.sectionItemsModels.count
-    }
+    private func handleViewModelOutput() {
+        let output = viewModel.transform(
+            input: .init(reloadTrigger: Just(()).eraseToAnyPublisher()))
 
-    override public func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.sectionItemsModels[section].items.count
-    }
-
-    override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = viewModel.sectionItemsModels[indexPath.section].items[indexPath.row]
-        switch item {
-        case let .toggle(vm):
-            let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
-            cell.configure(with: (vm.key, vm.value))
-            cell.selectionStyle = .none
-            return cell
-        case let .textInput(vm):
-            let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
-            cell.configure(with: (vm.key, vm.value))
-            cell.selectionStyle = .none
-            return cell
-        case let .optionSelection(vm):
-            let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
-            cell.configure(with: (vm.key, vm.value))
-            return cell
-        }
+        output.sectionItemsModels
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] secItems in
+                guard let self = self else { return }
+                self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
+            }
+            .store(in: &subscriptions)
     }
 }

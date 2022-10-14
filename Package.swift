@@ -17,6 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/stephencelis/SQLite.swift", .upToNextMinor(from: "0.13.3")),
+        .package(url: "https://github.com/CombineCommunity/CombineExt", .upToNextMinor(from: "1.8.0")),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -27,6 +28,7 @@ let package = Package(
             name: "XConfigs",
             dependencies: [
                 .product(name: "SQLite", package: "SQLite.swift"),
+                .product(name: "CombineExt", package: "CombineExt"),
             ]
         ),
         .testTarget(

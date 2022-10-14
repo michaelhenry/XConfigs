@@ -1,6 +1,8 @@
+import Combine
+import CombineExt
 import Foundation
 
-public struct XConfigsViewModel {
+public struct XConfigsViewModel: ViewModelType {
     enum Section: Hashable {
         case main
         case group(String)
@@ -12,21 +14,47 @@ public struct XConfigsViewModel {
         case optionSelection(OptionSelectionModel)
     }
 
-    let sectionItemsModels: [SectionItemsModel<Section, Item>]
-    let title = "XConfigs"
+    struct Input {
+        let reloadTrigger: AnyPublisher<Void, Never>
+    }
+
+    struct Output {
+        let sectionItemsModels: AnyPublisher<[SectionItemsModel<Section, Item>], Never>
+    }
+
+    private let useCase: XConfigUseCase
 
     public init(useCase: XConfigUseCase = .shared) {
-        let items = useCase.getConfigInfos().compactMap { info -> Item? in
-            let key = info.configKey
-            switch info.configValue {
-            case let val as Bool:
-                return .toggle(.init(key: key, value: val))
-            case let val as any CaseIterable & RawStringRepresentable:
-                return .optionSelection(.init(key: key, value: val.rawString, choices: val.allChoices))
-            default:
-                return .textInput(.init(key: key, value: info.configValue.rawString))
-            }
+        self.useCase = useCase
+    }
+
+    func transform(input: Input) -> Output {
+        let request = input.reloadTrigger
+            .map { useCase.getConfigInfos() }
+            .share(replay: 1)
+            .eraseToAnyPublisher()
+
+        let sectionItemsModels = request
+            .compactMap(mapConfigInfosToSectionItemsModels)
+            .eraseToAnyPublisher()
+        return .init(sectionItemsModels: sectionItemsModels)
+    }
+
+    // Transform [ConfigInfo] to [SectionItemModel]
+    func mapConfigInfosToSectionItemsModels(_ infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
+        .init(arrayLiteral: .init(section: .main, items: infos.compactMap(mapConfigInfoToItem)))
+    }
+
+    // Transform ConfigInfo to Item
+    func mapConfigInfoToItem(_ info: ConfigInfo) -> Item? {
+        let key = info.configKey
+        switch info.configValue {
+        case let val as Bool:
+            return .toggle(.init(key: key, value: val))
+        case let val as any CaseIterable & RawStringRepresentable:
+            return .optionSelection(.init(key: key, value: val.rawString, choices: val.allChoices))
+        default:
+            return .textInput(.init(key: key, value: info.configValue.rawString))
         }
-        sectionItemsModels = [.init(section: .main, items: items)]
     }
 }
