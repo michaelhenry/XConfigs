@@ -22,7 +22,7 @@ public final class XConfigsViewController: UITableViewController {
     }
 
     override public func numberOfSections(in _: UITableView) -> Int {
-        1
+        viewModel.sectionItemsModels.count
     }
 
     override public func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
