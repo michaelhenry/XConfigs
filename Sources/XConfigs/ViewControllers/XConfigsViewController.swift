@@ -40,6 +40,7 @@ public final class XConfigsViewController: UITableViewController {
         case let .textInput(vm):
             let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
             cell.configure(with: (vm.key, vm.value))
+            cell.selectionStyle = .none
             return cell
         case let .optionSelection(vm):
             let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
