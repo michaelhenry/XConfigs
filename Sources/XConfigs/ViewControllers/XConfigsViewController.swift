@@ -8,17 +8,19 @@ public final class XConfigsViewController: UITableViewController {
 
     private let viewModel: ViewModel
     private var subscriptions = Set<AnyCancellable>()
+    private var updateValueSubject = PassthroughSubject<UpdateValueInput, Never>()
+    private var shouldAnimate = false
 
     private lazy var datasource: DataSource = {
-        var ds = DataSource(tableView: tableView) { tableView, indexPath, item in
+        var ds = DataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
+            guard let self = self else { return .init() }
             switch item {
             case let .toggle(vm):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
                 cell.configure(with: (vm.key, vm.value))
-                cell.mainView.switchView.isOnPublisher
-                    .sink { value in
-                        print("VALUE", value)
-                    }
+                cell.mainView.valueChangedPublisher
+                    .map { UpdateValueInput(key: vm.key, value: $0) }
+                    .subscribe(self.updateValueSubject)
                     .store(in: &cell.subscriptions)
                 cell.selectionStyle = .none
                 return cell
@@ -32,6 +34,7 @@ public final class XConfigsViewController: UITableViewController {
                 return cell
             }
         }
+        ds.defaultRowAnimation = .fade
         return ds
     }()
 
@@ -52,7 +55,6 @@ public final class XConfigsViewController: UITableViewController {
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<TextInputView>.self)
         tableView.registerCell(UIViewTableWrapperCell<OptionView>.self)
-
         handleViewModelOutput()
     }
 
@@ -61,22 +63,29 @@ public final class XConfigsViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        shouldAnimate = true
+    }
+
     private func handleViewModelOutput() {
         let output = viewModel.transform(
-            input: .init(reloadTrigger: Just(()).eraseToAnyPublisher()))
+            input: .init(
+                reloadPublisher: Just(()).eraseToAnyPublisher(),
+                updateValuePublisher: updateValueSubject.eraseToAnyPublisher()
+            ))
 
         output.sectionItemsModels
             .receive(on: DispatchQueue.main)
             .sink { [weak self] secItems in
                 guard let self = self else { return }
-                self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
+                self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
             }
             .store(in: &subscriptions)
     }
 
     private func handleItemSelection(_ indexPath: IndexPath) {
         guard let item = datasource.itemIdentifier(for: indexPath) else { return }
-        print("ITEM", item)
         switch item {
         case let .optionSelection(model):
             showOptionSelection(for: model)

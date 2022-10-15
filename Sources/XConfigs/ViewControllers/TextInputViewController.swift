@@ -55,6 +55,5 @@ final class TextInputViewController: UIViewController {
             view.trailingAnchor.constraint(equalTo: textView.trailingAnchor, constant: 20),
             view.bottomAnchor.constraint(equalTo: textView.bottomAnchor, constant: 20),
         ])
-        textView.becomeFirstResponder()
     }
 }

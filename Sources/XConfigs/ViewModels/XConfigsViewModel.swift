@@ -15,7 +15,8 @@ public struct XConfigsViewModel: ViewModelType {
     }
 
     struct Input {
-        let reloadTrigger: AnyPublisher<Void, Never>
+        let reloadPublisher: AnyPublisher<Void, Never>
+        let updateValuePublisher: AnyPublisher<UpdateValueInput, Never>
     }
 
     struct Output {
@@ -29,12 +30,15 @@ public struct XConfigsViewModel: ViewModelType {
     }
 
     func transform(input: Input) -> Output {
-        let request = input.reloadTrigger
-            .map { useCase.getConfigInfos() }
+        let update = input.updateValuePublisher.map { useCase.set(value: $0.value, for: $0.key) }
+        let reload = input.reloadPublisher
+
+        let configs = Publishers.Merge(update, reload)
+            .map { _ in useCase.getConfigs() }
             .share(replay: 1)
             .eraseToAnyPublisher()
 
-        let sectionItemsModels = request
+        let sectionItemsModels = configs
             .compactMap(mapConfigInfosToSectionItemsModels)
             .eraseToAnyPublisher()
         return .init(sectionItemsModels: sectionItemsModels)

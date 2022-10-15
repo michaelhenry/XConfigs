@@ -1,11 +1,18 @@
+import Combine
 import CombineCocoa
 import UIKit
 
 final class ToggleView: UIView, ConfigurableView {
     typealias ViewModel = (String, Bool)
 
-    let switchView = UISwitch()
+    private let switchView = UISwitch()
     private let keyLabel = UILabel()
+
+    var valueChangedPublisher: AnyPublisher<Bool, Never> {
+        switchView.controlEventPublisher(for: .valueChanged)
+            .map { self.self.switchView.isOn }
+            .eraseToAnyPublisher()
+    }
 
     init() {
         super.init(frame: .zero)
