@@ -4,15 +4,15 @@ import UIKit
 final class OptionViewController: UITableViewController {
     struct ViewModel {
         let title: String
-        let items: [RawStringRepresentable]
+        let items: [RawStringValueRepresentable]
     }
 
     private let viewModel: ViewModel
     private var subscriptions = Set<AnyCancellable>()
 
-    var selectedItemPublisher: AnyPublisher<RawStringRepresentable, Never> {
+    var selectedItemPublisher: AnyPublisher<RawStringValueRepresentable, Never> {
         tableView.didSelectRowPublisher
-            .compactMap { [weak self] indexPath -> RawStringRepresentable? in
+            .compactMap { [weak self] indexPath -> RawStringValueRepresentable? in
                 guard let self = self else { return nil }
                 self.dismiss(animated: true)
                 return self.viewModel.items[indexPath.item]

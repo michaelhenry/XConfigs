@@ -8,7 +8,7 @@ public final class XConfigsViewController: UITableViewController {
 
     private let viewModel: ViewModel
     private var subscriptions = Set<AnyCancellable>()
-    private var updateValueSubject = PassthroughSubject<UpdateValueInput, Never>()
+    private var updateValueSubject = PassthroughSubject<KeyValue, Never>()
     private var shouldAnimate = false
 
     private lazy var datasource: DataSource = {
@@ -19,7 +19,7 @@ public final class XConfigsViewController: UITableViewController {
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
                 cell.configure(with: (vm.key, vm.value))
                 cell.mainView.valueChangedPublisher
-                    .map { UpdateValueInput(key: vm.key, value: $0) }
+                    .map { KeyValue(key: vm.key, value: $0) }
                     .subscribe(self.updateValueSubject)
                     .store(in: &cell.subscriptions)
                 cell.selectionStyle = .none
@@ -101,7 +101,7 @@ public final class XConfigsViewController: UITableViewController {
         let textInputVC = InputValueViewController(viewModel: .init(title: model.key, value: model.value))
 
         textInputVC.valuePublisher
-            .map { UpdateValueInput(key: model.key, value: $0) }
+            .map { KeyValue(key: model.key, value: $0) }
             .subscribe(updateValueSubject)
             .store(in: &subscriptions)
 
@@ -116,7 +116,7 @@ public final class XConfigsViewController: UITableViewController {
         let optionVC = OptionViewController(viewModel: .init(title: model.key, items: model.choices))
 
         optionVC.selectedItemPublisher
-            .map { UpdateValueInput(key: model.key, value: $0) }
+            .map { KeyValue(key: model.key, value: $0) }
             .subscribe(updateValueSubject)
             .store(in: &subscriptions)
 

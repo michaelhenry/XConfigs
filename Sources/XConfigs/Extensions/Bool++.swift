@@ -1,6 +1,6 @@
 import Foundation
 
-extension Bool: RawStringRepresentable {
+extension Bool: RawStringValueRepresentable {
     public var rawString: String {
         "\(self)"
     }

@@ -1,7 +1,7 @@
 import Foundation
 
 @propertyWrapper
-public struct XConfig<Value: RawStringRepresentable>: ConfigInfo {
+public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
     let key: String
     let defaultValue: Value
 
@@ -18,11 +18,11 @@ public struct XConfig<Value: RawStringRepresentable>: ConfigInfo {
         key
     }
 
-    public var configValue: RawStringRepresentable {
+    public var configValue: RawStringValueRepresentable {
         wrappedValue
     }
 
-    public var configDefaultValue: RawStringRepresentable {
+    public var configDefaultValue: RawStringValueRepresentable {
         defaultValue
     }
 }

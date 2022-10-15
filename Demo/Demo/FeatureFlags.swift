@@ -23,7 +23,7 @@ struct FeatureFlags: XConfigsSpec {
     var rate: Double
 }
 
-enum Region: String, CaseIterable, RawStringRepresentable {
+enum Region: String, CaseIterable, RawStringValueRepresentable {
     case north
     case south
     case east

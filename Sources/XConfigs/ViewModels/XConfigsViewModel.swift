@@ -16,7 +16,7 @@ public struct XConfigsViewModel: ViewModelType {
 
     struct Input {
         let reloadPublisher: AnyPublisher<Void, Never>
-        let updateValuePublisher: AnyPublisher<UpdateValueInput, Never>
+        let updateValuePublisher: AnyPublisher<KeyValue, Never>
     }
 
     struct Output {
@@ -55,7 +55,7 @@ public struct XConfigsViewModel: ViewModelType {
         switch info.configValue {
         case let val as Bool:
             return .toggle(.init(key: key, value: val))
-        case let val as any CaseIterable & RawStringRepresentable:
+        case let val as any CaseIterable & RawStringValueRepresentable:
             return .optionSelection(.init(key: key, value: val.rawString, choices: val.allChoices))
         default:
             return .textInput(.init(key: key, value: info.configValue.rawString))

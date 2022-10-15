@@ -1,6 +1,6 @@
 import Foundation
 
-extension String: RawStringRepresentable {
+extension String: RawStringValueRepresentable {
     public var rawString: String {
         self
     }

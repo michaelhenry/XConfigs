@@ -35,12 +35,12 @@ public class XConfigUseCase {
         _ = remoteKVProvider?().provide()
     }
 
-    func get<Value: RawStringRepresentable>(for key: String) -> Value? {
+    func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
         guard isOverriden else { return remoteKVProvider?().get(for: key) }
         return kvStore?().get(for: key)
     }
 
-    func set<Value: RawStringRepresentable>(value: Value, for key: String) {
+    func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         guard isOverriden else { return }
         kvStore?().set(value: value, for: key)
     }
@@ -54,14 +54,14 @@ public class XConfigUseCase {
 class InMemoryKVStore: KeyValueStore {
     static let shared = InMemoryKVStore()
 
-    private var kv: [String: RawStringRepresentable] = [:]
+    private var kv: [String: RawStringValueRepresentable] = [:]
 
-    func get<Value: RawStringRepresentable>(for key: String) -> Value? {
+    func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
         guard let rawString = kv[key]?.rawString else { return nil }
         return Value(rawString: rawString)
     }
 
-    func set<Value: RawStringRepresentable>(value: Value, for key: String) {
+    func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         kv[key] = value
     }
 }
