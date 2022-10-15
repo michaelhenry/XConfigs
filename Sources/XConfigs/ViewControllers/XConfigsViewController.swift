@@ -79,6 +79,7 @@ public final class XConfigsViewController: UITableViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] secItems in
                 guard let self = self else { return }
+                print("REFRESH")
                 self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
             }
             .store(in: &subscriptions)
@@ -97,20 +98,32 @@ public final class XConfigsViewController: UITableViewController {
     }
 
     private func showTextInputViewController(model: TextInputModel) {
-        let textInputVC = TextInputViewController(viewModel: .init(title: model.key, value: model.value))
+        let textInputVC = InputValueViewController(viewModel: .init(title: model.key, value: model.value))
+
+        textInputVC.valuePublisher
+            .map { UpdateValueInput(key: model.key, value: $0) }
+            .subscribe(updateValueSubject)
+            .store(in: &subscriptions)
+
         let nvc = textInputVC.wrapInsideNavVC()
 
         // Sheet
-        nvc.preferAsSheet()
+        nvc.preferAsHalfSheet()
         present(nvc, animated: true)
     }
 
     func showOptionSelection(for model: OptionSelectionModel) {
         let optionVC = OptionViewController(viewModel: .init(title: model.key, items: model.choices))
+
+        optionVC.selectedItemPublisher
+            .map { UpdateValueInput(key: model.key, value: $0) }
+            .subscribe(updateValueSubject)
+            .store(in: &subscriptions)
+
         let nvc = optionVC.wrapInsideNavVC()
 
         // Sheet
-        nvc.preferAsSheet()
+        nvc.preferAsHalfSheet()
         present(nvc, animated: true)
     }
 }

@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIViewController {
-    func preferAsSheet() {
+    func preferAsHalfSheet() {
         if #available(iOS 15.0, *) {
             if let sheet = sheetPresentationController {
                 sheet.detents = [.medium(), .large()]

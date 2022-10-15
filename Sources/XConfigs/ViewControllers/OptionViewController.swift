@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 final class OptionViewController: UITableViewController {
@@ -7,6 +8,17 @@ final class OptionViewController: UITableViewController {
     }
 
     private let viewModel: ViewModel
+    private var subscriptions = Set<AnyCancellable>()
+
+    var selectedItemPublisher: AnyPublisher<RawStringRepresentable, Never> {
+        tableView.didSelectRowPublisher
+            .compactMap { [weak self] indexPath -> RawStringRepresentable? in
+                guard let self = self else { return nil }
+                self.dismiss(animated: true)
+                return self.viewModel.items[indexPath.item]
+            }
+            .eraseToAnyPublisher()
+    }
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -37,8 +49,25 @@ final class OptionViewController: UITableViewController {
         return cell
     }
 
+    override func tableView(_: UITableView, didSelectRowAt _: IndexPath) {
+        dismiss(animated: true)
+    }
+
     private func setupUI() {
         title = viewModel.title
         tableView.registerCell(UITableViewCell.self)
+
+        if #available(iOS 14.0, *) {
+            navigationItem.leftBarButtonItem = .init(systemItem: .cancel)
+        } else {
+            navigationItem.leftBarButtonItem = .init(title: "Cancel", style: .plain, target: self, action: nil)
+        }
+
+        navigationItem.leftBarButtonItem?
+            .tapPublisher
+            .sink(receiveValue: { [weak self] _ in
+                self?.dismiss(animated: true)
+            })
+            .store(in: &subscriptions)
     }
 }

@@ -38,6 +38,11 @@ extension UIView {
         guard let superview = superview else { return }
         bind(to: superview, margins: margins)
     }
+
+    func bindToSuperview(margins: CGFloat) {
+        guard let superview = superview else { return }
+        bind(to: superview, margins: .init(top: margins, left: margins, bottom: margins, right: margins))
+    }
 }
 
 protocol ConfigurableView: UIView {
