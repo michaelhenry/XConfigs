@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 // Provide a default `reuseIdentifier` equal to the class name.
@@ -45,11 +46,13 @@ protocol ConfigurableView: UIView {
     func configure(with viewModel: ViewModel)
 }
 
-final class UIViewTableWrapperCell<View: ConfigurableView>: UITableViewCell {
-    private let view: View
+final class UIViewTableWrapperCell<MainView: ConfigurableView>: UITableViewCell {
+    let mainView: MainView
+
+    var subscriptions = Set<AnyCancellable>()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        view = View()
+        mainView = MainView()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
@@ -59,12 +62,17 @@ final class UIViewTableWrapperCell<View: ConfigurableView>: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with viewModel: View.ViewModel) {
-        view.configure(with: viewModel)
+    func configure(with viewModel: MainView.ViewModel) {
+        mainView.configure(with: viewModel)
     }
 
     private func setupUI() {
-        contentView.addSubview(view)
-        view.bindToSuperview()
+        contentView.addSubview(mainView)
+        mainView.bindToSuperview()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        subscriptions = Set<AnyCancellable>()
     }
 }

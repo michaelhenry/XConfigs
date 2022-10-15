@@ -1,9 +1,10 @@
+import CombineCocoa
 import UIKit
 
 final class ToggleView: UIView, ConfigurableView {
     typealias ViewModel = (String, Bool)
 
-    private let switchView = UISwitch()
+    let switchView = UISwitch()
     private let keyLabel = UILabel()
 
     init() {
@@ -16,10 +17,7 @@ final class ToggleView: UIView, ConfigurableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with viewModel: ViewModel) {
-        keyLabel.text = viewModel.0
-        switchView.isOn = viewModel.1
-    }
+    // MARK: - Private
 
     private func setupUI() {
         let stackview = UIStackView(arrangedSubviews: [
@@ -28,5 +26,12 @@ final class ToggleView: UIView, ConfigurableView {
         ])
         addSubview(stackview)
         stackview.bindToSuperview(margins: .init(top: 10, left: 20, bottom: 10, right: 20))
+    }
+
+    // MARK: - Internal
+
+    func configure(with viewModel: ViewModel) {
+        keyLabel.text = viewModel.0
+        switchView.isOn = viewModel.1
     }
 }
