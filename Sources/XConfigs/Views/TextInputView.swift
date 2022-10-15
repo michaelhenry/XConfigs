@@ -4,7 +4,10 @@ final class TextInputView: UIView, ConfigurableView {
     typealias ViewModel = (String, String?)
 
     private let keyLabel = UILabel()
-    private let valueLabel = UILabel()
+
+    private let valueLabel = UILabel().apply {
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
 
     init() {
         super.init(frame: .zero)
@@ -25,7 +28,9 @@ final class TextInputView: UIView, ConfigurableView {
         let stackview = UIStackView(arrangedSubviews: [
             keyLabel,
             valueLabel,
-        ])
+        ]).apply {
+            $0.spacing = 10
+        }
         addSubview(stackview)
         stackview.bindToSuperview(margins: .init(top: 10, left: 20, bottom: 10, right: 20))
     }
