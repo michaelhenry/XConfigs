@@ -5,7 +5,7 @@ public class XConfigUseCase {
     public static let shared = XConfigUseCase()
 
     var isOverriden: Bool = false
-    var configStore: (() -> ConfigStoreProtocol)?
+    var kvStore: (() -> KeyValueStore)?
     var remoteKVProvider: (() -> RemoteKeyValueProvider)?
     var configsSpec: (() -> XConfigsSpec.Type)?
 
@@ -23,8 +23,8 @@ public class XConfigUseCase {
         self.configsSpec = configsSpec
     }
 
-    public func set(configStore: @escaping (() -> ConfigStoreProtocol)) {
-        self.configStore = configStore
+    public func set(kvStore: @escaping (() -> KeyValueStore)) {
+        self.kvStore = kvStore
     }
 
     public func set(remoteKVProvider: @escaping (() -> RemoteKeyValueProvider)) {
@@ -36,8 +36,8 @@ public class XConfigUseCase {
     }
 
     func get<Value>(for key: String) -> Value? {
-        guard isOverriden else { return configStore?().getRemoteValue(for: key) }
-        return configStore?().getDevValue(for: key)
+        guard isOverriden else { return remoteKVProvider?().get(for: key) }
+        return kvStore?().get(for: key)
     }
 
     func set<Value>(value _: Value, for _: String) {
