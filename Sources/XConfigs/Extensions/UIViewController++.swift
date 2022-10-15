@@ -6,7 +6,7 @@ extension UIViewController {
             if let sheet = sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                sheet.prefersGrabberVisible = true
+//                sheet.prefersGrabberVisible = true
                 sheet.preferredCornerRadius = 10
             }
         }
