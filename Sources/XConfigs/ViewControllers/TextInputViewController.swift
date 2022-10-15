@@ -1,3 +1,5 @@
+import Combine
+import CombineCocoa
 import UIKit
 
 final class TextInputViewController: UIViewController {
@@ -11,6 +13,7 @@ final class TextInputViewController: UIViewController {
     }
 
     private let viewModel: ViewModel
+    private var subscriptions = Set<AnyCancellable>()
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -25,6 +28,13 @@ final class TextInputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+
+        navigationItem.rightBarButtonItem?
+            .tapPublisher
+            .sink(receiveValue: { [weak self] _ in
+                self?.dismiss(animated: true)
+            })
+            .store(in: &subscriptions)
     }
 
     private func setupUI() {
