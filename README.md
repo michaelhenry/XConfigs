@@ -1,4 +1,4 @@
-# XConfig
+# XConfigs
 
 A description of this package.
 
