@@ -113,7 +113,7 @@ public final class XConfigsViewController: UITableViewController {
     }
 
     func showOptionSelection(for model: OptionSelectionModel) {
-        let optionVC = OptionViewController(viewModel: .init(title: model.key, items: model.choices))
+        let optionVC = OptionViewController(viewModel: .init(choices: model.choices, selectedItem: model.value))
 
         optionVC.selectedItemPublisher
             .map { KeyValue(key: model.key, value: $0) }

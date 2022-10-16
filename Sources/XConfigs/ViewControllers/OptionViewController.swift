@@ -2,23 +2,27 @@ import Combine
 import UIKit
 
 final class OptionViewController: UITableViewController {
-    struct ViewModel {
-        let title: String
-        let items: [RawStringValueRepresentable]
-    }
+    typealias ViewModel = OptionViewModel
+    typealias DataSource = UITableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
     private var subscriptions = Set<AnyCancellable>()
 
-    var selectedItemPublisher: AnyPublisher<RawStringValueRepresentable, Never> {
-        tableView.didSelectRowPublisher
-            .compactMap { [weak self] indexPath -> RawStringValueRepresentable? in
-                guard let self = self else { return nil }
-                self.dismiss(animated: true)
-                return self.viewModel.items[indexPath.item]
-            }
-            .eraseToAnyPublisher()
+    private let itemSubject = PassthroughSubject<String, Never>()
+    var selectedItemPublisher: AnyPublisher<String, Never> {
+        itemSubject.eraseToAnyPublisher()
     }
+
+    private lazy var datasource: DataSource = {
+        var ds = DataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
+            guard let self = self else { return .init() }
+            let cell = tableView.dequeueCell(UITableViewCell.self, for: indexPath)
+            cell.textLabel?.text = item
+            return cell
+        }
+        ds.defaultRowAnimation = .fade
+        return ds
+    }()
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -33,20 +37,41 @@ final class OptionViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        handleViewModelOutput()
     }
 
-    override func numberOfSections(in _: UITableView) -> Int {
-        1
-    }
+    private func handleViewModelOutput() {
+        guard let leftNavItem = navigationItem.leftBarButtonItem else { return }
+        let output = viewModel.transform(input: .init(
+            reloadPublisher: Just(()).eraseToAnyPublisher(),
+            dismissPublisher: leftNavItem.tapPublisher,
+            selectItemPublisher: tableView.didSelectRowPublisher.compactMap { [weak self] indexPath -> ViewModel.Item? in
+                guard let self = self else { return nil }
+                return self.datasource.itemIdentifier(for: indexPath)
+            }.eraseToAnyPublisher()
+        ))
 
-    override func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        viewModel.items.count
-    }
+        output.sectionItemsModels
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] secItems in
+                guard let self = self else { return }
+                self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
+            }
+            .store(in: &subscriptions)
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueCell(UITableViewCell.self, for: indexPath)
-        cell.textLabel?.text = viewModel.items[indexPath.item].rawString
-        return cell
+        output.action
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self = self else { return }
+                switch action {
+                case .cancel:
+                    self.dismiss(animated: true)
+                case let .select(item):
+                    self.itemSubject.send(item)
+                    self.dismiss(animated: true)
+                }
+            }
+            .store(in: &subscriptions)
     }
 
     override func tableView(_: UITableView, didSelectRowAt _: IndexPath) {
@@ -54,7 +79,7 @@ final class OptionViewController: UITableViewController {
     }
 
     private func setupUI() {
-        title = viewModel.title
+        title = "hello"
         tableView.registerCell(UITableViewCell.self)
 
         if #available(iOS 14.0, *) {
@@ -62,12 +87,5 @@ final class OptionViewController: UITableViewController {
         } else {
             navigationItem.leftBarButtonItem = .init(title: "Cancel", style: .plain, target: self, action: nil)
         }
-
-        navigationItem.leftBarButtonItem?
-            .tapPublisher
-            .sink(receiveValue: { [weak self] _ in
-                self?.dismiss(animated: true)
-            })
-            .store(in: &subscriptions)
     }
 }
