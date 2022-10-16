@@ -79,7 +79,6 @@ public final class XConfigsViewController: UITableViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] secItems in
                 guard let self = self else { return }
-                print("REFRESH")
                 self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
             }
             .store(in: &subscriptions)
