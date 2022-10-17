@@ -64,37 +64,3 @@ public class XConfigUseCase {
         }
     }
 }
-
-class InMemoryKVStore: KeyValueStore {
-    static let shared = InMemoryKVStore()
-
-    private var kv: [String: RawStringValueRepresentable] = [:]
-
-    func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        guard let rawString = kv[key]?.rawString else { return nil }
-        return Value(rawString: rawString)
-    }
-
-    func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
-        kv[key] = value
-    }
-
-    func remove(key: String) {
-        kv.removeValue(forKey: key)
-    }
-}
-
-extension UserDefaults: KeyValueStore {
-    public func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        guard let rawString = string(forKey: key) else { return nil }
-        return Value(rawString: rawString)
-    }
-
-    public func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
-        set(value.rawString, forKey: key)
-    }
-
-    public func remove(key: String) {
-        removeObject(forKey: key)
-    }
-}

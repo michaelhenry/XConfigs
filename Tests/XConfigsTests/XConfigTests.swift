@@ -2,25 +2,7 @@ import XCTest
 @testable import XConfigs
 
 final class XConfigTests: XCTestCase {
-    func testRegistration() throws {
-        let useCase = XConfigUseCase.shared
-        let mockLocalStore = MockLocalKVStore()
-        let remoteKVProvider = MockRemoteKVProvider()
-        useCase.update(configStore: { mockLocalStore })
-        useCase.update(remoteKVProvider: { remoteKVProvider })
-        let vm = XConfigsViewModel(useCase: useCase, spec: MockConfigs.self)
-
-        XCTAssertEqual(vm.sectionItemsModels, [
-            .init(section: .main, items: [
-                .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
-                .optionSelection(.init(key: "region", value: "north", choices: ["north", "south", "east", "west"])),
-                .textInput(.init(key: "maxRetry", value: "10")),
-                .textInput(.init(key: "threshold", value: "1")),
-                .textInput(.init(key: "rate", value: "2.5")),
-            ]),
-        ])
-    }
+    func testRegistration() throws {}
 }
 
 struct MockConfigs: XConfigsSpec {
@@ -58,24 +40,6 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
     var rawString: String {
         rawValue
     }
-}
-
-class MockLocalKVStore: ConfigStoreProtocol {
-    func getRemoteValue<Value>(for _: String) -> Value? {
-        nil
-    }
-
-    func getDevValue<Value>(for _: String) -> Value? {
-        nil
-    }
-
-    func get(key _: String) -> Config? {
-        nil
-    }
-
-    func set(value _: Config, for _: String) {}
-
-    func deleteAll() {}
 }
 
 class MockRemoteKVProvider: RemoteKeyValueProvider {

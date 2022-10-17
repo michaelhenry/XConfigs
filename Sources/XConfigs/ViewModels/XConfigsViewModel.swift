@@ -70,10 +70,13 @@ public struct XConfigsViewModel: ViewModelType {
 
     // Transform [ConfigInfo] to [SectionItemModel]
     func mapConfigInfosToSectionItemsModels(infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
-        var sections = [SectionItemsModel<Section, Item>(section: .main, items: [
-            .overrideConfig(useCase.isOverriden),
-            .action("Reset"),
-        ])]
+        var mainItems: [Item] = [.overrideConfig(useCase.isOverriden)]
+
+        if useCase.isOverriden {
+            mainItems.append(.action("Reset"))
+        }
+
+        var sections = [SectionItemsModel<Section, Item>(section: .main, items: mainItems)]
 
         let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
             var items = group[info.group] ?? []
