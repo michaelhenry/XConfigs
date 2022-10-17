@@ -46,7 +46,13 @@ public struct XConfigsViewModel: ViewModelType {
 
     // Transform [ConfigInfo] to [SectionItemModel]
     func mapConfigInfosToSectionItemsModels(_ infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
-        .init(arrayLiteral: .init(section: .main, items: infos.compactMap(mapConfigInfoToItem)))
+        [
+            .init(section: .main, items: [
+                .toggle(.init(key: "Enable override", value: true)),
+                .textInput(.init(key: "Reset", value: "")),
+            ]),
+            .init(section: .group("Sub"), items: infos.compactMap(mapConfigInfoToItem)),
+        ]
     }
 
     // Transform ConfigInfo to Item
