@@ -25,11 +25,11 @@ public final class XConfigsViewController: UITableViewController {
                 cell.selectionStyle = .none
                 return cell
             case let .textInput(vm):
-                let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
                 cell.configure(with: (vm.key, vm.value))
                 return cell
             case let .optionSelection(vm):
-                let cell = tableView.dequeueCell(UIViewTableWrapperCell<TextInputView>.self, for: indexPath)
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
                 cell.configure(with: (vm.key, vm.value))
                 return cell
             }
@@ -53,7 +53,7 @@ public final class XConfigsViewController: UITableViewController {
 
         title = "XConfigs"
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
-        tableView.registerCell(UIViewTableWrapperCell<TextInputView>.self)
+        tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
         tableView.registerCell(UIViewTableWrapperCell<OptionView>.self)
         handleViewModelOutput()
     }
