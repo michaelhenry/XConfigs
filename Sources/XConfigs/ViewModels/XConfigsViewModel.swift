@@ -21,11 +21,14 @@ public struct XConfigsViewModel: ViewModelType {
         case toggle(ToggleModel)
         case textInput(TextInputModel)
         case optionSelection(OptionSelectionModel)
+        case action(String)
+        case overrideConfig(Bool)
     }
 
     struct Input {
         let reloadPublisher: AnyPublisher<Void, Never>
         let updateValuePublisher: AnyPublisher<KeyValue, Never>
+        let overrideConfigPublisher: AnyPublisher<Bool, Never>
     }
 
     struct Output {
@@ -47,34 +50,40 @@ public struct XConfigsViewModel: ViewModelType {
             .share(replay: 1)
             .eraseToAnyPublisher()
 
-        let sectionItemsModels = configs
-            .compactMap(mapConfigInfosToSectionItemsModels)
+        let overrideConfig = input.overrideConfigPublisher
+
+        let sectionItemsModels = Publishers.CombineLatest(configs, overrideConfig)
+            .map { configs, isOverriden -> [SectionItemsModel<Section, Item>] in
+
+                mapConfigInfosToSectionItemsModels(isOverriden: isOverriden, infos: configs)
+            }
             .eraseToAnyPublisher()
         return .init(sectionItemsModels: sectionItemsModels)
     }
 
     // Transform [ConfigInfo] to [SectionItemModel]
-    func mapConfigInfosToSectionItemsModels(_ infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
-        let mainSection = SectionItemsModel<Section, Item>(section: .main, items: [
-            .toggle(.init(key: "Enable override", value: true)),
-            .textInput(.init(key: "Reset", value: "")),
-        ])
+    func mapConfigInfosToSectionItemsModels(isOverriden: Bool, infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
+        var sections = [SectionItemsModel<Section, Item>(section: .main, items: [
+            .overrideConfig(isOverriden),
+            .action("Reset"),
+        ])]
 
-        let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
-            var items = group[info.group] ?? []
-            if let item = mapConfigInfoToItem(info) {
-                items.append(item)
+        if isOverriden {
+            let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
+                var items = group[info.group] ?? []
+                if let item = mapConfigInfoToItem(info) {
+                    items.append(item)
+                }
+                group[info.group] = items
+            }.sorted {
+                $0.key.sort < $1.key.sort
             }
-            group[info.group] = items
-        }.sorted {
-            $0.key.sort < $1.key.sort
-        }
 
-        let sections = groups.map {
-            SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
+            sections.append(contentsOf: groups.map {
+                SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
+            })
         }
-
-        return [mainSection] + sections
+        return sections
     }
 
     // Transform ConfigInfo to Item

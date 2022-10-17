@@ -9,6 +9,7 @@ public final class XConfigsViewController: UITableViewController {
     private let viewModel: ViewModel
     private var subscriptions = Set<AnyCancellable>()
     private var updateValueSubject = PassthroughSubject<KeyValue, Never>()
+    private var overrideConfigSubject = PassthroughSubject<Bool, Never>()
     private var shouldAnimate = false
 
     private lazy var datasource: DataSource = {
@@ -32,6 +33,18 @@ public final class XConfigsViewController: UITableViewController {
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
                 cell.configure(with: (vm.key, vm.value))
                 return cell
+            case let .action(vm):
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<ActionView>.self, for: indexPath)
+                cell.configure(with: vm)
+                return cell
+            case let .overrideConfig(vm):
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
+                cell.configure(with: ("Override", vm))
+                cell.mainView.valueChangedPublisher
+                    .subscribe(self.overrideConfigSubject)
+                    .store(in: &cell.subscriptions)
+                cell.selectionStyle = .none
+                return cell
             }
         }
         ds.defaultRowAnimation = .fade
@@ -52,6 +65,7 @@ public final class XConfigsViewController: UITableViewController {
         super.viewDidLoad()
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
+        tableView.registerCell(UIViewTableWrapperCell<ActionView>.self)
         handleViewModelOutput()
     }
 
@@ -69,7 +83,8 @@ public final class XConfigsViewController: UITableViewController {
         let output = viewModel.transform(
             input: .init(
                 reloadPublisher: Just(()).eraseToAnyPublisher(),
-                updateValuePublisher: updateValueSubject.eraseToAnyPublisher()
+                updateValuePublisher: updateValueSubject.eraseToAnyPublisher(),
+                overrideConfigPublisher: overrideConfigSubject.prepend(false).eraseToAnyPublisher()
             ))
 
         output.sectionItemsModels
