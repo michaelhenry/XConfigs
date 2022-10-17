@@ -13,6 +13,7 @@ struct OptionViewModel: ViewModelType {
     }
 
     struct Output {
+        let title: AnyPublisher<String, Never>
         let sectionItemsModels: AnyPublisher<[SectionItemsModel<Section, Item>], Never>
         let action: AnyPublisher<Action, Never>
     }
@@ -22,17 +23,15 @@ struct OptionViewModel: ViewModelType {
         case select(Item)
     }
 
-    private let choices: [any RawStringValueRepresentable]
-    private let selectedItem: (any RawStringValueRepresentable)?
+    private let model: OptionSelectionModel
 
-    init(choices: [any RawStringValueRepresentable], selectedItem: (any RawStringValueRepresentable)?) {
-        self.choices = choices
-        self.selectedItem = selectedItem
+    init(model: OptionSelectionModel) {
+        self.model = model
     }
 
     func transform(input: Input) -> Output {
         let sectionItemsFromReload = input.reloadPublisher.map { _ -> [SectionItemsModel<Section, Item>] in
-            .init(arrayLiteral: .init(section: 0, items: choices.map(\.rawString)))
+            .init(arrayLiteral: .init(section: 0, items: model.choices.map(\.rawString)))
         }.eraseToAnyPublisher()
 
         let cancelAction = input.dismissPublisher.map { Action.cancel }
@@ -40,6 +39,7 @@ struct OptionViewModel: ViewModelType {
 
         let action = Publishers.Merge(cancelAction, selectAction).eraseToAnyPublisher()
         return .init(
+            title: Just(model.key).eraseToAnyPublisher(),
             sectionItemsModels: sectionItemsFromReload,
             action: action
         )

@@ -79,7 +79,6 @@ final class OptionViewController: UITableViewController {
     }
 
     private func setupUI() {
-        title = "hello"
         tableView.registerCell(UITableViewCell.self)
 
         if #available(iOS 14.0, *) {
