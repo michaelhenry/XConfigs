@@ -10,6 +10,7 @@ public final class XConfigsViewController: UITableViewController {
     private var subscriptions = Set<AnyCancellable>()
     private var updateValueSubject = PassthroughSubject<KeyValue, Never>()
     private var overrideConfigSubject = PassthroughSubject<Bool, Never>()
+    private var resetSubject = PassthroughSubject<Void, Never>()
     private var shouldAnimate = false
 
     private lazy var datasource: DataSource = {
@@ -84,7 +85,8 @@ public final class XConfigsViewController: UITableViewController {
             input: .init(
                 reloadPublisher: Just(()).eraseToAnyPublisher(),
                 updateValuePublisher: updateValueSubject.eraseToAnyPublisher(),
-                overrideConfigPublisher: overrideConfigSubject.eraseToAnyPublisher()
+                overrideConfigPublisher: overrideConfigSubject.eraseToAnyPublisher(),
+                resetPublisher: resetSubject.eraseToAnyPublisher()
             ))
 
         output.title.sink { [weak self] title in
@@ -108,6 +110,8 @@ public final class XConfigsViewController: UITableViewController {
             showOptionSelection(for: model)
         case let .textInput(model):
             showTextInputViewController(model: model)
+        case .action:
+            resetSubject.send(())
         default:
             break
         }

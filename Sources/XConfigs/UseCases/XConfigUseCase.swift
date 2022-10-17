@@ -57,9 +57,11 @@ public class XConfigUseCase {
         kvStore?().set(value: value, for: key)
     }
 
-    func resetLocalValues() {
+    func reset() {
         guard isOverriden else { return }
-        //        localKVStore?().deleteAll()
+        getConfigs().forEach {
+            kvStore?().remove(key: $0.configKey)
+        }
     }
 }
 
@@ -76,14 +78,23 @@ class InMemoryKVStore: KeyValueStore {
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         kv[key] = value
     }
+
+    func remove(key: String) {
+        kv.removeValue(forKey: key)
+    }
 }
 
 extension UserDefaults: KeyValueStore {
     public func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        object(forKey: key) as? Value
+        guard let rawString = string(forKey: key) else { return nil }
+        return Value(rawString: rawString)
     }
 
     public func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
-        setValue(value, forKey: key)
+        set(value.rawString, forKey: key)
+    }
+
+    public func remove(key: String) {
+        removeObject(forKey: key)
     }
 }

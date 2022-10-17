@@ -29,6 +29,7 @@ public struct XConfigsViewModel: ViewModelType {
         let reloadPublisher: AnyPublisher<Void, Never>
         let updateValuePublisher: AnyPublisher<KeyValue, Never>
         let overrideConfigPublisher: AnyPublisher<Bool, Never>
+        let resetPublisher: AnyPublisher<Void, Never>
     }
 
     struct Output {
@@ -45,12 +46,16 @@ public struct XConfigsViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let update = input.updateValuePublisher.map { useCase.set(value: $0.value, for: $0.key) }
         let reload = input.reloadPublisher
+        let reset = input.resetPublisher.map {
+            useCase.reset()
+        }
+
         let overrideConfig = input.overrideConfigPublisher
             .map { val in
                 useCase.isOverriden = val
             }
 
-        let configs = Publishers.Merge3(update, reload, overrideConfig)
+        let configs = Publishers.Merge4(update, reload, overrideConfig, reset)
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
             .eraseToAnyPublisher()
