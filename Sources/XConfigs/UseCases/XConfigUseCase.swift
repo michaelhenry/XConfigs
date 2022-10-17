@@ -4,13 +4,15 @@ import Foundation
 public class XConfigUseCase {
     public static let shared = XConfigUseCase()
 
+    private let isOverridenKey = "XConfigs.Debug.isOverriden"
+
     var isOverriden: Bool {
         get {
-            UserDefaults.standard.bool(forKey: "XConfigs.isOverriden")
+            kvStore?().get(for: isOverridenKey) ?? false
         }
 
         set {
-            UserDefaults.standard.set(newValue, forKey: "XConfigs.isOverriden")
+            kvStore?().set(value: newValue, for: isOverridenKey)
         }
     }
 
@@ -73,5 +75,15 @@ class InMemoryKVStore: KeyValueStore {
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         kv[key] = value
+    }
+}
+
+extension UserDefaults: KeyValueStore {
+    public func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
+        object(forKey: key) as? Value
+    }
+
+    public func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
+        setValue(value, forKey: key)
     }
 }
