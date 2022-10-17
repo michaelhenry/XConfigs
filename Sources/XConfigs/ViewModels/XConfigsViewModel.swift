@@ -45,20 +45,18 @@ public struct XConfigsViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let update = input.updateValuePublisher.map { useCase.set(value: $0.value, for: $0.key) }
         let reload = input.reloadPublisher
+        let overrideConfig = input.overrideConfigPublisher
+            .map { val in
+                useCase.isOverriden = val
+            }
 
-        let configs = Publishers.Merge(update, reload)
+        let configs = Publishers.Merge3(update, reload, overrideConfig)
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
             .eraseToAnyPublisher()
 
-        let overrideConfig = input.overrideConfigPublisher
+        let sectionItemsModels = configs.compactMap(mapConfigInfosToSectionItemsModels).eraseToAnyPublisher()
 
-        let sectionItemsModels = Publishers.CombineLatest(configs, overrideConfig)
-            .map { configs, isOverriden -> [SectionItemsModel<Section, Item>] in
-
-                mapConfigInfosToSectionItemsModels(isOverriden: isOverriden, infos: configs)
-            }
-            .eraseToAnyPublisher()
         return .init(
             title: Just("Configs").eraseToAnyPublisher(),
             sectionItemsModels: sectionItemsModels
@@ -66,27 +64,25 @@ public struct XConfigsViewModel: ViewModelType {
     }
 
     // Transform [ConfigInfo] to [SectionItemModel]
-    func mapConfigInfosToSectionItemsModels(isOverriden: Bool, infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
+    func mapConfigInfosToSectionItemsModels(infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
         var sections = [SectionItemsModel<Section, Item>(section: .main, items: [
-            .overrideConfig(isOverriden),
+            .overrideConfig(useCase.isOverriden),
             .action("Reset"),
         ])]
 
-        if isOverriden {
-            let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
-                var items = group[info.group] ?? []
-                if let item = mapConfigInfoToItem(info) {
-                    items.append(item)
-                }
-                group[info.group] = items
-            }.sorted {
-                $0.key.sort < $1.key.sort
+        let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
+            var items = group[info.group] ?? []
+            if let item = mapConfigInfoToItem(info) {
+                items.append(item)
             }
-
-            sections.append(contentsOf: groups.map {
-                SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
-            })
+            group[info.group] = items
+        }.sorted {
+            $0.key.sort < $1.key.sort
         }
+
+        sections.append(contentsOf: groups.map {
+            SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
+        })
         return sections
     }
 

@@ -4,7 +4,16 @@ import Foundation
 public class XConfigUseCase {
     public static let shared = XConfigUseCase()
 
-    var isOverriden: Bool = true
+    var isOverriden: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "XConfigs.isOverriden")
+        }
+
+        set {
+            UserDefaults.standard.set(newValue, forKey: "XConfigs.isOverriden")
+        }
+    }
+
     var kvStore: (() -> KeyValueStore)?
     var remoteKVProvider: (() -> RemoteKeyValueProvider)?
     var configsSpec: (() -> XConfigsSpec.Type)?
@@ -13,6 +22,7 @@ public class XConfigUseCase {
     private init() {}
 
     func getConfigs() -> [ConfigInfo] {
+        guard isOverriden else { return [] }
         guard let spec = configsSpec?() else { fatalError("Must set the config spec") }
         let instance = spec.init()
         let mirror = Mirror(reflecting: instance)

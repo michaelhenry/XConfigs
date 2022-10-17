@@ -84,7 +84,7 @@ public final class XConfigsViewController: UITableViewController {
             input: .init(
                 reloadPublisher: Just(()).eraseToAnyPublisher(),
                 updateValuePublisher: updateValueSubject.eraseToAnyPublisher(),
-                overrideConfigPublisher: overrideConfigSubject.prepend(false).eraseToAnyPublisher()
+                overrideConfigPublisher: overrideConfigSubject.eraseToAnyPublisher()
             ))
 
         output.title.sink { [weak self] title in
