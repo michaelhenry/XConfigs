@@ -21,6 +21,17 @@ struct FeatureFlags: XConfigsSpec {
 
     @XConfig(key: "rate", defaultValue: 2.5)
     var rate: Double
+
+    @XConfig(key: "maxScore", defaultValue: 100, group: .feature1)
+    var maxScore: Int
+
+    @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature2)
+    var maxRate: Double
+}
+
+extension XConfigGroup {
+    static let feature1 = Self(name: "Feature 1", sort: 1)
+    static let feature2 = Self(name: "Feature 2", sort: 2)
 }
 
 enum Region: String, CaseIterable, RawStringValueRepresentable {

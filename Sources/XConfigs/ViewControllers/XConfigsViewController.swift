@@ -4,7 +4,7 @@ import UIKit
 
 public final class XConfigsViewController: UITableViewController {
     typealias ViewModel = XConfigsViewModel
-    typealias DataSource = UITableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+    typealias DataSource = TableViewDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
     private var subscriptions = Set<AnyCancellable>()

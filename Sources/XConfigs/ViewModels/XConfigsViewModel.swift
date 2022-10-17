@@ -3,9 +3,18 @@ import CombineExt
 import Foundation
 
 public struct XConfigsViewModel: ViewModelType {
-    enum Section: Hashable {
+    enum Section: Hashable, CustomStringConvertible {
         case main
         case group(String)
+
+        var description: String {
+            switch self {
+            case .main:
+                return ""
+            case let .group(name):
+                return name
+            }
+        }
     }
 
     enum Item: Hashable {
@@ -46,13 +55,26 @@ public struct XConfigsViewModel: ViewModelType {
 
     // Transform [ConfigInfo] to [SectionItemModel]
     func mapConfigInfosToSectionItemsModels(_ infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
-        [
-            .init(section: .main, items: [
-                .toggle(.init(key: "Enable override", value: true)),
-                .textInput(.init(key: "Reset", value: "")),
-            ]),
-            .init(section: .group("Sub"), items: infos.compactMap(mapConfigInfoToItem)),
-        ]
+        let mainSection = SectionItemsModel<Section, Item>(section: .main, items: [
+            .toggle(.init(key: "Enable override", value: true)),
+            .textInput(.init(key: "Reset", value: "")),
+        ])
+
+        let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
+            var items = group[info.group] ?? []
+            if let item = mapConfigInfoToItem(info) {
+                items.append(item)
+            }
+            group[info.group] = items
+        }.sorted {
+            $0.key.sort < $1.key.sort
+        }
+
+        let sections = groups.map {
+            SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
+        }
+
+        return [mainSection] + sections
     }
 
     // Transform ConfigInfo to Item
