@@ -3,18 +3,9 @@ import CombineExt
 import Foundation
 
 public struct XConfigsViewModel: ViewModelType {
-    enum Section: Hashable, CustomStringConvertible {
+    enum Section: Hashable {
         case main
         case group(String)
-
-        var description: String {
-            switch self {
-            case .main:
-                return ""
-            case let .group(name):
-                return name
-            }
-        }
     }
 
     enum Item: Hashable {
@@ -46,14 +37,8 @@ public struct XConfigsViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let update = input.updateValuePublisher.map { useCase.set(value: $0.value, for: $0.key) }
         let reload = input.reloadPublisher
-        let reset = input.resetPublisher.map {
-            useCase.reset()
-        }
-
-        let overrideConfig = input.overrideConfigPublisher
-            .map { val in
-                useCase.isOverriden = val
-            }
+        let reset = input.resetPublisher.map { useCase.reset() }
+        let overrideConfig = input.overrideConfigPublisher.map { val in useCase.isOverriden = val }
 
         let configs = Publishers.Merge4(update, reload, overrideConfig, reset)
             .map { _ in useCase.getConfigs() }
@@ -104,6 +89,17 @@ public struct XConfigsViewModel: ViewModelType {
             return .optionSelection(.init(key: key, value: val.rawString, choices: val.allChoices))
         default:
             return .textInput(.init(key: key, value: info.configValue.rawString))
+        }
+    }
+}
+
+extension XConfigsViewModel.Section: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .main:
+            return ""
+        case let .group(name):
+            return name
         }
     }
 }
