@@ -35,9 +35,6 @@ final class InputValueViewController: UIViewController {
     }
 
     private func setupUI() {
-        title = viewModel.title
-        textView.text = viewModel.value
-
         if #available(iOS 14.0, *) {
             navigationItem.rightBarButtonItem = .init(systemItem: .done)
             navigationItem.leftBarButtonItem = .init(systemItem: .cancel)
@@ -59,6 +56,16 @@ final class InputValueViewController: UIViewController {
             dismissPublisher: leftNavItem.tapPublisher,
             donePublisher: rightNavITem.tapPublisher
         ))
+        output.title.sink { [weak self] title in
+            self?.title = title
+        }
+        .store(in: &subscriptions)
+
+        output.value.sink { [weak self] value in
+            self?.textView.text = value
+        }
+        .store(in: &subscriptions)
+
         output.action.sink { [weak self] action in
             switch action {
             case .cancel:

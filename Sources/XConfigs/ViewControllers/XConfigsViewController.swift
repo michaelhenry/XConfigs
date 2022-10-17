@@ -94,7 +94,7 @@ public final class XConfigsViewController: UITableViewController {
     }
 
     private func showTextInputViewController(model: TextInputModel) {
-        let textInputVC = InputValueViewController(viewModel: .init(title: model.key, value: model.value))
+        let textInputVC = InputValueViewController(viewModel: .init(model: model))
         textInputVC.valuePublisher
             .map { KeyValue(key: model.key, value: $0) }
             .subscribe(updateValueSubject)
@@ -102,7 +102,7 @@ public final class XConfigsViewController: UITableViewController {
         present(textInputVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
     }
 
-    func showOptionSelection(for model: OptionSelectionModel) {
+    private func showOptionSelection(for model: OptionSelectionModel) {
         let optionVC = OptionViewController(viewModel: .init(model: model))
         optionVC.selectedItemPublisher
             .map { KeyValue(key: model.key, value: $0) }
