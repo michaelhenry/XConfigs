@@ -87,6 +87,11 @@ public final class XConfigsViewController: UITableViewController {
                 overrideConfigPublisher: overrideConfigSubject.prepend(false).eraseToAnyPublisher()
             ))
 
+        output.title.sink { [weak self] title in
+            self?.title = title
+        }
+        .store(in: &subscriptions)
+
         output.sectionItemsModels
             .receive(on: DispatchQueue.main)
             .sink { [weak self] secItems in

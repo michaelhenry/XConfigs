@@ -32,6 +32,7 @@ public struct XConfigsViewModel: ViewModelType {
     }
 
     struct Output {
+        let title: AnyPublisher<String, Never>
         let sectionItemsModels: AnyPublisher<[SectionItemsModel<Section, Item>], Never>
     }
 
@@ -58,7 +59,10 @@ public struct XConfigsViewModel: ViewModelType {
                 mapConfigInfosToSectionItemsModels(isOverriden: isOverriden, infos: configs)
             }
             .eraseToAnyPublisher()
-        return .init(sectionItemsModels: sectionItemsModels)
+        return .init(
+            title: Just("Configs").eraseToAnyPublisher(),
+            sectionItemsModels: sectionItemsModels
+        )
     }
 
     // Transform [ConfigInfo] to [SectionItemModel]
