@@ -50,11 +50,8 @@ public final class XConfigsViewController: UITableViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "XConfigs"
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
-        tableView.registerCell(UIViewTableWrapperCell<OptionView>.self)
         handleViewModelOutput()
     }
 
