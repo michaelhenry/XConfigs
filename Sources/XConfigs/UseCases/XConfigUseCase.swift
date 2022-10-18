@@ -16,9 +16,10 @@ public class XConfigUseCase {
         }
     }
 
-    var kvStore: (() -> KeyValueStore)?
-    var remoteKVProvider: (() -> RemoteKeyValueProvider)?
-    var configsSpec: (() -> XConfigsSpec.Type)?
+    private var kvStore: (() -> KeyValueStore)?
+    private var remoteKVProvider: (() -> RemoteKeyValueProvider)?
+    private var configsSpec: (() -> XConfigsSpec.Type)?
+    private var remoteKeyValues: [String: Any] = [:]
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
     private init() {}
@@ -43,12 +44,24 @@ public class XConfigUseCase {
         self.remoteKVProvider = remoteKVProvider
     }
 
-    public func downloadLatest() {
-        _ = remoteKVProvider?().provide()
+    public func downloadRemoteConfigs() async throws {
+        remoteKeyValues = try await remoteKVProvider?().provide() ?? [:]
+        print("remoteKeyValues", remoteKeyValues)
+    }
+
+    public func downloadRemoteConfigs(completion: @escaping ((Result<Void, Error>) -> Void)) {
+        Task {
+            do {
+                try await downloadRemoteConfigs()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 
     func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        guard isOverriden else { return remoteKVProvider?().get(for: key) }
+        guard isOverriden else { return remoteKeyValues[key] as? Value }
         return kvStore?().get(for: key)
     }
 
