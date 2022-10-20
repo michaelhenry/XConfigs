@@ -1,12 +1,18 @@
+import XConfigs
 import XCTest
-@testable import XConfigs
 
-final class XConfigTests: XCTestCase {
-    func testRegistration() throws {}
+class MockRemoteKVProvider: RemoteKeyValueProvider {
+    func provide() -> [String: Any] {
+        [:]
+    }
+
+    func get<Value>(for _: String) -> Value? {
+        nil
+    }
 }
 
-struct MockConfigs: XConfigsSpec {
-    static let `default` = Self()
+struct MockFeatureFlags: XConfigsSpec {
+    static let shared = Self()
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
@@ -25,6 +31,17 @@ struct MockConfigs: XConfigsSpec {
 
     @XConfig(key: "rate", defaultValue: 2.5)
     var rate: Double
+
+    @XConfig(key: "maxScore", defaultValue: 100, group: .feature1)
+    var maxScore: Int
+
+    @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature2)
+    var maxRate: Double
+}
+
+extension XConfigGroup {
+    static let feature1 = Self(name: "Feature 1", sort: 1)
+    static let feature2 = Self(name: "Feature 2", sort: 2)
 }
 
 enum Region: String, CaseIterable, RawStringValueRepresentable {
@@ -39,15 +56,5 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 
     var rawString: String {
         rawValue
-    }
-}
-
-class MockRemoteKVProvider: RemoteKeyValueProvider {
-    func provide() -> [String: Any] {
-        [:]
-    }
-
-    func get<Value>(for _: String) -> Value? {
-        nil
     }
 }

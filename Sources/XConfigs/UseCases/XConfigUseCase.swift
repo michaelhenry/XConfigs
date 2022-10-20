@@ -6,7 +6,7 @@ public class XConfigUseCase {
 
     private let isOverridenKey = "XConfigs.Debug.isOverriden"
 
-    var isOverriden: Bool {
+    public var isOverriden: Bool {
         get {
             kvStore?().get(for: isOverridenKey) ?? false
         }

@@ -1,9 +1,7 @@
 import Foundation
-@testable import XConfigs
+import XConfigs
 
 class InMemoryKVStore: KeyValueStore {
-    static let shared = InMemoryKVStore()
-
     private var kv: [String: RawStringValueRepresentable] = [:]
 
     func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {

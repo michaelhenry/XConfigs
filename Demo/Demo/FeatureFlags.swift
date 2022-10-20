@@ -2,7 +2,7 @@ import Foundation
 import XConfigs
 
 struct FeatureFlags: XConfigsSpec {
-    static let `default` = Self()
+    static let shared = Self()
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
