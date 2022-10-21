@@ -2,50 +2,39 @@ import Combine
 import Foundation
 
 public class XConfigUseCase {
-    public static let shared = XConfigUseCase()
-
     private let isOverridenKey = "XConfigs.Debug.isOverriden"
 
-    public var isOverriden: Bool {
+    var isOverriden: Bool {
         get {
-            kvStore?().get(for: isOverridenKey) ?? false
+            kvStore.get(for: isOverridenKey) ?? false
         }
 
         set {
-            kvStore?().set(value: newValue, for: isOverridenKey)
+            kvStore.set(value: newValue, for: isOverridenKey)
         }
     }
 
-    private var kvStore: (() -> KeyValueStore)?
-    private var remoteKVProvider: (() -> RemoteKeyValueProvider)?
-    private var configsSpec: (() -> XConfigsSpec.Type)?
+    private var kvStore: KeyValueStore
+    private var remoteKVProvider: RemoteKeyValueProvider
+    private var configsSpec: XConfigsSpec.Type
     private var remoteKeyValues: [String: Any] = [:]
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    private init() {}
+    init(spec: XConfigsSpec.Type, kvStore: KeyValueStore, remoteKVProvider: RemoteKeyValueProvider) {
+        configsSpec = spec
+        self.kvStore = kvStore
+        self.remoteKVProvider = remoteKVProvider
+    }
 
     func getConfigs() -> [ConfigInfo] {
         guard isOverriden else { return [] }
-        guard let spec = configsSpec?() else { fatalError("Must set the config spec") }
-        let instance = spec.init()
+        let instance = configsSpec.init()
         let mirror = Mirror(reflecting: instance)
         return mirror.children.compactMap { $0.value as? ConfigInfo }
     }
 
-    public func set(configsSpec: @escaping (() -> XConfigsSpec.Type)) {
-        self.configsSpec = configsSpec
-    }
-
-    public func set(kvStore: @escaping (() -> KeyValueStore)) {
-        self.kvStore = kvStore
-    }
-
-    public func set(remoteKVProvider: @escaping (() -> RemoteKeyValueProvider)) {
-        self.remoteKVProvider = remoteKVProvider
-    }
-
-    public func downloadRemoteConfigs() async throws {
-        remoteKeyValues = try await remoteKVProvider?().provide() ?? [:]
+    func downloadRemoteConfigs() async throws {
+        remoteKeyValues = try await remoteKVProvider.provide()
         print("remoteKeyValues", remoteKeyValues)
     }
 
@@ -62,18 +51,18 @@ public class XConfigUseCase {
 
     func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
         guard isOverriden else { return remoteKeyValues[key] as? Value }
-        return kvStore?().get(for: key)
+        return kvStore.get(for: key)
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         guard isOverriden else { return }
-        kvStore?().set(value: value, for: key)
+        kvStore.set(value: value, for: key)
     }
 
     func reset() {
         guard isOverriden else { return }
         getConfigs().forEach {
-            kvStore?().remove(key: $0.configKey)
+            kvStore.remove(key: $0.configKey)
         }
     }
 }

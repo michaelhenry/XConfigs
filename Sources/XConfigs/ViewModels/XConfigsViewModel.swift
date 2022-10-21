@@ -2,7 +2,7 @@ import Combine
 import CombineExt
 import Foundation
 
-public struct XConfigsViewModel: ViewModelType {
+struct XConfigsViewModel: ViewModelType {
     enum Section: Hashable {
         case main
         case group(String)
@@ -30,7 +30,7 @@ public struct XConfigsViewModel: ViewModelType {
 
     private let useCase: XConfigUseCase
 
-    public init(useCase: XConfigUseCase = .shared) {
+    init(useCase: XConfigUseCase = defaultConfigUseCase) {
         self.useCase = useCase
     }
 

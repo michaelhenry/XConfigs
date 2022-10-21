@@ -18,9 +18,8 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testhOverrideDisabled() throws {
-        let useCase = XConfigUseCase.shared
         let viewModel = XConfigsViewModel()
-        useCase.isOverriden = false
+        defaultConfigUseCase.isOverriden = false
 
         let reloadPublisher = PassthroughSubject<Void, Never>()
         let output = viewModel.transform(input: .init(
@@ -45,9 +44,8 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testhOverrideEnabled() throws {
-        let useCase = XConfigUseCase.shared
         let viewModel = XConfigsViewModel()
-        useCase.isOverriden = true
+        defaultConfigUseCase.isOverriden = true
 
         let reloadPublisher = PassthroughSubject<Void, Never>()
         let output = viewModel.transform(input: .init(
@@ -90,9 +88,8 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testhOverridingUpdateValues() throws {
-        let useCase = XConfigUseCase.shared
         let viewModel = XConfigsViewModel()
-        useCase.isOverriden = true
+        defaultConfigUseCase.isOverriden = true
 
         let reloadPublisher = PassthroughSubject<Void, Never>()
         let updateValuePublisher = PassthroughSubject<KeyValue, Never>()
@@ -190,9 +187,8 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testTryToOverrideValueButNotOverridable() throws {
-        let useCase = XConfigUseCase.shared
         let viewModel = XConfigsViewModel()
-        useCase.isOverriden = false
+        defaultConfigUseCase.isOverriden = false
 
         let reloadPublisher = PassthroughSubject<Void, Never>()
         let updateValuePublisher = PassthroughSubject<KeyValue, Never>()
@@ -232,9 +228,8 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testhOverridingUpdateValuesThenReset() throws {
-        let useCase = XConfigUseCase.shared
         let viewModel = XConfigsViewModel()
-        useCase.isOverriden = true
+        defaultConfigUseCase.isOverriden = true
 
         let reloadPublisher = PassthroughSubject<Void, Never>()
         let updateValuePublisher = PassthroughSubject<KeyValue, Never>()

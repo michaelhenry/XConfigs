@@ -2,7 +2,7 @@ import Combine
 import CombineCocoa
 import UIKit
 
-public final class XConfigsViewController: UITableViewController {
+final class XConfigsViewController: UITableViewController {
     typealias ViewModel = XConfigsViewModel
     typealias DataSource = TableViewDataSource<ViewModel.Section, ViewModel.Item>
 
@@ -52,7 +52,7 @@ public final class XConfigsViewController: UITableViewController {
         return ds
     }()
 
-    public init(viewModel: XConfigsViewModel = .init()) {
+    init(viewModel: XConfigsViewModel) {
         self.viewModel = viewModel
         super.init(style: .insetGrouped)
     }
