@@ -62,7 +62,7 @@ final class XConfigsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
@@ -70,12 +70,12 @@ final class XConfigsViewController: UITableViewController {
         handleViewModelOutput()
     }
 
-    override public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         handleItemSelection(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         shouldAnimate = true
     }
@@ -89,18 +89,17 @@ final class XConfigsViewController: UITableViewController {
                 resetPublisher: resetSubject.eraseToAnyPublisher()
             ))
 
-        output.title.sink { [weak self] title in
-            self?.title = title
-        }
-        .store(in: &subscriptions)
-
         output.sectionItemsModels
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] secItems in
                 guard let self = self else { return }
                 self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
             }
             .store(in: &subscriptions)
+
+        output.title.sink { [weak self] title in
+            self?.title = title
+        }
+        .store(in: &subscriptions)
     }
 
     private func handleItemSelection(_ indexPath: IndexPath) {

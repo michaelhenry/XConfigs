@@ -19,6 +19,8 @@
 		992081A0290189BB009263C5 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819D290189BB009263C5 /* Mocks.swift */; };
 		992081A229018AD5009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A129018AD5009263C5 /* XConfigs */; };
 		992081A429018B1C009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A329018B1C009263C5 /* XConfigs */; };
+		99CD39752902EC7E003CE496 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 99CD39742902EC7E003CE496 /* SnapshotTesting */; };
+		99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CD39762902EC92003CE496 /* SnapshotTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,7 @@
 		9920819528F8457F009263C5 /* XConfigs */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfigs; path = ..; sourceTree = "<group>"; };
 		9920819D290189BB009263C5 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		9920819E290189BB009263C5 /* InMemoryKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryKeyValueStore.swift; sourceTree = "<group>"; };
+		99CD39762902EC92003CE496 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				992081A429018B1C009263C5 /* XConfigs in Frameworks */,
+				99CD39752902EC7E003CE496 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +113,7 @@
 				9920817228F837DD009263C5 /* XConfigsTests.swift */,
 				9920819E290189BB009263C5 /* InMemoryKeyValueStore.swift */,
 				9920819D290189BB009263C5 /* Mocks.swift */,
+				99CD39762902EC92003CE496 /* SnapshotTests.swift */,
 			);
 			path = DemoTests;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 			name = DemoTests;
 			packageProductDependencies = (
 				992081A329018B1C009263C5 /* XConfigs */,
+				99CD39742902EC7E003CE496 /* SnapshotTesting */,
 			);
 			productName = DemoTests;
 			productReference = 9920816E28F837DD009263C5 /* DemoTests.xctest */;
@@ -200,6 +206,9 @@
 				Base,
 			);
 			mainGroup = 9920814F28F837DC009263C5;
+			packageReferences = (
+				99CD39732902EC7E003CE496 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = 9920815928F837DC009263C5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -247,6 +256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9920817328F837DD009263C5 /* XConfigsTests.swift in Sources */,
+				99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */,
 				9920819F290189BB009263C5 /* InMemoryKeyValueStore.swift in Sources */,
 				992081A0290189BB009263C5 /* Mocks.swift in Sources */,
 			);
@@ -520,6 +530,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		99CD39732902EC7E003CE496 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		992081A129018AD5009263C5 /* XConfigs */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -528,6 +549,11 @@
 		992081A329018B1C009263C5 /* XConfigs */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XConfigs;
+		};
+		99CD39742902EC7E003CE496 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 99CD39732902EC7E003CE496 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
