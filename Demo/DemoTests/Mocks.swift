@@ -2,12 +2,8 @@ import XConfigs
 import XCTest
 
 class MockRemoteKVProvider: RemoteKeyValueProvider {
-    func provide() -> [String: Any] {
+    func provide() async throws -> [String: Any] {
         [:]
-    }
-
-    func get<Value>(for _: String) -> Value? {
-        nil
     }
 }
 

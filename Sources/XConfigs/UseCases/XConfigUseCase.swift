@@ -49,16 +49,16 @@ public class XConfigUseCase {
         print("remoteKeyValues", remoteKeyValues)
     }
 
-    public func downloadRemoteConfigs(completion: @escaping ((Result<Void, Error>) -> Void)) {
-        Task {
-            do {
-                try await downloadRemoteConfigs()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
+//    public func downloadRemoteConfigs(completion: @escaping ((Result<Void, Error>) -> Void)) {
+//        Task {
+//            do {
+//                try await downloadRemoteConfigs()
+//                completion(.success(()))
+//            } catch {
+//                completion(.failure(error))
+//            }
+//        }
+//    }
 
     func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
         guard isOverriden else { return remoteKeyValues[key] as? Value }
