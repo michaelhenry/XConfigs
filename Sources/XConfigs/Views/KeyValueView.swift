@@ -25,6 +25,7 @@ final class KeyValueView: UIView, ConfigurableView {
     }
 
     private func setupUI() {
+        translatesAutoresizingMaskIntoConstraints = false
         let stackview = UIStackView(arrangedSubviews: [
             keyLabel,
             valueLabel,

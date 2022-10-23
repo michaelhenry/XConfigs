@@ -22,6 +22,7 @@ final class ActionView: UIView, ConfigurableView {
     }
 
     private func setupUI() {
+        translatesAutoresizingMaskIntoConstraints = false
         addSubview(keyLabel)
         keyLabel.bindToSuperview(margins: .init(top: 10, left: 20, bottom: 10, right: 20))
     }

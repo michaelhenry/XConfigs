@@ -6,7 +6,6 @@ extension UIViewController {
             if let sheet = sheetPresentationController {
                 sheet.detents = [.medium(), .large()]
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-//                sheet.prefersGrabberVisible = true // UIKit bug causing to retain
                 sheet.preferredCornerRadius = 10
             }
         }

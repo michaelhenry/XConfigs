@@ -27,6 +27,7 @@ final class ToggleView: UIView, ConfigurableView {
     // MARK: - Private
 
     private func setupUI() {
+        translatesAutoresizingMaskIntoConstraints = false
         let stackview = UIStackView(arrangedSubviews: [
             keyLabel,
             switchView,

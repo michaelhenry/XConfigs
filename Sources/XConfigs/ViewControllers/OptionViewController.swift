@@ -52,7 +52,6 @@ final class OptionViewController: UITableViewController {
         ))
 
         output.sectionItemsModels
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] secItems in
                 guard let self = self else { return }
                 self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
@@ -60,7 +59,6 @@ final class OptionViewController: UITableViewController {
             .store(in: &subscriptions)
 
         output.action
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self = self else { return }
                 switch action {
