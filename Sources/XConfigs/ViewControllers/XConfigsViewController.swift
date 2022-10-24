@@ -68,7 +68,6 @@ final class XConfigsViewController: UITableViewController {
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
         tableView.registerCell(UIViewTableWrapperCell<ActionView>.self)
         handleViewModelOutput()
-        showOptionSelection(for: .init(key: "hello", value: "haha", choices: ["yow", "hehe", "haha"]))
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,7 +122,7 @@ final class XConfigsViewController: UITableViewController {
             .map { KeyValue(key: model.key, value: $0) }
             .subscribe(updateValueSubject)
             .store(in: &subscriptions)
-        present(textInputVC.wrapInsideNavVC().preferAsHalfSheet(), animated: false)
+        present(textInputVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
     }
 
     private func showOptionSelection(for model: OptionSelectionModel) {
@@ -132,6 +131,6 @@ final class XConfigsViewController: UITableViewController {
             .map { KeyValue(key: model.key, value: $0) }
             .subscribe(updateValueSubject)
             .store(in: &subscriptions)
-        present(optionVC.wrapInsideNavVC().preferAsHalfSheet(), animated: false)
+        present(optionVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
     }
 }
