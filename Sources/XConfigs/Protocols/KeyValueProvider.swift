@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol RemoteKeyValueProvider {
+public protocol KeyValueProvider {
     func provide() async throws -> [String: Any]
 }

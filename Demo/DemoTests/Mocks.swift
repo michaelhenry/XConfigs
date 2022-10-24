@@ -1,7 +1,7 @@
 import XConfigs
 import XCTest
 
-class MockRemoteKVProvider: RemoteKeyValueProvider {
+class MockRemoteKVProvider: KeyValueProvider {
     func provide() async throws -> [String: Any] {
         [:]
     }

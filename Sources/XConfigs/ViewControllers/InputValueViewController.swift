@@ -2,11 +2,12 @@ import Combine
 import CombineCocoa
 import UIKit
 
-final class InputValueViewController: UIViewController {
+final class InputValueViewController: UIViewController, UITextViewDelegate {
     typealias ViewModel = InputValueViewModel
 
     private lazy var textView = UITextView().apply {
         $0.font = .preferredFont(forTextStyle: .body)
+        $0.isEditable = true
     }
 
     private let viewModel: ViewModel

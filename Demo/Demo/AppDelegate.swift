@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-struct MockKeyValueProvider: RemoteKeyValueProvider {
+struct MockKeyValueProvider: KeyValueProvider {
     func provide() async throws -> [String: Any] {
         [:]
     }

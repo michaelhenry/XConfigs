@@ -15,12 +15,12 @@ public class XConfigUseCase {
     }
 
     private var kvStore: KeyValueStore
-    private var remoteKVProvider: RemoteKeyValueProvider
+    private var remoteKVProvider: KeyValueProvider
     private var configsSpec: XConfigsSpec.Type
     private var remoteKeyValues: [String: Any] = [:]
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, kvStore: KeyValueStore, remoteKVProvider: RemoteKeyValueProvider) {
+    init(spec: XConfigsSpec.Type, kvStore: KeyValueStore, remoteKVProvider: KeyValueProvider) {
         configsSpec = spec
         self.kvStore = kvStore
         self.remoteKVProvider = remoteKVProvider
