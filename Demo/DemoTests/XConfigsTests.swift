@@ -9,7 +9,7 @@ final class XConfigsTests: XCTestCase {
 
     override func setUpWithError() throws {
         subscriptions = Set<AnyCancellable>()
-        XConfigs.configure(with: MockFeatureFlags.self, kvStore: InMemoryKVStore(), remoteKeyValueProvider: MockRemoteKVProvider())
+        XConfigs.configure(with: MockFeatureFlags.self, kvStore: MockKeyValueStore(), remoteKeyValueProvider: MockKeyValueProvider())
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 

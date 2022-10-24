@@ -7,8 +7,8 @@ internal var defaultConfigUseCase: XConfigUseCase!
 public struct XConfigs {
     private init() {}
 
-    public static func configure(with spec: XConfigsSpec.Type, kvStore: KeyValueStore = UserDefaults.standard, remoteKeyValueProvider: KeyValueProvider) {
-        defaultConfigUseCase = XConfigUseCase(spec: spec, kvStore: kvStore, remoteKVProvider: remoteKeyValueProvider)
+    public static func configure(with spec: XConfigsSpec.Type, remoteKeyValueProvider: KeyValueProvider, developmentKvStore: KeyValueStore = UserDefaults.standard) {
+        defaultConfigUseCase = XConfigUseCase(spec: spec, remoteKVProvider: remoteKeyValueProvider, developmentKvStore: developmentKvStore)
     }
 
     public static func configsViewController() -> UIViewController {

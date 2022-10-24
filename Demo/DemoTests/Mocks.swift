@@ -1,12 +1,6 @@
 import XConfigs
 import XCTest
 
-class MockRemoteKVProvider: KeyValueProvider {
-    func provide() async throws -> [String: Any] {
-        [:]
-    }
-}
-
 struct MockFeatureFlags: XConfigsSpec {
     static let shared = Self()
 

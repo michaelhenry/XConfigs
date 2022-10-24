@@ -6,24 +6,24 @@ public class XConfigUseCase {
 
     var isOverriden: Bool {
         get {
-            kvStore.get(for: isOverridenKey) ?? false
+            developmentKvStore.get(for: isOverridenKey) ?? false
         }
 
         set {
-            kvStore.set(value: newValue, for: isOverridenKey)
+            developmentKvStore.set(value: newValue, for: isOverridenKey)
         }
     }
 
-    private var kvStore: KeyValueStore
+    private var developmentKvStore: KeyValueStore
     private var remoteKVProvider: KeyValueProvider
     private var configsSpec: XConfigsSpec.Type
     private var remoteKeyValues: [String: Any] = [:]
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, kvStore: KeyValueStore, remoteKVProvider: KeyValueProvider) {
+    init(spec: XConfigsSpec.Type, remoteKVProvider: KeyValueProvider, developmentKvStore: KeyValueStore) {
         configsSpec = spec
-        self.kvStore = kvStore
         self.remoteKVProvider = remoteKVProvider
+        self.developmentKvStore = developmentKvStore
     }
 
     func getConfigs() -> [ConfigInfo] {
@@ -51,18 +51,18 @@ public class XConfigUseCase {
 
     func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
         guard isOverriden else { return remoteKeyValues[key] as? Value }
-        return kvStore.get(for: key)
+        return developmentKvStore.get(for: key)
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         guard isOverriden else { return }
-        kvStore.set(value: value, for: key)
+        developmentKvStore.set(value: value, for: key)
     }
 
     func reset() {
         guard isOverriden else { return }
         getConfigs().forEach {
-            kvStore.remove(key: $0.configKey)
+            developmentKvStore.remove(key: $0.configKey)
         }
     }
 }
