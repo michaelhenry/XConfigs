@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 struct MockKeyValueProvider: KeyValueProvider {
-    func provide() async throws -> [String: Any] {
-        [:]
+    func get<Value>(for _: String) -> Value? {
+        nil
     }
 }

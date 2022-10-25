@@ -7,8 +7,11 @@ struct FeatureFlags: XConfigsSpec {
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
 
-    @XConfig(key: "apiHost", defaultValue: "https://google.com")
-    var apiHost: String
+    @XConfig(key: "apiHost", defaultValue: URL(string: "https://www.google.com")!)
+    var apiHost: URL
+
+    @XConfig(key: "apiVersion", defaultValue: "v1.2.3")
+    var apiVersion: String
 
     @XConfig(key: "region", defaultValue: .north)
     var region: Region

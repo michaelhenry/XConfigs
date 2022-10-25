@@ -2,5 +2,5 @@ import Foundation
 
 // sourcery: AutoMockable
 public protocol KeyValueProvider {
-    func provide() async throws -> [String: Any]
+    func get<Value>(for key: String) -> Value?
 }

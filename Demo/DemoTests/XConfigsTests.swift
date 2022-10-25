@@ -6,8 +6,8 @@ import XCTest
 final class XConfigsTests: XCTestCase {
     typealias ViewModel = XConfigsViewModel
     private var subscriptions: Set<AnyCancellable>!
-    private var provider: KeyValueProvider!
-    private var store: KeyValueStore!
+    private var provider: MockKeyValueProvider!
+    private var store: MockKeyValueStore!
 
     override func setUpWithError() throws {
         subscriptions = Set<AnyCancellable>()
@@ -231,6 +231,12 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testhOverridingUpdateValuesThenReset() throws {
+        // use this value instead of the assigned defaultValue
+        provider.mock(next: [
+            "isOnboardingEnabled": true,
+            "apiHost": "https://prod.google.com",
+        ])
+
         let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = true
 
@@ -264,8 +270,8 @@ final class XConfigsTests: XCTestCase {
                 .action("Reset"),
             ]),
             .init(section: .group(""), items: [
-                .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .toggle(.init(key: "isOnboardingEnabled", value: true)),
+                .textInput(.init(key: "apiHost", value: "https://prod.google.com")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -287,8 +293,8 @@ final class XConfigsTests: XCTestCase {
                 .action("Reset"),
             ]),
             .init(section: .group(""), items: [
-                .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .toggle(.init(key: "isOnboardingEnabled", value: true)),
+                .textInput(.init(key: "apiHost", value: "https://prod.google.com")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -310,8 +316,8 @@ final class XConfigsTests: XCTestCase {
                 .action("Reset"),
             ]),
             .init(section: .group(""), items: [
-                .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .toggle(.init(key: "isOnboardingEnabled", value: true)),
+                .textInput(.init(key: "apiHost", value: "https://prod.google.com")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -333,8 +339,8 @@ final class XConfigsTests: XCTestCase {
                 .action("Reset"),
             ]),
             .init(section: .group(""), items: [
-                .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .toggle(.init(key: "isOnboardingEnabled", value: true)), // uses remote
+                .textInput(.init(key: "apiHost", value: "https://prod.google.com")), // uses remote
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
