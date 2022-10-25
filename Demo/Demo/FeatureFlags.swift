@@ -50,7 +50,7 @@ struct FeatureFlags: XConfigsSpec {
     @XConfig(key: "nestedInfo", defaultValue: AnyCodable<NestedInfo>(.init()), group: .otherDataTypes)
     var nestedInfo: AnyCodable<NestedInfo>
 
-    // So as long as you can represent it as string, it should be fine.
+    // So the key is: as long as you can represent it as string, it should be fine.
 }
 
 extension XConfigGroup {
