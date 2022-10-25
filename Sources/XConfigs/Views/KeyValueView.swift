@@ -1,7 +1,7 @@
 import UIKit
 
 final class KeyValueView: UIView, ConfigurableView {
-    typealias ViewModel = (String, String?)
+    typealias ViewModel = (String, String)
 
     private let keyLabel = UILabel()
 

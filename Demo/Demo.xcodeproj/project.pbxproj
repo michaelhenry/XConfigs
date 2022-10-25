@@ -16,8 +16,8 @@
 		9920817328F837DD009263C5 /* XConfigsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920817228F837DD009263C5 /* XConfigsTests.swift */; };
 		9920819328F844EA009263C5 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819228F844EA009263C5 /* FeatureFlags.swift */; };
 		992081A0290189BB009263C5 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819D290189BB009263C5 /* Mocks.swift */; };
-		992081A229018AD5009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A129018AD5009263C5 /* XConfigs */; };
 		992081A429018B1C009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A329018B1C009263C5 /* XConfigs */; };
+		998E8BBC2907F99F00B79EEF /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 998E8BBB2907F99F00B79EEF /* XConfigs */; };
 		99CD39752902EC7E003CE496 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 99CD39742902EC7E003CE496 /* SnapshotTesting */; };
 		99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CD39762902EC92003CE496 /* SnapshotTests.swift */; };
 /* End PBXBuildFile section */
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				992081A229018AD5009263C5 /* XConfigs in Frameworks */,
+				998E8BBC2907F99F00B79EEF /* XConfigs in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,11 +96,11 @@
 				9920815B28F837DC009263C5 /* AppDelegate.swift */,
 				9920815D28F837DC009263C5 /* SceneDelegate.swift */,
 				9920815F28F837DC009263C5 /* ViewController.swift */,
+				9920819228F844EA009263C5 /* FeatureFlags.swift */,
 				9920816128F837DC009263C5 /* Main.storyboard */,
 				9920816428F837DD009263C5 /* Assets.xcassets */,
 				9920816628F837DD009263C5 /* LaunchScreen.storyboard */,
 				9920816928F837DD009263C5 /* Info.plist */,
-				9920819228F844EA009263C5 /* FeatureFlags.swift */,
 			);
 			path = Demo;
 			sourceTree = "<group>";
@@ -147,7 +147,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				992081A129018AD5009263C5 /* XConfigs */,
+				998E8BBB2907F99F00B79EEF /* XConfigs */,
 			);
 			productName = Demo;
 			productReference = 9920815828F837DC009263C5 /* Demo.app */;
@@ -538,11 +538,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		992081A129018AD5009263C5 /* XConfigs */ = {
+		992081A329018B1C009263C5 /* XConfigs */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XConfigs;
 		};
-		992081A329018B1C009263C5 /* XConfigs */ = {
+		998E8BBB2907F99F00B79EEF /* XConfigs */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XConfigs;
 		};

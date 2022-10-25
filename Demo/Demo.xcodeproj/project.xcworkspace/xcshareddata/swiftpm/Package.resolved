@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "Prettier_swift",
+        "repositoryURL": "https://github.com/michaelhenry/Prettier.swift",
+        "state": {
+          "branch": null,
+          "revision": "d6e2197469a2d9a9c5f0a9302bb28e155586d36d",
+          "version": "1.1.1"
+        }
+      },
+      {
         "package": "SQLite.swift",
         "repositoryURL": "https://github.com/stephencelis/SQLite.swift",
         "state": {

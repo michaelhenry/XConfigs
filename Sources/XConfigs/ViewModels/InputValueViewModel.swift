@@ -1,6 +1,7 @@
 import Combine
 import CombineExt
 import Foundation
+import Prettier_swift
 
 struct InputValueViewModel: ViewModelType {
     struct Input {
@@ -21,6 +22,7 @@ struct InputValueViewModel: ViewModelType {
     }
 
     private let model: TextInputModel
+    private let prettier = Prettier()
 
     init(model: TextInputModel) {
         self.model = model
@@ -32,7 +34,7 @@ struct InputValueViewModel: ViewModelType {
         let action = Publishers.Merge(cancelAction, doneAction).eraseToAnyPublisher()
         return .init(
             title: Just(model.key).eraseToAnyPublisher(),
-            value: Just(model.value).eraseToAnyPublisher(),
+            value: Just(prettier.prettify(model.value, parser: .jsonStringify) ?? model.value).eraseToAnyPublisher(),
             action: action
         )
     }
