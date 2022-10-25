@@ -7,6 +7,7 @@ final class KeyValueView: UIView, ConfigurableView {
 
     private let valueLabel = UILabel().apply {
         $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        $0.textAlignment = .right
     }
 
     init() {
