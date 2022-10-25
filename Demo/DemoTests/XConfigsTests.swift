@@ -6,11 +6,14 @@ import XCTest
 final class XConfigsTests: XCTestCase {
     typealias ViewModel = XConfigsViewModel
     private var subscriptions: Set<AnyCancellable>!
+    private var provider: KeyValueProvider!
+    private var store: KeyValueStore!
 
     override func setUpWithError() throws {
         subscriptions = Set<AnyCancellable>()
-        XConfigs.configure(with: MockFeatureFlags.self, kvStore: MockKeyValueStore(), remoteKeyValueProvider: MockKeyValueProvider())
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        provider = MockKeyValueProvider()
+        store = MockKeyValueStore()
+        XConfigs.configure(with: MockFeatureFlags.self, remoteKeyValueProvider: provider, developmentKvStore: store)
     }
 
     override func tearDownWithError() throws {

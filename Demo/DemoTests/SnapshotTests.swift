@@ -10,7 +10,7 @@ final class SnapshotTests: XCTestCase {
 
     override func setUpWithError() throws {
         subscriptions = Set<AnyCancellable>()
-        XConfigs.configure(with: MockFeatureFlags.self, kvStore: InMemoryKVStore(), remoteKeyValueProvider: MockRemoteKVProvider())
+        XConfigs.configure(with: MockFeatureFlags.self, remoteKeyValueProvider: MockKeyValueProvider(), developmentKvStore: MockKeyValueStore())
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
