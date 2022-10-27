@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - run: xcodebuild test -project Demo.xcodeproj -scheme Demo -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.0' -enableCodeCoverage YES -derivedDataPath DerivedData
+    - run: xcodebuild test -project Demo/Demo.xcodeproj -scheme Demo -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.0' -enableCodeCoverage YES -derivedDataPath DerivedData
     - uses: michaelhenry/swifty-code-coverage@v1.0.0
       with:
         build-path: DerivedData
