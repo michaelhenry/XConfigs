@@ -41,17 +41,17 @@ struct FeatureFlags: XConfigsSpec {
     // OR:
 
     // Wrap the codable object inside `AnyCodable`
-    @XConfig(key: "place", defaultValue: AnyCodable(Place(city: "Tokyo", country: "Japan")), group: .otherDataTypes)
-    var place: AnyCodable<Place>
+    @XConfig(key: "place", defaultValue: Place(city: "Tokyo", country: "Japan"), group: .otherDataTypes)
+    var place: Place
 
-    @XConfig(key: "favoriteFruits", defaultValue: AnyCodable<[String]>(["apple", "banana", "mango", "grape", "strawberry"]), group: .otherDataTypes)
-    var favoriteFruits: AnyCodable<[String]>
+    @XConfig(key: "favoriteFruits", defaultValue: [String](["apple", "banana", "mango", "grape", "strawberry"]), group: .otherDataTypes)
+    var favoriteFruits: [String]
 
-    @XConfig(key: "favouriteNumbers", defaultValue: AnyCodable<[Int]>([1, 2, 3, 4, 5]), group: .otherDataTypes)
-    var favouriteNumbers: AnyCodable<[Int]>
+    @XConfig(key: "favouriteNumbers", defaultValue: [Int]([1, 2, 3, 4, 5]), group: .otherDataTypes)
+    var favouriteNumbers: [Int]
 
-    @XConfig(key: "nestedInfo", defaultValue: AnyCodable<NestedInfo>(.init()), group: .otherDataTypes)
-    var nestedInfo: AnyCodable<NestedInfo>
+    @XConfig(key: "nestedInfo", defaultValue: NestedInfo(), group: .otherDataTypes)
+    var nestedInfo: NestedInfo
 
     // So the key is: as long as you can represent it as string, it should be fine.
 }
@@ -86,30 +86,18 @@ struct Contact: Codable, RawStringValueRepresentable {
         self.phoneNumber = phoneNumber
     }
 
-    init?(rawString: String) {
-        let decoder = JSONDecoder()
-        guard let obj = try? decoder.decode(Self.self, from: rawString.data(using: .utf8)!) else { return nil }
-        name = obj.name
-        phoneNumber = obj.phoneNumber
-    }
-
-    var rawString: String {
-        let encoder = JSONEncoder()
-        guard let data = try? encoder.encode(self), let str = String(data: data, encoding: .utf8) else { return "{}" }
-        return str
-    }
-
     static let `default` = Contact(name: "Name", phoneNumber: "1234 5678")
 }
 
-struct Place: Codable {
+struct Place: Codable, RawStringValueRepresentable {
     let city: String
     let country: String
 }
 
-struct NestedInfo: Codable {
+struct NestedInfo: Codable, RawStringValueRepresentable {
     var contact = Contact.default
     var place = Place(city: "Melbourne", country: "Australia")
     var favouriteNumbers = [1, 2, 3, 4, 5, 6]
     var favouriteFoods = ["cake", "bread", "fish", "meat"]
+    var someKeyValues = ["name": "Kel", "job": "programmer"]
 }
