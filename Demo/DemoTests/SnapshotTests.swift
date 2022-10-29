@@ -9,6 +9,7 @@ final class SnapshotTests: XCTestCase {
     private var subscriptions: Set<AnyCancellable>!
 
     override func setUpWithError() throws {
+        SnapshotTesting.diffTool = "ksdiff"
         subscriptions = Set<AnyCancellable>()
         XConfigs.configure(with: MockFeatureFlags.self, remoteKeyValueProvider: MockKeyValueProvider(), developmentKvStore: MockKeyValueStore())
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -18,16 +19,16 @@ final class SnapshotTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testDisabledOverriding() throws {
-        let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(on: .iPhoneX))
-    }
+//    func testDisabledOverriding() throws {
+//        let vc = XConfigs.configsViewController()
+//        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(on: .iPhoneX))
+//    }
 
-    func testhOverrideEnabled() throws {
-        defaultConfigUseCase.isOverriden = true
-        let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(on: .iPhoneX))
-    }
+//    func testhOverrideEnabled() throws {
+//        defaultConfigUseCase.isOverriden = true
+//        let vc = XConfigs.configsViewController()
+//        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(on: .iPhoneX))
+//    }
 
 //    func testActionView() throws {
 //        let view =  ActionView().apply {
@@ -53,13 +54,13 @@ final class SnapshotTests: XCTestCase {
 //        assertSnapshot(matching: view, as: .image)
 //    }
 
-    func testInputValueViewController() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World")))
-        assertSnapshot(matching: vc, as: .image(on: .iPhoneX))
-    }
-
-    func testOptionViewController() throws {
-        let vc = OptionViewController(viewModel: .init(model: .init(key: "Key", value: "Value1", choices: ["Value1", "Value2", "Value3", "Value4"])))
-        assertSnapshot(matching: vc, as: .image(on: .iPhoneX))
-    }
+//    func testInputValueViewController() throws {
+//        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World")))
+//        assertSnapshot(matching: vc, as: .image(on: .iPhoneX))
+//    }
+//
+//    func testOptionViewController() throws {
+//        let vc = OptionViewController(viewModel: .init(model: .init(key: "Key", value: "Value1", choices: ["Value1", "Value2", "Value3", "Value4"])))
+//        assertSnapshot(matching: vc, as: .image(on: .iPhoneX))
+//    }
 }
