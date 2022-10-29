@@ -34,7 +34,7 @@ struct InputValueViewModel: ViewModelType {
         let action = Publishers.Merge(cancelAction, doneAction).eraseToAnyPublisher()
         return .init(
             title: Just(model.key).eraseToAnyPublisher(),
-            value: Just(prettier.prettify(model.value, parser: .jsonStringify) ?? model.value).eraseToAnyPublisher(),
+            value: Just(prettier.prettify(model.value, parser: .jsonStringify)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? model.value).eraseToAnyPublisher(),
             action: action
         )
     }

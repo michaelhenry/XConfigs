@@ -31,6 +31,12 @@ struct FeatureFlags: XConfigsSpec {
     @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature2)
     var maxRate: Double
 
+    @XConfig(key: "maxHeight", defaultValue: 100, group: .feature2)
+    var maxHeight: Double
+
+    @XConfig(key: "maxWidth", defaultValue: 300.5, group: .feature2)
+    var maxWidth: Double
+
     // Custom Objects or Data Types
     // Either:
 

@@ -16,7 +16,15 @@ extension Int: RawStringValueRepresentable {} // Codable + RawStringValueReprese
 
 // MARK: - Double + RawStringValueRepresentable
 
-extension Double: RawStringValueRepresentable {} // Codable + RawStringValueRepresentable can pick this up
+extension Double: RawStringValueRepresentable { // Codable + RawStringValueRepresentable can pick this up BUT it has some minor issue with the accuracy of the floating point
+    public var rawString: String {
+        "\(self)"
+    }
+
+    public init(rawString: String) {
+        self = Double(rawString) ?? 0.0
+    }
+}
 
 // MARK: - String + RawStringValueRepresentable
 
