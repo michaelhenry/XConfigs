@@ -71,7 +71,7 @@ public extension RawStringValueRepresentable where Self: Codable {
 
 extension Array: RawStringValueRepresentable where Element: RawStringValueRepresentable {
     public var rawString: String {
-        compactMap(\.rawString).joined(separator: ",")
+        map(\.rawString).joined(separator: ",")
     }
 
     public init?(rawString: String) {
