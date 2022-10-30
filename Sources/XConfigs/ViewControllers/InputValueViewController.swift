@@ -55,7 +55,7 @@ final class InputValueViewController: UIViewController, UITextViewDelegate {
         }
         view.backgroundColor = .systemBackground
         view.addSubview(textView)
-        textView.bindToSuperview(margins: .init(top: 20, left: 20, bottom: 20, right: 10))
+        textView.bindToSuperview(margins: .init(top: 20, left: 20, bottom: 20, right: 5))
     }
 
     private func handleViewModelOutput() {
