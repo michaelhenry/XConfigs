@@ -25,11 +25,15 @@ struct FeatureFlags: XConfigsSpec {
     @XConfig(key: "rate", defaultValue: 2.5)
     var rate: Double
 
+    // MARK: - Feature 1
+
     @XConfig(key: "maxScore", defaultValue: 100, group: .feature1)
     var maxScore: Int
 
     @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature1)
     var maxRate: Double
+
+    // MARK: - Feature 2
 
     @XConfig(key: "maxHeight", defaultValue: 100, group: .feature2)
     var maxHeight: Double
@@ -37,16 +41,11 @@ struct FeatureFlags: XConfigsSpec {
     @XConfig(key: "maxWidth", defaultValue: 300.5, group: .feature2)
     var maxWidth: Double
 
-    // Custom Objects or Data Types
-    // Either:
+    // MARK: - Custom Data Types
 
-    // Conform to `RawStringValueRepresentable`
     @XConfig(key: "contact", defaultValue: .default, group: .otherDataTypes)
     var contactInfo: Contact
 
-    // OR:
-
-    // Wrap the codable object inside `AnyCodable`
     @XConfig(key: "place", defaultValue: Place(city: "Tokyo", country: "Japan"), group: .otherDataTypes)
     var place: Place
 
