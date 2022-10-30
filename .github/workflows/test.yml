@@ -22,4 +22,4 @@ jobs:
         build-path: DerivedData
         target: Demo.app
         is-spm: false
-        ignore-filename-regex: '**/*ViewController.swift'
+        ignore-filename-regex: '^[\w,\s-]+ViewController\.swift$|DerivedData'
