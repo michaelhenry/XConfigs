@@ -8,7 +8,15 @@ public protocol RawStringValueRepresentable {
 
 // MARK: - Bool + RawStringValueRepresentable
 
-extension Bool: RawStringValueRepresentable {} // Codable + RawStringValueRepresentable can pick this up
+extension Bool: RawStringValueRepresentable {
+    public var rawString: String {
+        "\(self)"
+    }
+
+    public init(rawString: String) {
+        self = ["1", "true"].contains(rawString)
+    }
+}
 
 // MARK: - Int + RawStringValueRepresentable
 
@@ -21,8 +29,9 @@ extension Double: RawStringValueRepresentable { // Codable + RawStringValueRepre
         "\(self)"
     }
 
-    public init(rawString: String) {
-        self = Double(rawString) ?? 0.0
+    public init?(rawString: String) {
+        guard let val = Double(rawString) else { return nil }
+        self = val
     }
 }
 

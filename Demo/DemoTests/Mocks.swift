@@ -1,7 +1,7 @@
 import XConfigs
 import XCTest
 
-struct MockFeatureFlags: XConfigsSpec {
+struct MockConfigs: XConfigsSpec {
     static let shared = Self()
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)

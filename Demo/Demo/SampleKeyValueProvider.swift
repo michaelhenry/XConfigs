@@ -2,20 +2,22 @@ import Foundation
 import XConfigs
 
 final class SampleKeyValueProvider: KeyValueProvider {
-    private let remoteKeyValuesURL = URL(string: "https://gist.githubusercontent.com/michaelhenry/57809ecedc24d9de8936078a9f0c12f1/raw/8103b6cdd9cb7930ca05ca4a407d9c1e51839702/remoteKeyValues.json")!
+    private let remoteKeyValuesURL = URL(string: "https://gist.githubusercontent.com/michaelhenry/57809ecedc24d9de8936078a9f0c12f1/raw/c87824ffdf34df63cae2917774dda1d4d012a168/remoteKeyValues.json")!
     private var keyValues: [String: String] = [:]
 
-    func download() {
+    func download(completion: @escaping ((Bool) -> Void)) {
         Task {
             do {
                 let (data, _) = try await URLSession.shared.data(from: self.remoteKeyValuesURL)
-                print("DATA", String(data: data, encoding: .utf8)!)
                 let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
-                print("JSON", jsonObject)
+                print(jsonObject)
                 self.keyValues = jsonObject.reduce(into: [String: String]()) {
                     $0[$1.key] = String(describing: $1.value)
+                    print($1.key, $1.value)
                 }
+                completion(true)
             } catch {
+                completion(false)
                 print("ERROR", error)
             }
         }

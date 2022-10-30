@@ -14,7 +14,7 @@
 		9920816528F837DD009263C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9920816428F837DD009263C5 /* Assets.xcassets */; };
 		9920816828F837DD009263C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9920816628F837DD009263C5 /* LaunchScreen.storyboard */; };
 		9920817328F837DD009263C5 /* XConfigsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920817228F837DD009263C5 /* XConfigsTests.swift */; };
-		9920819328F844EA009263C5 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819228F844EA009263C5 /* FeatureFlags.swift */; };
+		9920819328F844EA009263C5 /* AppConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819228F844EA009263C5 /* AppConfigs.swift */; };
 		992081A0290189BB009263C5 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819D290189BB009263C5 /* Mocks.swift */; };
 		992081A429018B1C009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A329018B1C009263C5 /* XConfigs */; };
 		998E8BBC2907F99F00B79EEF /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 998E8BBB2907F99F00B79EEF /* XConfigs */; };
@@ -44,7 +44,7 @@
 		9920816928F837DD009263C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9920816E28F837DD009263C5 /* DemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9920817228F837DD009263C5 /* XConfigsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XConfigsTests.swift; sourceTree = "<group>"; };
-		9920819228F844EA009263C5 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
+		9920819228F844EA009263C5 /* AppConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigs.swift; sourceTree = "<group>"; };
 		9920819528F8457F009263C5 /* XConfigs */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfigs; path = ..; sourceTree = "<group>"; };
 		9920819D290189BB009263C5 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleKeyValueProvider.swift; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 				9920815B28F837DC009263C5 /* AppDelegate.swift */,
 				9920815D28F837DC009263C5 /* SceneDelegate.swift */,
 				9920815F28F837DC009263C5 /* ViewController.swift */,
-				9920819228F844EA009263C5 /* FeatureFlags.swift */,
+				9920819228F844EA009263C5 /* AppConfigs.swift */,
 				999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */,
 				9920816128F837DC009263C5 /* Main.storyboard */,
 				9920816428F837DD009263C5 /* Assets.xcassets */,
@@ -247,7 +247,7 @@
 				999353C5290EDFB700E79302 /* SampleKeyValueProvider.swift in Sources */,
 				9920816028F837DC009263C5 /* ViewController.swift in Sources */,
 				9920815C28F837DC009263C5 /* AppDelegate.swift in Sources */,
-				9920819328F844EA009263C5 /* FeatureFlags.swift in Sources */,
+				9920819328F844EA009263C5 /* AppConfigs.swift in Sources */,
 				9920815E28F837DC009263C5 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

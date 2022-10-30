@@ -1,14 +1,14 @@
 import Foundation
 import XConfigs
 
-struct FeatureFlags: XConfigsSpec {
+struct AppConfigs: XConfigsSpec {
     static let shared = Self()
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
 
-    @XConfig(key: "apiHost", defaultValue: URL(string: "https://www.google.com")!)
-    var apiHost: URL
+    @XConfig(key: "apiURL", defaultValue: URL(string: "https://dev.google.com")!)
+    var apiURL: URL
 
     @XConfig(key: "apiVersion", defaultValue: "v1.2.3")
     var apiVersion: String

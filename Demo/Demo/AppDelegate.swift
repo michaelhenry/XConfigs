@@ -5,8 +5,13 @@ import XConfigs
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let kvProvider = SampleKeyValueProvider()
-        XConfigs.configure(with: FeatureFlags.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
-        kvProvider.download()
+        XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+        kvProvider.download { _ in
+            print("is onboarding enabled? \(AppConfigs.shared.isOnboardingEnabled)")
+            print("API URL is \(AppConfigs.shared.apiURL)")
+            print("API version is \(AppConfigs.shared.apiVersion)")
+        }
+
         return true
     }
 

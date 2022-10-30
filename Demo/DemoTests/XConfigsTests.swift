@@ -13,7 +13,7 @@ final class XConfigsTests: XCTestCase {
         subscriptions = Set<AnyCancellable>()
         provider = MockKeyValueProvider()
         store = MockKeyValueStore()
-        XConfigs.configure(with: MockFeatureFlags.self, keyValueProvider: provider, keyValueStore: store)
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, keyValueStore: store)
     }
 
     override func tearDownWithError() throws {
@@ -109,8 +109,8 @@ final class XConfigsTests: XCTestCase {
         }
         .store(in: &subscriptions)
 
-        XCTAssertEqual(MockFeatureFlags.shared.maxRetry, 10)
-        XCTAssertEqual(MockFeatureFlags.shared.maxRate, 1.0)
+        XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
+        XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
 
         reloadPublisher.send(())
         updateValuePublisher.send(.init(key: "maxRetry", value: "20"))
@@ -185,8 +185,8 @@ final class XConfigsTests: XCTestCase {
             ]),
         ])
 
-        XCTAssertEqual(MockFeatureFlags.shared.maxRetry, 20)
-        XCTAssertEqual(MockFeatureFlags.shared.maxRate, 0.99)
+        XCTAssertEqual(MockConfigs.shared.maxRetry, 20)
+        XCTAssertEqual(MockConfigs.shared.maxRate, 0.99)
     }
 
     func testTryToOverrideValueButNotOverridable() throws {
@@ -208,8 +208,8 @@ final class XConfigsTests: XCTestCase {
         }
         .store(in: &subscriptions)
 
-        XCTAssertEqual(MockFeatureFlags.shared.maxRetry, 10)
-        XCTAssertEqual(MockFeatureFlags.shared.maxRate, 1.0)
+        XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
+        XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
 
         reloadPublisher.send(())
         updateValuePublisher.send(.init(key: "maxRetry", value: "20"))
@@ -226,8 +226,8 @@ final class XConfigsTests: XCTestCase {
                 .overrideConfig(false),
             ]),
         ])
-        XCTAssertEqual(MockFeatureFlags.shared.maxRetry, 10)
-        XCTAssertEqual(MockFeatureFlags.shared.maxRate, 1.0)
+        XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
+        XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
     }
 
     func testhOverridingUpdateValuesThenReset() throws {
@@ -256,8 +256,8 @@ final class XConfigsTests: XCTestCase {
         }
         .store(in: &subscriptions)
 
-        XCTAssertEqual(MockFeatureFlags.shared.maxRetry, 10)
-        XCTAssertEqual(MockFeatureFlags.shared.maxRate, 1.0)
+        XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
+        XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
 
         reloadPublisher.send(())
         updateValuePublisher.send(.init(key: "maxRetry", value: "20"))
