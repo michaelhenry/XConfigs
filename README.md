@@ -32,7 +32,6 @@ Similar with logger tool such as [swift-log](https://github.com/apple/swift-log)
 
 ```swift
 struct MockConfigs: XConfigSpec {
-    static let `default` = Self()
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
