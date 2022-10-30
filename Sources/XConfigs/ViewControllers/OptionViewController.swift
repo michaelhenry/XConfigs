@@ -51,6 +51,11 @@ final class OptionViewController: UITableViewController {
             }.eraseToAnyPublisher()
         ))
 
+        output.title.sink { [weak self] title in
+            self?.title = title
+        }
+        .store(in: &subscriptions)
+
         output.sectionItemsModels
             .sink { [weak self] secItems in
                 guard let self = self else { return }
