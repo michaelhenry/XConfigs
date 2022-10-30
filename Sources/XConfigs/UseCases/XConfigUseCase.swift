@@ -6,23 +6,23 @@ public class XConfigUseCase {
 
     var isOverriden: Bool {
         get {
-            developmentKvStore.get(for: isOverridenKey) ?? false
+            keyValueStore.get(for: isOverridenKey) ?? false
         }
 
         set {
-            developmentKvStore.set(value: newValue, for: isOverridenKey)
+            keyValueStore.set(value: newValue, for: isOverridenKey)
         }
     }
 
-    private var developmentKvStore: KeyValueStore
-    private var remoteKVProvider: KeyValueProvider
+    private var keyValueStore: KeyValueStore
+    private var keyValueProvider: KeyValueProvider
     private var configsSpec: XConfigsSpec.Type
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, remoteKVProvider: KeyValueProvider, developmentKvStore: KeyValueStore) {
+    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore) {
         configsSpec = spec
-        self.remoteKVProvider = remoteKVProvider
-        self.developmentKvStore = developmentKvStore
+        self.keyValueProvider = keyValueProvider
+        self.keyValueStore = keyValueStore
     }
 
     func getConfigs() -> [ConfigInfo] {
@@ -33,19 +33,19 @@ public class XConfigUseCase {
     }
 
     func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        guard isOverriden else { return remoteKVProvider.get(for: key) }
-        return developmentKvStore.get(for: key) ?? remoteKVProvider.get(for: key)
+        guard isOverriden else { return keyValueProvider.get(for: key) }
+        return keyValueStore.get(for: key) ?? keyValueProvider.get(for: key)
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         guard isOverriden else { return }
-        developmentKvStore.set(value: value, for: key)
+        keyValueStore.set(value: value, for: key)
     }
 
     func reset() {
         guard isOverriden else { return }
         getConfigs().forEach {
-            developmentKvStore.remove(key: $0.configKey)
+            keyValueStore.remove(key: $0.configKey)
         }
     }
 }

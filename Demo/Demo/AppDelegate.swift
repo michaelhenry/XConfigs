@@ -4,7 +4,7 @@ import XConfigs
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        XConfigs.configure(with: FeatureFlags.self, remoteKeyValueProvider: MockKeyValueProvider(), developmentKvStore: UserDefaults.standard)
+        XConfigs.configure(with: FeatureFlags.self, keyValueProvider: MockKeyValueProvider(), keyValueStore: UserDefaults.standard)
         return true
     }
 

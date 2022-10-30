@@ -13,7 +13,7 @@ final class XConfigsTests: XCTestCase {
         subscriptions = Set<AnyCancellable>()
         provider = MockKeyValueProvider()
         store = MockKeyValueStore()
-        XConfigs.configure(with: MockFeatureFlags.self, remoteKeyValueProvider: provider, developmentKvStore: store)
+        XConfigs.configure(with: MockFeatureFlags.self, keyValueProvider: provider, keyValueStore: store)
     }
 
     override func tearDownWithError() throws {
