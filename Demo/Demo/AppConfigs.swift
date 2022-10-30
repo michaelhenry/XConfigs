@@ -67,19 +67,11 @@ extension XConfigGroup {
     static let otherDataTypes = Self(name: "Other Data Types", sort: 3)
 }
 
-enum Region: String, CaseIterable, RawStringValueRepresentable {
+enum Region: String, CaseIterable, RawStringValueRepresentable, Codable {
     case north
     case south
     case east
     case west
-
-    init(rawString: String) {
-        self = .init(rawValue: rawString) ?? .north
-    }
-
-    var rawString: String {
-        rawValue
-    }
 }
 
 struct Contact: Codable, RawStringValueRepresentable {

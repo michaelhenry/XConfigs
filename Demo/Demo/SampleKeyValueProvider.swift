@@ -10,7 +10,6 @@ final class SampleKeyValueProvider: KeyValueProvider {
             do {
                 let (data, _) = try await URLSession.shared.data(from: self.remoteKeyValuesURL)
                 let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
-                print(jsonObject)
                 self.keyValues = jsonObject.reduce(into: [String: String]()) {
                     $0[$1.key] = String(describing: $1.value)
                     print($1.key, $1.value)

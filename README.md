@@ -30,6 +30,8 @@ Install using SPM
 
 Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
 
+If you have some custom datatype, you can simply conform them to `Codable` & `RawStringRepresentable`.
+
 ```swift
 struct MockConfigs: XConfigSpec {
 
@@ -57,14 +59,6 @@ enum Region: String, CaseIterable, RawStringRepresentable {
     case south
     case east
     case west
-
-    init(rawString: String) {
-        self = .init(rawValue: rawString) ?? .north
-    }
-
-    var rawString: String {
-        rawValue
-    }
 }
 ```
 
