@@ -67,14 +67,14 @@ extension XConfigGroup {
     static let otherDataTypes = Self(name: "Other Data Types", sort: 3)
 }
 
-enum Region: String, CaseIterable, RawStringValueRepresentable, Codable {
+enum Region: String, CaseIterable, RawStringValueRepresentable {
     case north
     case south
     case east
     case west
 }
 
-struct Contact: Codable, RawStringValueRepresentable {
+struct Contact: RawStringValueRepresentable {
     let name: String
     let phoneNumber: String
 
@@ -86,12 +86,12 @@ struct Contact: Codable, RawStringValueRepresentable {
     static let `default` = Contact(name: "Name", phoneNumber: "1234 5678")
 }
 
-struct Place: Codable, RawStringValueRepresentable {
+struct Place: RawStringValueRepresentable {
     let city: String
     let country: String
 }
 
-struct NestedInfo: Codable, RawStringValueRepresentable {
+struct NestedInfo: RawStringValueRepresentable {
     var contact = Contact.default
     var place = Place(city: "Melbourne", country: "Australia")
     var favouriteNumbers = [1, 2, 3, 4, 5, 6]

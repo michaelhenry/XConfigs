@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol RawStringValueRepresentable {
+public protocol RawStringValueRepresentable: Codable {
     var rawString: String { get }
 
     init?(rawString: String)
