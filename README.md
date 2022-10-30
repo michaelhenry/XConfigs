@@ -1,4 +1,4 @@
-<h1 align="center">🛠 XConfigs</h1>
+<h1 align="center">🛠Configs</h1>
 <p align="center">A quick, easy and elegant solution for your remote and dev configuration.</p>
 <p align="center">
   <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/workflows/test/badge.svg"></a>
