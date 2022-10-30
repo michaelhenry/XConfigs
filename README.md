@@ -13,13 +13,14 @@
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
 - [Example](#example)
+- [Other Related](#other-related)
 - [License](#license)
 
 ---
 
 ## Introduction
 
-As part of development, we always wanted to see on how our app will react depending on the different scenarios or configurations and one way to do this is to have an ability to change every configuration inside our app during development process.
+As part of software development process, we always need to see how our app will react depending on the different scenarios or configurations especially during testing even those features are not yet available in public and at the same time, it would be better if we some mechanism where we can immidiately turn off a certain features, or control some configurations remotely if there are something unexpected happened in our production build.
 
 ## Getting Started
 
@@ -27,7 +28,7 @@ Install using SPM
 
 ## Example
 
-Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to[XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
+Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
 
 ```swift
 struct MockConfigs: XConfigSpec {
@@ -67,6 +68,10 @@ enum Region: String, CaseIterable, RawStringRepresentable {
     }
 }
 ```
+
+## Other Related
+
+- [Firebase Remote Config](https://firebase.google.com/docs/remote-config), you can simply backed [XConfigs](https://github.com/michaelhenry/XConfigs) by FirebaseRemoteConfig by simply implmenting [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
 
 
 ## LICENSE
