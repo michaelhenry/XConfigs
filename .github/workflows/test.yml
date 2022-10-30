@@ -1,0 +1,29 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - run: xcodebuild test -project Demo/Demo.xcodeproj -scheme Demo -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13' -enableCodeCoverage YES -derivedDataPath /tmp/DerivedData
+    - uses: michaelhenry/swifty-code-coverage@v1.0.1
+      with:
+        build-path: /tmp/DerivedData
+        target: Demo.app
+        is-spm: false
+        ignore-filename-regex: '^[\w,\s-]+ViewController\.swift$|DerivedData|.libs'
