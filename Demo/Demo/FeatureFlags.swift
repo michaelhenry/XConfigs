@@ -28,7 +28,7 @@ struct FeatureFlags: XConfigsSpec {
     @XConfig(key: "maxScore", defaultValue: 100, group: .feature1)
     var maxScore: Int
 
-    @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature2)
+    @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature1)
     var maxRate: Double
 
     @XConfig(key: "maxHeight", defaultValue: 100, group: .feature2)

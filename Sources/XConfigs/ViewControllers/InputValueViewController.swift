@@ -1,11 +1,21 @@
 import Combine
 import CombineCocoa
+import Highlightr
 import UIKit
 
 final class InputValueViewController: UIViewController, UITextViewDelegate {
     typealias ViewModel = InputValueViewModel
 
-    private lazy var textView = UITextView().apply {
+    private lazy var textContainer = NSTextContainer().apply {
+        let textStorage = CodeAttributedString()
+        textStorage.language = "Javascript"
+        let layoutManager = NSLayoutManager()
+        textStorage.addLayoutManager(layoutManager)
+        layoutManager.addTextContainer($0)
+        textStorage.highlightr.setTheme(to: "vs")
+    }
+
+    private lazy var textView = UITextView(frame: .zero, textContainer: textContainer).apply {
         $0.font = .preferredFont(forTextStyle: .body)
         $0.isEditable = true
     }
