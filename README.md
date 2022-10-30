@@ -27,6 +27,8 @@ Install using SPM
 
 ## Example
 
+Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to[XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
+
 ```swift
 struct MockConfigs: XConfigSpec {
     static let `default` = Self()
