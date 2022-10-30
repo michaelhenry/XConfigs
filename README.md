@@ -20,7 +20,7 @@
 
 ## Introduction
 
-As part of software development process, we always need to see how our app will react depending on the different scenarios or configurations especially during testing even those features are not yet available in public. At the same time, it would be better if we some mechanism where we can immidiately turn off a certain features, or control some configurations remotely if there are something unexpected happened in our production build.
+As part of software development process, we always need to see how our app will react depending on the different scenarios or configurations especially during testing even those features are not yet available in public. At the same time, it would be better if we some mechanism where we can immidiately turn off a certain functionality, or control some configurations via remote if there are something unexpected happened in our production environment.
 
 ## Getting Started
 
