@@ -26,6 +26,10 @@ As part of software development process, we always need to see how our app will 
 
 Install using SPM
 
+```swift
+.package(url: "https://github.com/michaelhenry/XConfigs", .upToNextMinor(from: "1.0.0")),
+```
+
 ## Example
 
 Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
