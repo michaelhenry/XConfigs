@@ -75,6 +75,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "SNAPSHOT_ARTIFACTS"
+            value = "/tmp/SNAPSHOTS"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
