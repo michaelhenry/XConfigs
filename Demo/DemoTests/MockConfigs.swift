@@ -7,8 +7,11 @@ struct MockConfigs: XConfigsSpec {
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
 
-    @XConfig(key: "apiHost", defaultValue: "https://google.com")
-    var apiHost: String
+    @XConfig(key: "apiURL", defaultValue: URL(string: "https://prod.google.com")!)
+    var apiURL: URL
+
+    @XConfig(key: "apiVersion", defaultValue: "v1.2.3")
+    var apiVersion: String
 
     @XConfig(key: "region", defaultValue: .north)
     var region: Region
@@ -25,8 +28,14 @@ struct MockConfigs: XConfigsSpec {
     @XConfig(key: "maxScore", defaultValue: 100, group: .feature1)
     var maxScore: Int
 
-    @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature2)
+    @XConfig(key: "maxRate", defaultValue: 1.0, group: .feature1)
     var maxRate: Double
+
+    @XConfig(key: "height", defaultValue: 44, group: .feature2)
+    var height: Double
+
+    @XConfig(key: "width", defaultValue: 320, group: .feature2)
+    var width: Double
 }
 
 extension XConfigGroup {
@@ -46,34 +55,5 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 
     var rawString: String {
         rawValue
-    }
-}
-
-final class MockKeyValueProvider: KeyValueProvider {
-    private var next: [String: Any] = [:]
-
-    func mock(next: [String: Any]) {
-        self.next = next
-    }
-
-    func get<Value>(for key: String) -> Value? {
-        next[key] as? Value
-    }
-}
-
-final class MockKeyValueStore: KeyValueStore {
-    var keyValues: [String: String] = [:]
-
-    func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        guard let rawString = keyValues[key] else { return nil }
-        return Value(rawString: rawString)
-    }
-
-    func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
-        keyValues[key] = value.rawString
-    }
-
-    func remove(key: String) {
-        keyValues.removeValue(forKey: key)
     }
 }

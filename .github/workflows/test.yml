@@ -27,3 +27,5 @@ jobs:
         target: Demo.app
         is-spm: false
         ignore-filename-regex: '^[\w,\s-]+ViewController\.swift$|DerivedData|.libs'
+    env:
+      SNAPSHOT_ARTIFACTS: "/tmp/SNAPSHOTS"
