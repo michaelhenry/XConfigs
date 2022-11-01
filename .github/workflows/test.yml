@@ -13,6 +13,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  SNAPSHOT_ARTIFACTS: "/tmp/SNAPSHOTS"
+
 jobs:
   build:
 
@@ -27,5 +30,11 @@ jobs:
         target: Demo.app
         is-spm: false
         ignore-filename-regex: '^[\w,\s-]+ViewController\.swift$|DerivedData|.libs'
-    env:
-      SNAPSHOT_ARTIFACTS: "/tmp/SNAPSHOTS"
+
+    - name: Archive Failing UI Snapshots
+      uses: actions/upload-artifact@v3.1.1
+      if: failure()
+      with:
+        name: failing-ui-snapshots-artifact
+        path: |
+          ${{ env.SNAPSHOT_ARTIFACTS }}
