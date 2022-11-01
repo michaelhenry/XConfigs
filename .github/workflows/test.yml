@@ -31,6 +31,13 @@ jobs:
         is-spm: false
         ignore-filename-regex: '^[\w,\s-]+ViewController\.swift$|DerivedData|.libs'
 
+    - name: Upload to Codecov
+      run: |
+        bash <(curl https://codecov.io/bash) -f "coverage/*.info"
+      shell: bash
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
     - name: Archive Failing UI Snapshots
       uses: actions/upload-artifact@v3.1.1
       if: failure()
