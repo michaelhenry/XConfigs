@@ -37,7 +37,7 @@ jobs:
         build-path: ${{ env.DERIVEDDATA_PATH }}
         target: Demo.app
         is-spm: false
-        ignore-filename-regex: '^[\w,\s-]+ViewController\.swift$|DerivedData|.libs'
+        ignore-filename-regex: 'ViewController|DerivedData|.libs'
 
     - name: Upload to Codecov
       run: |
