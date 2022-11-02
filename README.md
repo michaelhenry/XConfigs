@@ -1,5 +1,5 @@
 <h1 align="center">🛠Configs</h1>
-<p align="center">A quick, easy and elegant solution for your remote and dev configuration.</p>
+<p align="center">A quick, easy and stylish solution for your remote and dev configurations.</p>
 <p align="center">
   <a href="https://codecov.io/gh/michaelhenry/XConfigs"><img alt="codecov" src="https://codecov.io/gh/michaelhenry/XConfigs/branch/main/graph/badge.svg?token=WLH8VVA19I"/></a>
   <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/actions/workflows/test.yml/badge.svg"></a>
