@@ -77,7 +77,9 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 }
 ```
 
-For the complete example, please refer to the [Demo](Demo) project.
+For the complete example, please refer to the [Demo](Demo) project which auto-generated the screen(below) using the [AppConfigs.swift](https://github.com/michaelhenry/XConfigs/blob/main/Demo/Demo/AppConfigs.swift) config specification.
+
+https://user-images.githubusercontent.com/717992/199521206-3682e8de-ec72-4ed8-af7e-4ad467c9ec31.mp4
 
 ## Other Related
 
