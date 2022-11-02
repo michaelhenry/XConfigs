@@ -73,7 +73,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -83,9 +84,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "1.0")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "1.0")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
     }
@@ -123,7 +126,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -133,9 +137,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "1.0")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "1.0")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
 
@@ -146,7 +152,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -156,9 +163,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "1.0")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "1.0")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
 
@@ -169,7 +178,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
-                .textInput(.init(key: "apiHost", value: "https://google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -179,9 +189,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "0.99")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "0.99")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
 
@@ -234,7 +246,7 @@ final class XConfigsTests: XCTestCase {
         // use this value instead of the assigned defaultValue
         provider.mock(next: [
             "isOnboardingEnabled": true,
-            "apiHost": "https://prod.google.com",
+            "apiURL": "https://prod.google.com",
         ])
 
         let viewModel = XConfigsViewModel()
@@ -271,7 +283,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: true)),
-                .textInput(.init(key: "apiHost", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -281,9 +294,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "1.0")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "1.0")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
 
@@ -294,7 +309,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: true)),
-                .textInput(.init(key: "apiHost", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -304,9 +320,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "1.0")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "1.0")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
 
@@ -317,7 +335,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: true)),
-                .textInput(.init(key: "apiHost", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -327,9 +346,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "0.99")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "0.99")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
 
@@ -340,7 +361,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group(""), items: [
                 .toggle(.init(key: "isOnboardingEnabled", value: true)), // uses remote
-                .textInput(.init(key: "apiHost", value: "https://prod.google.com")), // uses remote
+                .textInput(.init(key: "apiURL", value: "https://prod.google.com")), // uses remote
+                .textInput(.init(key: "apiVersion", value: "v1.2.3")),
                 .optionSelection(.init(key: "region", value: "north", choices: [
                     "north", "south", "east", "west",
                 ])),
@@ -350,9 +372,11 @@ final class XConfigsTests: XCTestCase {
             ]),
             .init(section: .group("Feature 1"), items: [
                 .textInput(.init(key: "maxScore", value: "100")),
+                .textInput(.init(key: "maxRate", value: "1.0")),
             ]),
             .init(section: .group("Feature 2"), items: [
-                .textInput(.init(key: "maxRate", value: "1.0")),
+                .textInput(.init(key: "height", value: "44.0")),
+                .textInput(.init(key: "width", value: "320.0")),
             ]),
         ])
         XCTAssertEqual(sectionItemsModels.count, 4)

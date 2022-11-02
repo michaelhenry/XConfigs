@@ -15,10 +15,12 @@
 		9920816828F837DD009263C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9920816628F837DD009263C5 /* LaunchScreen.storyboard */; };
 		9920817328F837DD009263C5 /* XConfigsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920817228F837DD009263C5 /* XConfigsTests.swift */; };
 		9920819328F844EA009263C5 /* AppConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819228F844EA009263C5 /* AppConfigs.swift */; };
-		992081A0290189BB009263C5 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819D290189BB009263C5 /* Mocks.swift */; };
+		992081A0290189BB009263C5 /* MockConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819D290189BB009263C5 /* MockConfigs.swift */; };
 		992081A429018B1C009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A329018B1C009263C5 /* XConfigs */; };
 		998E8BBC2907F99F00B79EEF /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 998E8BBB2907F99F00B79EEF /* XConfigs */; };
 		999353C5290EDFB700E79302 /* SampleKeyValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */; };
+		999353C72911646400E79302 /* MockKeyValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C62911646400E79302 /* MockKeyValueProvider.swift */; };
+		999353C92911647B00E79302 /* MockKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C82911647B00E79302 /* MockKeyValueStore.swift */; };
 		99CD39752902EC7E003CE496 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 99CD39742902EC7E003CE496 /* SnapshotTesting */; };
 		99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CD39762902EC92003CE496 /* SnapshotTests.swift */; };
 /* End PBXBuildFile section */
@@ -46,8 +48,10 @@
 		9920817228F837DD009263C5 /* XConfigsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XConfigsTests.swift; sourceTree = "<group>"; };
 		9920819228F844EA009263C5 /* AppConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigs.swift; sourceTree = "<group>"; };
 		9920819528F8457F009263C5 /* XConfigs */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfigs; path = ..; sourceTree = "<group>"; };
-		9920819D290189BB009263C5 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		9920819D290189BB009263C5 /* MockConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConfigs.swift; sourceTree = "<group>"; };
 		999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleKeyValueProvider.swift; sourceTree = "<group>"; };
+		999353C62911646400E79302 /* MockKeyValueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeyValueProvider.swift; sourceTree = "<group>"; };
+		999353C82911647B00E79302 /* MockKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeyValueStore.swift; sourceTree = "<group>"; };
 		99CD39762902EC92003CE496 /* SnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,8 +115,9 @@
 		9920817128F837DD009263C5 /* DemoTests */ = {
 			isa = PBXGroup;
 			children = (
+				999353CA2911648400E79302 /* Helpers */,
 				9920817228F837DD009263C5 /* XConfigsTests.swift */,
-				9920819D290189BB009263C5 /* Mocks.swift */,
+				9920819D290189BB009263C5 /* MockConfigs.swift */,
 				99CD39762902EC92003CE496 /* SnapshotTests.swift */,
 			);
 			path = DemoTests;
@@ -131,6 +136,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		999353CA2911648400E79302 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				999353C62911646400E79302 /* MockKeyValueProvider.swift */,
+				999353C82911647B00E79302 /* MockKeyValueStore.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,9 +270,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				999353C72911646400E79302 /* MockKeyValueProvider.swift in Sources */,
 				9920817328F837DD009263C5 /* XConfigsTests.swift in Sources */,
 				99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */,
-				992081A0290189BB009263C5 /* Mocks.swift in Sources */,
+				999353C92911647B00E79302 /* MockKeyValueStore.swift in Sources */,
+				992081A0290189BB009263C5 /* MockConfigs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
