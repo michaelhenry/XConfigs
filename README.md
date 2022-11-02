@@ -1,8 +1,8 @@
 <h1 align="center">🛠Configs</h1>
-<p align="center">A quick, easy and elegant solution for your remote and dev configuration.</p>
+<p align="center">A quick, simple and stylish solution for your remote and dev configurations.</p>
 <p align="center">
   <a href="https://codecov.io/gh/michaelhenry/XConfigs"><img alt="codecov" src="https://codecov.io/gh/michaelhenry/XConfigs/branch/main/graph/badge.svg?token=WLH8VVA19I"/></a>
-  <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/workflows/test/badge.svg"></a>
+  <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/actions/workflows/test.yml/badge.svg"></a>
   <a href="https://github.com/michaelhenry/XConfigs/releases/latest"><img alt="release" src="https://img.shields.io/github/v/release/michaelhenry/XConfigs.svg"/></a>
   <a href="https://developer.apple.com/swift"><img alt="Swift5" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
   <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS-green.svg"></a>
@@ -13,6 +13,7 @@
 
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
+- [How to use](#how-to-use)
 - [Example](#example)
 - [Other Related](#other-related)
 - [License](#license)
@@ -31,14 +32,23 @@ Install using SPM
 .package(url: "https://github.com/michaelhenry/XConfigs", .upToNextMinor(from: "1.0.0")),
 ```
 
+## How to use
+
+```swift
+let kvProvider = SampleKeyValueProvider()
+
+// Register the AppConfigs and set which keyValueProvider and keyValueStore to use.
+XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+```
+
 ## Example
 
-Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
+Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift)ification and then use the `@XConfig` property wrapper inside it.
 
 If you have some custom datatype, you can simply conform them to `RawStringValueRepresentable`.
 
 ```swift
-struct MockConfigs: XConfigSpec {
+struct AppConfigs: XConfigSpec {
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
@@ -67,9 +77,16 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 }
 ```
 
+For the complete example, please refer to the [Demo](Demo) project.
+
 ## Other Related
 
-- [Firebase Remote Config](https://firebase.google.com/docs/remote-config), you can simply backed [XConfigs](https://github.com/michaelhenry/XConfigs) by FirebaseRemoteConfig by simply implmenting [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
+### [Firebase Remote Config](https://firebase.google.com/docs/remote-config)
+
+You can backed [XConfigs](https://github.com/michaelhenry/XConfigs) by [FirebaseRemoteConfig](https://firebase.google.com/docs/remote-config) by simply implementing the [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
+
+TODO: 
+- [ ] Sample implementation
 
 ## LICENSE
 
