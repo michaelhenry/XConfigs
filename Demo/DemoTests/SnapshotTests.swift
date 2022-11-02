@@ -22,14 +22,14 @@ final class SnapshotTests: XCTestCase {
 
     func testhOverrideDisabled() throws {
         let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image)
+        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
     }
 
     // BUG: https://github.com/pointfreeco/swift-snapshot-testing/discussions/502
     func testhOverrideEnabled() throws {
         defaultConfigUseCase.isOverriden = true
         let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image)
+        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
     }
 
     func testInputValueViewController() throws {
@@ -39,7 +39,7 @@ final class SnapshotTests: XCTestCase {
 
     func testOptionViewController() throws {
         let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: ["Value1", "Value2", "Value3", "Value4"]))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image)
+        assertSnapshot(matching: vc, as: .image(precision: 0.95))
     }
 
     // MARK: - Snapshots - Views
@@ -49,7 +49,7 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: "Action name")
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
     func testKeyValueView() throws {
@@ -57,7 +57,7 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", "Value"))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
     func testKeyValueViewWithLongValue() throws {
@@ -65,7 +65,7 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", "This a long value. Lorem ipsum sit dolor amet."))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
     func testToggleView() throws {
@@ -73,7 +73,7 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", false))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
     func testToggleViewWithOnValue() throws {
@@ -81,6 +81,6 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", true))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 }
