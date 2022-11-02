@@ -78,11 +78,6 @@ struct Contact: RawStringValueRepresentable {
     let name: String
     let phoneNumber: String
 
-    init(name: String, phoneNumber: String) {
-        self.name = name
-        self.phoneNumber = phoneNumber
-    }
-
     static let `default` = Contact(name: "Name", phoneNumber: "1234 5678")
 }
 
