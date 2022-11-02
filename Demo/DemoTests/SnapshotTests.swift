@@ -18,17 +18,31 @@ final class SnapshotTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    // MARK: - Snapshots ViewControllers
+
     func testhOverrideDisabled() throws {
         let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(on: .iPhoneX, precision: 0.95))
+        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image)
     }
 
     // BUG: https://github.com/pointfreeco/swift-snapshot-testing/discussions/502
     func testhOverrideEnabled() throws {
         defaultConfigUseCase.isOverriden = true
         let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(on: .iPhoneX, precision: 0.95))
+        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image)
     }
+
+    func testInputValueViewController() throws {
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World"))).wrapInsideNavVC()
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    func testOptionViewController() throws {
+        let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: ["Value1", "Value2", "Value3", "Value4"]))).wrapInsideNavVC()
+        assertSnapshot(matching: vc, as: .image)
+    }
+
+    // MARK: - Snapshots - Views
 
     func testActionView() throws {
         let view = ActionView().apply {
@@ -43,7 +57,7 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", "Value"))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image(precision: 0.95))
+        assertSnapshot(matching: view, as: .image)
     }
 
     func testKeyValueViewWithLongValue() throws {
@@ -51,7 +65,7 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", "This a long value. Lorem ipsum sit dolor amet."))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image(precision: 0.95))
+        assertSnapshot(matching: view, as: .image)
     }
 
     func testToggleView() throws {
@@ -67,16 +81,6 @@ final class SnapshotTests: XCTestCase {
             $0.configure(with: ("Name", true))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
         }
-        assertSnapshot(matching: view, as: .image(precision: 0.95))
-    }
-
-    func testInputValueViewController() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World"))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image(on: .iPhoneX, precision: 0.95))
-    }
-
-    func testOptionViewController() throws {
-        let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: ["Value1", "Value2", "Value3", "Value4"]))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image(on: .iPhoneX, precision: 0.95))
+        assertSnapshot(matching: view, as: .image)
     }
 }
