@@ -17,7 +17,7 @@ final class OptionViewController: UITableViewController {
         var ds = DataSource(tableView: tableView) { [weak self] tableView, indexPath, item in
             guard let self = self else { return .init() }
             let cell = tableView.dequeueCell(UITableViewCell.self, for: indexPath)
-            cell.textLabel?.text = item
+            cell.textLabel?.text = item.displayName
             return cell
         }
         ds.defaultRowAnimation = .fade
@@ -70,7 +70,7 @@ final class OptionViewController: UITableViewController {
                 case .cancel:
                     self.dismiss(animated: true)
                 case let .select(item):
-                    self.itemSubject.send(item)
+                    self.itemSubject.send(item.value)
                     self.dismiss(animated: true)
                 }
             }
