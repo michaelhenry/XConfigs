@@ -2,7 +2,7 @@
 <p align="center">A quick, easy and elegant solution for your remote and dev configuration.</p>
 <p align="center">
   <a href="https://codecov.io/gh/michaelhenry/XConfigs"><img alt="codecov" src="https://codecov.io/gh/michaelhenry/XConfigs/branch/main/graph/badge.svg?token=WLH8VVA19I"/></a>
-  <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/workflows/test/badge.svg"></a>
+  <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/actions/workflows/test.yml/badge.svg"></a>
   <a href="https://github.com/michaelhenry/XConfigs/releases/latest"><img alt="release" src="https://img.shields.io/github/v/release/michaelhenry/XConfigs.svg"/></a>
   <a href="https://developer.apple.com/swift"><img alt="Swift5" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
   <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS-green.svg"></a>
@@ -69,7 +69,12 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 
 ## Other Related
 
-- [Firebase Remote Config](https://firebase.google.com/docs/remote-config), you can simply backed [XConfigs](https://github.com/michaelhenry/XConfigs) by FirebaseRemoteConfig by simply implmenting [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
+### [Firebase Remote Config](https://firebase.google.com/docs/remote-config)
+
+You can backed [XConfigs](https://github.com/michaelhenry/XConfigs) by [FirebaseRemoteConfig](https://firebase.google.com/docs/remote-config) by simply implementing the [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
+
+TODO: 
+- [ ] Sample implementation
 
 ## LICENSE
 
