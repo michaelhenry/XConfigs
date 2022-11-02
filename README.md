@@ -41,6 +41,18 @@ let kvProvider = SampleKeyValueProvider()
 XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
 ```
 
+Please note that on production build, it is recommended to **DON'T put** any **keyValueStore**, so it will keep using either the value from the **keyValueProvider** or the default value assigned inside the property wrapper as fallback.
+
+Eg.
+
+```swift
+#if DEBUG
+    XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+#else
+    XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider)
+#endif
+```
+
 ## Example
 
 Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift)ification and then use the `@XConfig` property wrapper inside it.
