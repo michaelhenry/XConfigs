@@ -13,6 +13,7 @@
 
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
+- [How to use](#how-to-use)
 - [Example](#example)
 - [Other Related](#other-related)
 - [License](#license)
@@ -31,14 +32,23 @@ Install using SPM
 .package(url: "https://github.com/michaelhenry/XConfigs", .upToNextMinor(from: "1.0.0")),
 ```
 
+## How to use
+
+```swift
+let kvProvider = SampleKeyValueProvider()
+
+// Register the AppConfigs and set which keyValueProvider and keyValueStore to use.
+XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+```
+
 ## Example
 
-Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift) and then use the `@XConfig` property wrapper inside it.
+Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift)ification and then use the `@XConfig` property wrapper inside it.
 
 If you have some custom datatype, you can simply conform them to `RawStringValueRepresentable`.
 
 ```swift
-struct MockConfigs: XConfigSpec {
+struct AppConfigs: XConfigSpec {
 
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
@@ -66,6 +76,8 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
     case west
 }
 ```
+
+For the complete example, please refer to the [Demo](Demo) project.
 
 ## Other Related
 
