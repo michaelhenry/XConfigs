@@ -15,11 +15,12 @@ concurrency:
 
 env:
   SNAPSHOT_ARTIFACTS: "/tmp/SNAPSHOTS"
+  DEVELOPER_DIR: /Applications/Xcode_14.1.app
 
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: macos-12
 
     steps:
     - uses: actions/checkout@v3
