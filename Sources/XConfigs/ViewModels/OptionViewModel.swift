@@ -4,7 +4,7 @@ import Foundation
 struct OptionViewModel: ViewModelType {
     typealias Section = Int
 
-    typealias Item = String
+    typealias Item = Choice
 
     struct Input {
         let reloadPublisher: AnyPublisher<Void, Never>
@@ -31,7 +31,7 @@ struct OptionViewModel: ViewModelType {
 
     func transform(input: Input) -> Output {
         let sectionItemsFromReload = input.reloadPublisher.map { _ -> [SectionItemsModel<Section, Item>] in
-            .init(arrayLiteral: .init(section: 0, items: model.choices.map(\.rawString)))
+            .init(arrayLiteral: .init(section: 0, items: model.choices))
         }.eraseToAnyPublisher()
 
         let cancelAction = input.dismissPublisher.map { Action.cancel }

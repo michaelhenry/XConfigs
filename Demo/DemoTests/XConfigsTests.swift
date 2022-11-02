@@ -8,6 +8,8 @@ final class XConfigsTests: XCTestCase {
     private var subscriptions: Set<AnyCancellable>!
     private var provider: MockKeyValueProvider!
     private var store: MockKeyValueStore!
+    
+    private let regionChoices = ["north", "south", "east", "west"].map { Choice(displayName: $0, value: $0) }
 
     override func setUpWithError() throws {
         subscriptions = Set<AnyCancellable>()
@@ -75,9 +77,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "10")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -128,9 +128,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "10")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -154,9 +152,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "20")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -180,9 +176,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: false)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "20")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -285,9 +279,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: true)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "10")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -311,9 +303,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: true)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "20")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -337,9 +327,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: true)),
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "20")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),
@@ -363,9 +351,7 @@ final class XConfigsTests: XCTestCase {
                 .toggle(.init(key: "isOnboardingEnabled", value: true)), // uses remote
                 .textInput(.init(key: "apiURL", value: "https://prod.google.com")), // uses remote
                 .textInput(.init(key: "apiVersion", value: "v1.2.3")),
-                .optionSelection(.init(key: "region", value: "north", choices: [
-                    "north", "south", "east", "west",
-                ])),
+                .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
                 .textInput(.init(key: "maxRetry", value: "10")),
                 .textInput(.init(key: "threshold", value: "1")),
                 .textInput(.init(key: "rate", value: "2.5")),

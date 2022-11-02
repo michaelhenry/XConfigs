@@ -57,6 +57,9 @@ struct AppConfigs: XConfigsSpec {
 
     @XConfig(key: "nestedInfo", defaultValue: NestedInfo(), group: .otherDataTypes)
     var nestedInfo: NestedInfo
+    
+    @XConfig(key: "accountType", defaultValue: .guest, group: .otherDataTypes)
+    var accountType: AccountType
 
     // So the key is: as long as you can represent it as string, it should be fine.
 }
@@ -72,6 +75,26 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
     case south
     case east
     case west
+}
+
+// Wanna make it more readable instead of just showing integer values?
+// Then conform to `CustomStringConvertible`
+enum AccountType: Int, CaseIterable, RawStringValueRepresentable, CustomStringConvertible {
+
+    case guest = 0
+    case member = 1
+    case admin = 2
+    
+    var description: String {
+        switch self {
+        case .guest:
+            return "Guest"
+        case .member:
+            return "Member"
+        case .admin:
+            return "Admin"
+        }
+    }
 }
 
 struct Contact: RawStringValueRepresentable {

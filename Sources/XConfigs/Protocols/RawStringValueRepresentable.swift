@@ -63,8 +63,12 @@ extension URL: RawStringValueRepresentable {
 // MARK: - CaseIteratable + RawStringValueRepresentable
 
 extension CaseIterable where Self: RawStringValueRepresentable {
-    var allChoices: [String] {
-        Self.allCases.map(\.rawString)
+    var allChoices: [Choice] {
+        Self.allCases.map {
+            Choice(
+                displayName: ($0 as? CustomStringConvertible)?.description ?? $0.rawString,
+                value: $0.rawString)
+        }
     }
 }
 
