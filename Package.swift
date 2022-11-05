@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/CombineCommunity/CombineExt", .upToNextMajor(from: "1.8.0")),
-        .package(url: "https://github.com/CombineCommunity/CombineCocoa", .upToNextMajor(from: "0.4.0")),
+        .package(url: "https://github.com/CombineCommunity/CombineCocoa", .upToNextMajor(from: "0.4.1")),
         .package(url: "https://github.com/michaelhenry/Prettier.swift", .upToNextMajor(from: "1.1.1")),
         .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
     ],
