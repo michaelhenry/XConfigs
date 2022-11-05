@@ -23,10 +23,6 @@ public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
     public var configValue: RawStringValueRepresentable {
         wrappedValue
     }
-
-    public var configDefaultValue: RawStringValueRepresentable {
-        defaultValue
-    }
 }
 
 public struct XConfigGroup: Hashable {
