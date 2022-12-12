@@ -1,6 +1,6 @@
-import Combine
-import CombineExt
 import Foundation
+import RxCocoa
+import RxSwift
 
 struct XConfigsViewModel: ViewModelType {
     enum Section: Hashable {
@@ -17,15 +17,15 @@ struct XConfigsViewModel: ViewModelType {
     }
 
     struct Input {
-        let reloadPublisher: AnyPublisher<Void, Never>
-        let updateValuePublisher: AnyPublisher<KeyValue, Never>
-        let overrideConfigPublisher: AnyPublisher<Bool, Never>
-        let resetPublisher: AnyPublisher<Void, Never>
+        let reloadPublisher: Observable<Void>
+        let updateValuePublisher: Observable<KeyValue>
+        let overrideConfigPublisher: Observable<Bool>
+        let resetPublisher: Observable<Void>
     }
 
     struct Output {
-        let title: AnyPublisher<String, Never>
-        let sectionItemsModels: AnyPublisher<[SectionItemsModel<Section, Item>], Never>
+        let title: Driver<String>
+        let sectionItemsModels: Driver<[SectionItemsModel<Section, Item>]>
     }
 
     private let useCase: XConfigUseCase
@@ -40,15 +40,15 @@ struct XConfigsViewModel: ViewModelType {
         let reset = input.resetPublisher.map { useCase.reset() }
         let overrideConfig = input.overrideConfigPublisher.map { val in useCase.isOverriden = val }
 
-        let configs = Publishers.Merge4(update, reload, overrideConfig, reset)
+        let configs = Observable.merge(update, reload, overrideConfig, reset)
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
-            .eraseToAnyPublisher()
 
-        let sectionItemsModels = configs.compactMap(mapConfigInfosToSectionItemsModels).eraseToAnyPublisher()
+        let sectionItemsModels = configs.compactMap(mapConfigInfosToSectionItemsModels)
+            .asDriver(onErrorDriveWith: .empty())
 
         return .init(
-            title: Just("Configs").eraseToAnyPublisher(),
+            title: .just("Configs"),
             sectionItemsModels: sectionItemsModels
         )
     }
@@ -89,7 +89,8 @@ struct XConfigsViewModel: ViewModelType {
             return .optionSelection(.init(
                 key: key,
                 value: (val as? CustomStringConvertible)?.description ?? val.rawString,
-                choices: val.allChoices))
+                choices: val.allChoices
+            ))
         default:
             return .textInput(.init(key: key, value: info.configValue.rawString))
         }

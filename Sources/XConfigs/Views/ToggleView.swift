@@ -1,5 +1,5 @@
-import Combine
-import CombineCocoa
+import RxCocoa
+import RxSwift
 import UIKit
 
 final class ToggleView: UIView, ConfigurableView {
@@ -8,10 +8,8 @@ final class ToggleView: UIView, ConfigurableView {
     private let switchView = UISwitch()
     private let keyLabel = UILabel()
 
-    var valueChangedPublisher: AnyPublisher<Bool, Never> {
-        switchView.controlEventPublisher(for: .valueChanged)
-            .map { self.self.switchView.isOn }
-            .eraseToAnyPublisher()
+    var valueChangedPublisher: Observable<Bool> {
+        switchView.rx.isOn.asObservable()
     }
 
     init() {

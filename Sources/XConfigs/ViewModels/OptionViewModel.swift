@@ -1,5 +1,6 @@
-import Combine
 import Foundation
+import RxCocoa
+import RxSwift
 
 struct OptionViewModel: ViewModelType {
     typealias Section = Int
@@ -7,15 +8,15 @@ struct OptionViewModel: ViewModelType {
     typealias Item = Choice
 
     struct Input {
-        let reloadPublisher: AnyPublisher<Void, Never>
-        let dismissPublisher: AnyPublisher<Void, Never>
-        let selectItemPublisher: AnyPublisher<Item, Never>
+        let reloadPublisher: Observable<Void>
+        let dismissPublisher: Observable<Void>
+        let selectItemPublisher: Observable<Item>
     }
 
     struct Output {
-        let title: AnyPublisher<String, Never>
-        let sectionItemsModels: AnyPublisher<[SectionItemsModel<Section, Item>], Never>
-        let action: AnyPublisher<Action, Never>
+        let title: Driver<String>
+        let sectionItemsModels: Driver<[SectionItemsModel<Section, Item>]>
+        let action: Driver<Action>
     }
 
     enum Action {
@@ -32,14 +33,14 @@ struct OptionViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let sectionItemsFromReload = input.reloadPublisher.map { _ -> [SectionItemsModel<Section, Item>] in
             .init(arrayLiteral: .init(section: 0, items: model.choices))
-        }.eraseToAnyPublisher()
+        }.asDriver(onErrorDriveWith: .empty())
 
         let cancelAction = input.dismissPublisher.map { Action.cancel }
         let selectAction = input.selectItemPublisher.map(Action.select)
 
-        let action = Publishers.Merge(cancelAction, selectAction).eraseToAnyPublisher()
+        let action = Observable.merge(cancelAction, selectAction).asDriver(onErrorDriveWith: .empty())
         return .init(
-            title: Just(model.key).eraseToAnyPublisher(),
+            title: .just(model.key),
             sectionItemsModels: sectionItemsFromReload,
             action: action
         )

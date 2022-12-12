@@ -1,19 +1,19 @@
-import Combine
-import CombineExt
 import Foundation
 import Prettier_swift
+import RxCocoa
+import RxSwift
 
 struct InputValueViewModel: ViewModelType {
     struct Input {
-        let textPublisher: AnyPublisher<String, Never>
-        let dismissPublisher: AnyPublisher<Void, Never>
-        let donePublisher: AnyPublisher<Void, Never>
+        let textPublisher: Observable<String>
+        let dismissPublisher: Observable<Void>
+        let donePublisher: Observable<Void>
     }
 
     struct Output {
-        let title: AnyPublisher<String, Never>
-        let value: AnyPublisher<String, Never>
-        let action: AnyPublisher<Action, Never>
+        let title: Driver<String>
+        let value: Driver<String>
+        let action: Driver<Action>
     }
 
     enum Action {
@@ -31,10 +31,10 @@ struct InputValueViewModel: ViewModelType {
     func transform(input: Input) -> Output {
         let cancelAction = input.dismissPublisher.map { Action.cancel }
         let doneAction = input.donePublisher.withLatestFrom(input.textPublisher).map(Action.done)
-        let action = Publishers.Merge(cancelAction, doneAction).eraseToAnyPublisher()
+        let action = Observable.merge(cancelAction, doneAction).asDriver(onErrorDriveWith: .empty())
         return .init(
-            title: Just(model.key).eraseToAnyPublisher(),
-            value: Just(prettier.prettify(model.value, parser: .jsonStringify)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? model.value).eraseToAnyPublisher(),
+            title: .just(model.key),
+            value: .just(prettier.prettify(model.value, parser: .jsonStringify)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? model.value),
             action: action
         )
     }

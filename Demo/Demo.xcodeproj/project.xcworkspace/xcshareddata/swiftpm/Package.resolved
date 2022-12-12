@@ -2,24 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "CombineCocoa",
-        "repositoryURL": "https://github.com/CombineCommunity/CombineCocoa",
-        "state": {
-          "branch": null,
-          "revision": "4e262c2f9fb1cee1cb3be5717f7e6b55eb823971",
-          "version": "0.4.0"
-        }
-      },
-      {
-        "package": "CombineExt",
-        "repositoryURL": "https://github.com/CombineCommunity/CombineExt",
-        "state": {
-          "branch": null,
-          "revision": "aaf1a0981c05360000af972473034cb952be4ca0",
-          "version": "1.8.0"
-        }
-      },
-      {
         "package": "Highlightr",
         "repositoryURL": "https://github.com/raspu/Highlightr",
         "state": {
@@ -35,6 +17,24 @@
           "branch": null,
           "revision": "d6e2197469a2d9a9c5f0a9302bb28e155586d36d",
           "version": "1.1.1"
+        }
+      },
+      {
+        "package": "RxDataSources",
+        "repositoryURL": "https://github.com/RxSwiftCommunity/RxDataSources",
+        "state": {
+          "branch": null,
+          "revision": "90c29b48b628479097fe775ed1966d75ac374518",
+          "version": "5.0.2"
+        }
+      },
+      {
+        "package": "RxSwift",
+        "repositoryURL": "https://github.com/ReactiveX/RxSwift",
+        "state": {
+          "branch": null,
+          "revision": "b4307ba0b6425c0ba4178e138799946c3da594f8",
+          "version": "6.5.0"
         }
       },
       {
