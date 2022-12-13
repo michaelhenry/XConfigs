@@ -1,10 +1,10 @@
-import RxCocoa
+import DiffableDataSources
 import RxSwift
 import UIKit
 
 final class XConfigsViewController: UITableViewController {
     typealias ViewModel = XConfigsViewModel
-    typealias DataSource = TableViewDataSource<ViewModel.Section, ViewModel.Item>
+    typealias DataSource = TableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
     private var disposeBag = DisposeBag()
@@ -54,7 +54,11 @@ final class XConfigsViewController: UITableViewController {
 
     init(viewModel: XConfigsViewModel) {
         self.viewModel = viewModel
-        super.init(style: .insetGrouped)
+        if #available(iOS 13.0, *) {
+            super.init(style: .insetGrouped)
+        } else {
+            super.init(style: .grouped)
+        }
     }
 
     @available(*, unavailable)
@@ -64,10 +68,17 @@ final class XConfigsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTableView()
+        handleViewModelOutput()
+    }
+
+    private func setupTableView() {
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
         tableView.registerCell(UIViewTableWrapperCell<ActionView>.self)
-        handleViewModelOutput()
+        if #available(iOS 15.0, *) {
+            tableView.isPrefetchingEnabled = false
+        }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -91,7 +102,7 @@ final class XConfigsViewController: UITableViewController {
 
         output.sectionItemsModels
             .drive(onNext: { [weak self] secItems in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
             })
             .disposed(by: disposeBag)

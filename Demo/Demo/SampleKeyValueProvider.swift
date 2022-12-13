@@ -6,9 +6,12 @@ final class SampleKeyValueProvider: KeyValueProvider {
     private var keyValues: [String: String] = [:]
 
     func download(completion: @escaping ((Bool) -> Void)) {
-        Task {
+        URLSession.shared.dataTask(with: URLRequest(url: remoteKeyValuesURL)) { [weak self] data, _, _ in
+            guard let data, let self else {
+                completion(false)
+                return
+            }
             do {
-                let (data, _) = try await URLSession.shared.data(from: self.remoteKeyValuesURL)
                 let jsonObject = try JSONSerialization.jsonObject(with: data) as? [String: Any] ?? [:]
                 self.keyValues = jsonObject.reduce(into: [String: String]()) {
                     $0[$1.key] = String(describing: $1.value)
@@ -17,7 +20,6 @@ final class SampleKeyValueProvider: KeyValueProvider {
                 completion(true)
             } catch {
                 completion(false)
-                print("ERROR", error)
             }
         }
     }

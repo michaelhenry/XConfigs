@@ -1,10 +1,10 @@
-import RxCocoa
+import DiffableDataSources
 import RxSwift
 import UIKit
 
 final class OptionViewController: UITableViewController {
     typealias ViewModel = OptionViewModel
-    typealias DataSource = UITableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+    typealias DataSource = TableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
     private var disposeBag = DisposeBag()

@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ReactiveX/RxSwift", from: "6.5.0"),
-        .package(url: "https://github.com/RxSwiftCommunity/RxDataSources", from: "5.0.2"),
+        .package(url: "https://github.com/ra1028/DiffableDataSources", from: "0.5.0"),
         .package(url: "https://github.com/michaelhenry/Prettier.swift", from: "1.1.1"),
         .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
     ],
@@ -25,7 +25,8 @@ let package = Package(
             name: "XConfigs",
             dependencies: [
                 .product(name: "RxSwift", package: "RxSwift"),
-                .product(name: "RxDataSources", package: "RxDataSources"),
+                .product(name: "RxCocoa", package: "RxSwift"),
+                .product(name: "DiffableDataSources", package: "DiffableDataSources"),
                 .product(name: "Prettier_swift", package: "Prettier.swift"),
                 .product(name: "Highlightr", package: "Highlightr"),
             ]
