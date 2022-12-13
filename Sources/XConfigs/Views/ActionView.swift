@@ -4,7 +4,9 @@ final class ActionView: UIView, ConfigurableView {
     typealias ViewModel = String
 
     private let keyLabel = UILabel().apply {
-        $0.textColor = .link
+        if #available(iOS 13.0, *) {
+            $0.textColor = .link
+        }
     }
 
     init() {

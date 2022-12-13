@@ -31,9 +31,9 @@ public class XConfigUseCase {
         return mirror.children.compactMap { $0.value as? ConfigInfo }
     }
 
-    func get<Value: RawStringValueRepresentable>(for key: String) -> Value? {
-        guard isOverriden else { return keyValueProvider.get(for: key) }
-        return keyValueStore.get(for: key) ?? keyValueProvider.get(for: key)
+    func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value) -> Value {
+        guard isOverriden else { return keyValueProvider.get(for: key) ?? defaultValue }
+        return keyValueStore.get(for: key) ?? keyValueProvider.get(for: key) ?? defaultValue
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {

@@ -52,7 +52,9 @@ final class InputValueViewController: UIViewController, UITextViewDelegate {
             navigationItem.rightBarButtonItem = .init(title: "Done", style: .done, target: self, action: nil)
             navigationItem.leftBarButtonItem = .init(title: "Cancel", style: .plain, target: self, action: nil)
         }
-        view.backgroundColor = .systemBackground
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+        }
         view.addSubview(textView)
         textView.bindToSuperview(margins: .init(top: 20, left: 20, bottom: 20, right: 5))
     }

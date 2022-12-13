@@ -7,7 +7,7 @@ public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
     public let group: XConfigGroup
 
     public var wrappedValue: Value {
-        defaultConfigUseCase.get(for: key) ?? defaultValue
+        defaultConfigUseCase.get(for: key, defaultValue: defaultValue)
     }
 
     public init(key: String, defaultValue: Value, group: XConfigGroup = .default) {
