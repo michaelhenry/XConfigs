@@ -17,7 +17,7 @@ extension SectionItemsModel: Equatable {
 // MARK: - SectionItemsModel + NSDiffableDataSourceSnapshot
 
 extension Sequence {
-    func snapshot<Section: Hashable, Item: Hashable>() -> DiffableDataSourceSnapshot<Section, Item> where Element == SectionItemsModel<Section, Item> {
+    func snapshotLegacy<Section: Hashable, Item: Hashable>() -> DiffableDataSourceSnapshot<Section, Item> where Element == SectionItemsModel<Section, Item> {
         reduce(into: DiffableDataSourceSnapshot<Section, Item>()) { snapshot, sectionModel in
             snapshot.appendSections([sectionModel.section])
             snapshot.appendItems(sectionModel.items, toSection: sectionModel.section)

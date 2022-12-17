@@ -4,7 +4,7 @@ import UIKit
 
 final class OptionViewController: UITableViewController {
     typealias ViewModel = OptionViewModel
-    typealias DataSource = TableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+    typealias DataSource = AnyDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
     private var disposeBag = DisposeBag()
@@ -21,7 +21,6 @@ final class OptionViewController: UITableViewController {
             cell.textLabel?.text = item.displayName
             return cell
         }
-        ds.defaultRowAnimation = .fade
         return ds
     }()
 
@@ -60,7 +59,7 @@ final class OptionViewController: UITableViewController {
         output.sectionItemsModels
             .drive(onNext: { [weak self] secItems in
                 guard let self = self else { return }
-                self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
+                self.datasource.applyAnySnapshot(secItems.anySnapshot(), animatingDifferences: false)
             })
             .disposed(by: disposeBag)
 

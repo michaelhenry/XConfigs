@@ -1,10 +1,9 @@
-import DiffableDataSources
 import RxSwift
 import UIKit
 
 final class XConfigsViewController: UITableViewController {
     typealias ViewModel = XConfigsViewModel
-    typealias DataSource = TableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+    typealias DataSource = AnyDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
     private var disposeBag = DisposeBag()
@@ -48,7 +47,6 @@ final class XConfigsViewController: UITableViewController {
                 return cell
             }
         }
-        ds.defaultRowAnimation = .fade
         return ds
     }()
 
@@ -76,9 +74,6 @@ final class XConfigsViewController: UITableViewController {
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
         tableView.registerCell(UIViewTableWrapperCell<ActionView>.self)
-        if #available(iOS 15.0, *) {
-            tableView.isPrefetchingEnabled = false
-        }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -103,7 +98,7 @@ final class XConfigsViewController: UITableViewController {
         output.sectionItemsModels
             .drive(onNext: { [weak self] secItems in
                 guard let self else { return }
-                self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
+                self.datasource.applyAnySnapshot(secItems.anySnapshot(), animatingDifferences: self.shouldAnimate)
             })
             .disposed(by: disposeBag)
 
