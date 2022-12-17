@@ -32,10 +32,16 @@ struct AnyDiffableDataSource<Section: Hashable, Item: Hashable> {
 
     func applyAnySnapshot(_ snapshot: Any, animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         if #available(iOS 13.0, *) {
-            guard let datasource = datasource as? TableViewDataSource<Section, Item>, let snapshot = snapshot as? NSDiffableDataSourceSnapshot<Section, Item> else { return }
+            guard
+                let datasource = datasource as? TableViewDataSource<Section, Item>,
+                let snapshot = snapshot as? NSDiffableDataSourceSnapshot<Section, Item>
+            else { return }
             datasource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
         } else {
-            guard let datasource = datasource as? LegacyTableViewDataSource<Section, Item>, let snapshot = snapshot as? DiffableDataSourceSnapshot<Section, Item> else { return }
+            guard
+                let datasource = datasource as? LegacyTableViewDataSource<Section, Item>,
+                let snapshot = snapshot as? DiffableDataSourceSnapshot<Section, Item>
+            else { return }
             datasource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
         }
     }
