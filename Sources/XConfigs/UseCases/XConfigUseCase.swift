@@ -13,15 +13,17 @@ public class XConfigUseCase {
         }
     }
 
-    private var keyValueStore: KeyValueStore
-    private var keyValueProvider: KeyValueProvider
-    private var configsSpec: XConfigsSpec.Type
+    private let keyValueStore: KeyValueStore
+    private let keyValueProvider: KeyValueProvider
+    private let configsSpec: XConfigsSpec.Type
+    private let logicHandler: LogicHandler
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore) {
+    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore, logicHandler: LogicHandler = OverrideFromRemoteLogicHandler()) {
         configsSpec = spec
         self.keyValueProvider = keyValueProvider
         self.keyValueStore = keyValueStore
+        self.logicHandler = logicHandler
     }
 
     func getConfigs() -> [ConfigInfo] {
@@ -31,9 +33,8 @@ public class XConfigUseCase {
         return mirror.children.compactMap { $0.value as? ConfigInfo }
     }
 
-    func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value) -> Value {
-        guard isOverriden else { return keyValueProvider.get(for: key) ?? defaultValue }
-        return keyValueStore.get(for: key) ?? keyValueProvider.get(for: key) ?? defaultValue
+    func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value, group: XConfigGroup) -> Value {
+        logicHandler.handle(isOverriden: isOverriden, key: key, defaultValue: defaultValue, keyValueStore: keyValueStore, keyValueProvider: keyValueProvider, group: group)
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
