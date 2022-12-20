@@ -1,4 +1,4 @@
-import Combine
+import RxSwift
 import UIKit
 
 // Provide a default `reuseIdentifier` equal to the class name.
@@ -49,7 +49,7 @@ protocol ConfigurableView: UIView {
 final class UIViewTableWrapperCell<MainView: ConfigurableView>: UITableViewCell {
     let mainView: MainView
 
-    var subscriptions = Set<AnyCancellable>()
+    var disposeBag = DisposeBag()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         mainView = MainView()
@@ -73,6 +73,6 @@ final class UIViewTableWrapperCell<MainView: ConfigurableView>: UITableViewCell 
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        subscriptions = Set<AnyCancellable>()
+        disposeBag = DisposeBag()
     }
 }

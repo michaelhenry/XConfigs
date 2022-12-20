@@ -1,16 +1,17 @@
-import Combine
+import DiffableDataSources
+import RxSwift
 import UIKit
 
 final class OptionViewController: UITableViewController {
     typealias ViewModel = OptionViewModel
-    typealias DataSource = UITableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
+    typealias DataSource = AnyDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
     private let viewModel: ViewModel
-    private var subscriptions = Set<AnyCancellable>()
+    private var disposeBag = DisposeBag()
 
-    private let itemSubject = PassthroughSubject<String, Never>()
-    var selectedItemPublisher: AnyPublisher<String, Never> {
-        itemSubject.eraseToAnyPublisher()
+    private let itemSubject = PublishSubject<String>()
+    var selectedItemPublisher: Observable<String> {
+        itemSubject
     }
 
     private lazy var datasource: DataSource = {
@@ -20,7 +21,6 @@ final class OptionViewController: UITableViewController {
             cell.textLabel?.text = item.displayName
             return cell
         }
-        ds.defaultRowAnimation = .fade
         return ds
     }()
 
@@ -43,38 +43,38 @@ final class OptionViewController: UITableViewController {
     private func handleViewModelOutput() {
         guard let leftNavItem = navigationItem.leftBarButtonItem else { return }
         let output = viewModel.transform(input: .init(
-            reloadPublisher: Just(()).eraseToAnyPublisher(),
-            dismissPublisher: leftNavItem.tapPublisher,
-            selectItemPublisher: tableView.didSelectRowPublisher.compactMap { [weak self] indexPath -> ViewModel.Item? in
+            reloadPublisher: .just(()),
+            dismissPublisher: leftNavItem.rx.tap.map { _ in () }.asObservable(),
+            selectItemPublisher: tableView.rx.itemSelected.compactMap { [weak self] indexPath -> ViewModel.Item? in
                 guard let self = self else { return nil }
                 return self.datasource.itemIdentifier(for: indexPath)
-            }.eraseToAnyPublisher()
+            }
         ))
 
-        output.title.sink { [weak self] title in
+        output.title.drive(onNext: { [weak self] title in
             self?.title = title
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
         output.sectionItemsModels
-            .sink { [weak self] secItems in
+            .drive(onNext: { [weak self] secItems in
                 guard let self = self else { return }
-                self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
-            }
-            .store(in: &subscriptions)
+                self.datasource.applyAnySnapshot(secItems.anySnapshot(), animatingDifferences: false)
+            })
+            .disposed(by: disposeBag)
 
         output.action
-            .sink { [weak self] action in
+            .drive(onNext: { [weak self] action in
                 guard let self = self else { return }
                 switch action {
                 case .cancel:
                     self.dismiss(animated: true)
                 case let .select(item):
-                    self.itemSubject.send(item.value)
+                    self.itemSubject.onNext(item.value)
                     self.dismiss(animated: true)
                 }
-            }
-            .store(in: &subscriptions)
+            })
+            .disposed(by: disposeBag)
     }
 
     override func tableView(_: UITableView, didSelectRowAt _: IndexPath) {

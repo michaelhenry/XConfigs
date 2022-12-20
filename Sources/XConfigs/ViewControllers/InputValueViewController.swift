@@ -1,6 +1,5 @@
-import Combine
-import CombineCocoa
 import Highlightr
+import RxSwift
 import UIKit
 
 final class InputValueViewController: UIViewController, UITextViewDelegate {
@@ -21,12 +20,12 @@ final class InputValueViewController: UIViewController, UITextViewDelegate {
     }
 
     private let viewModel: ViewModel
-    private var subscriptions = Set<AnyCancellable>()
+    private var disposeBag = DisposeBag()
 
-    private var textSubject = PassthroughSubject<String, Never>()
+    private var textSubject = PublishSubject<String>()
 
-    var valuePublisher: AnyPublisher<String, Never> {
-        textSubject.eraseToAnyPublisher()
+    var valuePublisher: Observable<String> {
+        textSubject
     }
 
     init(viewModel: ViewModel) {
@@ -53,7 +52,9 @@ final class InputValueViewController: UIViewController, UITextViewDelegate {
             navigationItem.rightBarButtonItem = .init(title: "Done", style: .done, target: self, action: nil)
             navigationItem.leftBarButtonItem = .init(title: "Cancel", style: .plain, target: self, action: nil)
         }
-        view.backgroundColor = .systemBackground
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .systemBackground
+        }
         view.addSubview(textView)
         textView.bindToSuperview(margins: .init(top: 20, left: 20, bottom: 20, right: 5))
     }
@@ -63,29 +64,29 @@ final class InputValueViewController: UIViewController, UITextViewDelegate {
               let rightNavITem = navigationItem.rightBarButtonItem
         else { return }
         let output = viewModel.transform(input: .init(
-            textPublisher: textView.textPublisher.compactMap { $0 }.eraseToAnyPublisher(),
-            dismissPublisher: leftNavItem.tapPublisher,
-            donePublisher: rightNavITem.tapPublisher
+            textPublisher: textView.rx.text.compactMap { $0 }.asObservable(),
+            dismissPublisher: leftNavItem.rx.tap.asObservable(),
+            donePublisher: rightNavITem.rx.tap.asObservable()
         ))
-        output.title.sink { [weak self] title in
+        output.title.drive(onNext: { [weak self] title in
             self?.title = title
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
-        output.value.sink { [weak self] value in
+        output.value.drive(onNext: { [weak self] value in
             self?.textView.text = value
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
-        output.action.sink { [weak self] action in
+        output.action.drive(onNext: { [weak self] action in
             switch action {
             case .cancel:
                 self?.dismiss(animated: true)
             case let .done(text):
-                self?.textSubject.send(text)
+                self?.textSubject.onNext(text)
                 self?.dismiss(animated: true)
             }
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
     }
 }

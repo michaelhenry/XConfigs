@@ -1,18 +1,19 @@
-import Combine
+import RxCocoa
+import RxSwift
 import XCTest
 @testable import Demo
 @testable import XConfigs
 
 final class XConfigsTests: XCTestCase {
     typealias ViewModel = XConfigsViewModel
-    private var subscriptions: Set<AnyCancellable>!
+    private var disposeBag = DisposeBag()
     private var provider: MockKeyValueProvider!
     private var store: MockKeyValueStore!
-    
+
     private let regionChoices = ["north", "south", "east", "west"].map { Choice(displayName: $0, value: $0) }
 
     override func setUpWithError() throws {
-        subscriptions = Set<AnyCancellable>()
+        disposeBag = DisposeBag()
         provider = MockKeyValueProvider()
         store = MockKeyValueStore()
         XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, keyValueStore: store)
@@ -26,21 +27,21 @@ final class XConfigsTests: XCTestCase {
         let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = false
 
-        let reloadPublisher = PassthroughSubject<Void, Never>()
+        let reloadPublisher = PublishSubject<Void>()
         let output = viewModel.transform(input: .init(
-            reloadPublisher: reloadPublisher.eraseToAnyPublisher(),
-            updateValuePublisher: Empty().eraseToAnyPublisher(),
-            overrideConfigPublisher: Empty().eraseToAnyPublisher(),
-            resetPublisher: Empty().eraseToAnyPublisher()
+            reloadPublisher: reloadPublisher,
+            updateValuePublisher: .empty(),
+            overrideConfigPublisher: .empty(),
+            resetPublisher: .empty()
         ))
 
         var sectionItemsModels = [[SectionItemsModel<ViewModel.Section, ViewModel.Item>]]()
-        output.sectionItemsModels.sink { secItem in
+        output.sectionItemsModels.drive(onNext: { secItem in
             sectionItemsModels.append(secItem)
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
-        reloadPublisher.send(())
+        reloadPublisher.onNext(())
 
         XCTAssertEqual(sectionItemsModels[0], .init(
             arrayLiteral: .init(section: .main, items: [
@@ -52,21 +53,21 @@ final class XConfigsTests: XCTestCase {
         let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = true
 
-        let reloadPublisher = PassthroughSubject<Void, Never>()
+        let reloadPublisher = PublishSubject<Void>()
         let output = viewModel.transform(input: .init(
-            reloadPublisher: reloadPublisher.eraseToAnyPublisher(),
-            updateValuePublisher: Empty().eraseToAnyPublisher(),
-            overrideConfigPublisher: Empty().eraseToAnyPublisher(),
-            resetPublisher: Empty().eraseToAnyPublisher()
+            reloadPublisher: reloadPublisher,
+            updateValuePublisher: .empty(),
+            overrideConfigPublisher: .empty(),
+            resetPublisher: .empty()
         ))
 
         var sectionItemsModels = [[SectionItemsModel<ViewModel.Section, ViewModel.Item>]]()
-        output.sectionItemsModels.sink { secItem in
+        output.sectionItemsModels.drive(onNext: { secItem in
             sectionItemsModels.append(secItem)
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
-        reloadPublisher.send(())
+        reloadPublisher.onNext(())
 
         XCTAssertEqual(sectionItemsModels[0], [
             .init(section: .main, items: [
@@ -97,27 +98,27 @@ final class XConfigsTests: XCTestCase {
         let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = true
 
-        let reloadPublisher = PassthroughSubject<Void, Never>()
-        let updateValuePublisher = PassthroughSubject<KeyValue, Never>()
+        let reloadPublisher = PublishSubject<Void>()
+        let updateValuePublisher = PublishSubject<KeyValue>()
         let output = viewModel.transform(input: .init(
-            reloadPublisher: reloadPublisher.eraseToAnyPublisher(),
-            updateValuePublisher: updateValuePublisher.eraseToAnyPublisher(),
-            overrideConfigPublisher: Empty().eraseToAnyPublisher(),
-            resetPublisher: Empty().eraseToAnyPublisher()
+            reloadPublisher: reloadPublisher,
+            updateValuePublisher: updateValuePublisher,
+            overrideConfigPublisher: .empty(),
+            resetPublisher: .empty()
         ))
 
         var sectionItemsModels = [[SectionItemsModel<ViewModel.Section, ViewModel.Item>]]()
-        output.sectionItemsModels.sink { secItem in
+        output.sectionItemsModels.drive(onNext: { secItem in
             sectionItemsModels.append(secItem)
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
         XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
         XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
 
-        reloadPublisher.send(())
-        updateValuePublisher.send(.init(key: "maxRetry", value: "20"))
-        updateValuePublisher.send(.init(key: "maxRate", value: "0.99"))
+        reloadPublisher.onNext(())
+        updateValuePublisher.onNext(.init(key: "maxRetry", value: "20"))
+        updateValuePublisher.onNext(.init(key: "maxRate", value: "0.99"))
 
         XCTAssertEqual(sectionItemsModels[0], [
             .init(section: .main, items: [
@@ -199,27 +200,27 @@ final class XConfigsTests: XCTestCase {
         let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = false
 
-        let reloadPublisher = PassthroughSubject<Void, Never>()
-        let updateValuePublisher = PassthroughSubject<KeyValue, Never>()
+        let reloadPublisher = PublishSubject<Void>()
+        let updateValuePublisher = PublishSubject<KeyValue>()
         let output = viewModel.transform(input: .init(
-            reloadPublisher: reloadPublisher.eraseToAnyPublisher(),
-            updateValuePublisher: updateValuePublisher.eraseToAnyPublisher(),
-            overrideConfigPublisher: Empty().eraseToAnyPublisher(),
-            resetPublisher: Empty().eraseToAnyPublisher()
+            reloadPublisher: reloadPublisher,
+            updateValuePublisher: updateValuePublisher,
+            overrideConfigPublisher: .empty(),
+            resetPublisher: .empty()
         ))
 
         var sectionItemsModels = [[SectionItemsModel<ViewModel.Section, ViewModel.Item>]]()
-        output.sectionItemsModels.sink { secItem in
+        output.sectionItemsModels.drive(onNext: { secItem in
             sectionItemsModels.append(secItem)
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
         XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
         XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
 
-        reloadPublisher.send(())
-        updateValuePublisher.send(.init(key: "maxRetry", value: "20"))
-        updateValuePublisher.send(.init(key: "maxRate", value: "0.99"))
+        reloadPublisher.onNext(())
+        updateValuePublisher.onNext(.init(key: "maxRetry", value: "20"))
+        updateValuePublisher.onNext(.init(key: "maxRate", value: "0.99"))
 
         XCTAssertEqual(sectionItemsModels[0], [
             .init(section: .main, items: [
@@ -246,29 +247,29 @@ final class XConfigsTests: XCTestCase {
         let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = true
 
-        let reloadPublisher = PassthroughSubject<Void, Never>()
-        let updateValuePublisher = PassthroughSubject<KeyValue, Never>()
-        let resetPublisher = PassthroughSubject<Void, Never>()
+        let reloadPublisher = PublishSubject<Void>()
+        let updateValuePublisher = PublishSubject<KeyValue>()
+        let resetPublisher = PublishSubject<Void>()
         let output = viewModel.transform(input: .init(
-            reloadPublisher: reloadPublisher.eraseToAnyPublisher(),
-            updateValuePublisher: updateValuePublisher.eraseToAnyPublisher(),
-            overrideConfigPublisher: Empty().eraseToAnyPublisher(),
-            resetPublisher: resetPublisher.eraseToAnyPublisher()
+            reloadPublisher: reloadPublisher,
+            updateValuePublisher: updateValuePublisher,
+            overrideConfigPublisher: .empty(),
+            resetPublisher: resetPublisher
         ))
 
         var sectionItemsModels = [[SectionItemsModel<ViewModel.Section, ViewModel.Item>]]()
-        output.sectionItemsModels.sink { secItem in
+        output.sectionItemsModels.drive(onNext: { secItem in
             sectionItemsModels.append(secItem)
-        }
-        .store(in: &subscriptions)
+        })
+        .disposed(by: disposeBag)
 
         XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
         XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
 
-        reloadPublisher.send(())
-        updateValuePublisher.send(.init(key: "maxRetry", value: "20"))
-        updateValuePublisher.send(.init(key: "maxRate", value: "0.99"))
-        resetPublisher.send(())
+        reloadPublisher.onNext(())
+        updateValuePublisher.onNext(.init(key: "maxRetry", value: "20"))
+        updateValuePublisher.onNext(.init(key: "maxRate", value: "0.99"))
+        resetPublisher.onNext(())
 
         XCTAssertEqual(sectionItemsModels[0], [
             .init(section: .main, items: [
