@@ -16,10 +16,10 @@ public class XConfigUseCase {
     private let keyValueStore: KeyValueStore
     private let keyValueProvider: KeyValueProvider
     private let configsSpec: XConfigsSpec.Type
-    private let logicHandler: LogicHandler
+    private let logicHandler: XConfigsLogicHandler
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore, logicHandler: LogicHandler = OverrideFromRemoteLogicHandler()) {
+    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore, logicHandler: XConfigsLogicHandler) {
         configsSpec = spec
         self.keyValueProvider = keyValueProvider
         self.keyValueStore = keyValueStore
