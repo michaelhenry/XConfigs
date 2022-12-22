@@ -3,7 +3,7 @@ import RxCocoa
 import RxSwift
 
 struct OptionViewModel: ViewModelType {
-    typealias Section = Int
+    typealias Section = String?
 
     typealias Item = Choice
 
@@ -15,7 +15,7 @@ struct OptionViewModel: ViewModelType {
 
     struct Output {
         let title: Driver<String>
-        let sectionItemsModels: Driver<[SectionItemsModel<Section, Item>]>
+        let sectionItemsModels: Driver<[SectionItemsModel<String?, Item>]>
         let action: Driver<Action>
     }
 
@@ -32,7 +32,7 @@ struct OptionViewModel: ViewModelType {
 
     func transform(input: Input) -> Output {
         let sectionItemsFromReload = input.reloadPublisher.map { _ -> [SectionItemsModel<Section, Item>] in
-            .init(arrayLiteral: .init(section: 0, items: model.choices))
+            .init(arrayLiteral: .init(section: nil, items: model.choices))
         }.asDriver(onErrorDriveWith: .empty())
 
         let cancelAction = input.dismissPublisher.map { Action.cancel }
