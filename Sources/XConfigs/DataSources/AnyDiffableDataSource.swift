@@ -5,13 +5,13 @@ import UIKit
 @available(iOS 13.0, *)
 private class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<Section, Item> {
     override func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "\(snapshot().sectionIdentifiers[section])"
+        (snapshot().sectionIdentifiers[section] as? CustomStringConvertible)?.description
     }
 }
 
 private class LegacyTableViewDataSource<Section: Hashable, Item: Hashable>: TableViewDiffableDataSource<Section, Item> {
     override func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "\(snapshot().sectionIdentifiers[section])"
+        (snapshot().sectionIdentifiers[section] as? CustomStringConvertible)?.description
     }
 }
 
