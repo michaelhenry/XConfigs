@@ -107,6 +107,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "10")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -144,6 +145,7 @@ final class XConfigsTests: XCTestCase {
             .createColdObservable([
                 .next(1, .init(key: "maxRetry", value: "20")),
                 .next(2, .init(key: "maxRate", value: "0.99")),
+                .next(3, .init(key: "apiURL", value: "https://stage.google.com")),
             ]).bind(to: updateValuePublisher)
             .disposed(by: disposeBag)
 
@@ -165,6 +167,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "10")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -188,6 +191,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "20")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -211,6 +215,31 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "20")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .textInput(.init(key: "maxScore", value: "100")),
+                    .textInput(.init(key: "maxRate", value: "0.99")),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .textInput(.init(key: "height", value: "44.0")),
+                    .textInput(.init(key: "width", value: "320.0")),
+                ]),
+            ]),
+            .next(3, [
+                .init(section: .main, items: [
+                    .overrideConfig(true),
+                    .action("Reset"),
+                ]),
+                .init(section: .group(""), items: [
+                    .toggle(.init(key: "isOnboardingEnabled", value: false)),
+                    .textInput(.init(key: "apiURL", value: "https://stage.google.com")),
+                    .textInput(.init(key: "apiVersion", value: "v1.2.3")),
+                    .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
+                    .textInput(.init(key: "maxRetry", value: "20")),
+                    .textInput(.init(key: "threshold", value: "1")),
+                    .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -311,12 +340,13 @@ final class XConfigsTests: XCTestCase {
             .createColdObservable([
                 .next(1, .init(key: "maxRetry", value: "20")),
                 .next(2, .init(key: "maxRate", value: "0.99")),
+                .next(3, .init(key: "tags", value: "apple,banana")),
             ]).bind(to: updateValuePublisher)
             .disposed(by: disposeBag)
 
         scheduler
             .createColdObservable([
-                .next(3, ()),
+                .next(4, ()),
             ]).bind(to: resetPublisher)
             .disposed(by: disposeBag)
 
@@ -338,6 +368,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "10")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -361,6 +392,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "20")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -384,6 +416,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "20")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),
@@ -400,6 +433,30 @@ final class XConfigsTests: XCTestCase {
                     .action("Reset"),
                 ]),
                 .init(section: .group(""), items: [
+                    .toggle(.init(key: "isOnboardingEnabled", value: true)),
+                    .textInput(.init(key: "apiURL", value: "https://prod.google.com")),
+                    .textInput(.init(key: "apiVersion", value: "v1.2.3")),
+                    .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
+                    .textInput(.init(key: "maxRetry", value: "20")),
+                    .textInput(.init(key: "threshold", value: "1")),
+                    .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana")),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .textInput(.init(key: "maxScore", value: "100")),
+                    .textInput(.init(key: "maxRate", value: "0.99")),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .textInput(.init(key: "height", value: "44.0")),
+                    .textInput(.init(key: "width", value: "320.0")),
+                ]),
+            ]),
+            .next(4, [
+                .init(section: .main, items: [
+                    .overrideConfig(true),
+                    .action("Reset"),
+                ]),
+                .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)), // uses remote
                     .textInput(.init(key: "apiURL", value: "https://prod.google.com")), // uses remote
                     .textInput(.init(key: "apiVersion", value: "v1.2.3")),
@@ -407,6 +464,7 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "maxRetry", value: "10")),
                     .textInput(.init(key: "threshold", value: "1")),
                     .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
                 ]),
                 .init(section: .group("Feature 1"), items: [
                     .textInput(.init(key: "maxScore", value: "100")),

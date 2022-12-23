@@ -25,6 +25,9 @@ struct MockConfigs: XConfigsSpec {
     @XConfig(key: "rate", defaultValue: 2.5)
     var rate: Double
 
+    @XConfig(key: "tags", defaultValue: ["apple", "banana", "mango"])
+    var favoriteFruits: [String]
+
     @XConfig(key: "maxScore", defaultValue: 100, group: .feature1)
     var maxScore: Int
 
