@@ -20,6 +20,7 @@
 		999353C5290EDFB700E79302 /* SampleKeyValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */; };
 		999353C72911646400E79302 /* MockKeyValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C62911646400E79302 /* MockKeyValueProvider.swift */; };
 		999353C92911647B00E79302 /* MockKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C82911647B00E79302 /* MockKeyValueStore.swift */; };
+		99AFB8A22955C7BB009C1A56 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = 99AFB8A12955C7BB009C1A56 /* RxTest */; };
 		99C7400D2912A4640039CA69 /* UserDefaults++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C7400C2912A4640039CA69 /* UserDefaults++.swift */; };
 		99CD39752902EC7E003CE496 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 99CD39742902EC7E003CE496 /* SnapshotTesting */; };
 		99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CD39762902EC92003CE496 /* SnapshotTests.swift */; };
@@ -69,6 +70,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				992081A429018B1C009263C5 /* XConfigs in Frameworks */,
+				99AFB8A22955C7BB009C1A56 /* RxTest in Frameworks */,
 				99CD39752902EC7E003CE496 /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -187,6 +189,7 @@
 			packageProductDependencies = (
 				992081A329018B1C009263C5 /* XConfigs */,
 				99CD39742902EC7E003CE496 /* SnapshotTesting */,
+				99AFB8A12955C7BB009C1A56 /* RxTest */,
 			);
 			productName = DemoTests;
 			productReference = 9920816E28F837DD009263C5 /* DemoTests.xctest */;
@@ -222,6 +225,7 @@
 			mainGroup = 9920814F28F837DC009263C5;
 			packageReferences = (
 				99CD39732902EC7E003CE496 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				99AFB8A02955C7BB009C1A56 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = 9920815928F837DC009263C5 /* Products */;
 			projectDirPath = "";
@@ -549,6 +553,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		99AFB8A02955C7BB009C1A56 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 6.5.0;
+			};
+		};
 		99CD39732902EC7E003CE496 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
@@ -567,6 +579,11 @@
 		998E8BBB2907F99F00B79EEF /* XConfigs */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XConfigs;
+		};
+		99AFB8A12955C7BB009C1A56 /* RxTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 99AFB8A02955C7BB009C1A56 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxTest;
 		};
 		99CD39742902EC7E003CE496 /* SnapshotTesting */ = {
 			isa = XCSwiftPackageProductDependency;

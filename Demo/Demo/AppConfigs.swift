@@ -49,15 +49,15 @@ struct AppConfigs: XConfigsSpec {
     @XConfig(key: "place", defaultValue: Place(city: "Tokyo", country: "Japan"), group: .otherDataTypes)
     var place: Place
 
-    @XConfig(key: "favoriteFruits", defaultValue: [String](["apple", "banana", "mango", "grape", "strawberry"]), group: .otherDataTypes)
+    @XConfig(key: "favoriteFruits", defaultValue: ["apple", "banana", "mango", "grape", "strawberry"], group: .otherDataTypes)
     var favoriteFruits: [String]
 
-    @XConfig(key: "favouriteNumbers", defaultValue: [Int]([1, 2, 3, 4, 5]), group: .otherDataTypes)
+    @XConfig(key: "favouriteNumbers", defaultValue: [1, 2, 3, 4, 5], group: .otherDataTypes)
     var favouriteNumbers: [Int]
 
     @XConfig(key: "nestedInfo", defaultValue: NestedInfo(), group: .otherDataTypes)
     var nestedInfo: NestedInfo
-    
+
     @XConfig(key: "accountType", defaultValue: .guest, group: .otherDataTypes)
     var accountType: AccountType
 
@@ -80,11 +80,10 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 // Wanna make it more readable instead of just showing integer values?
 // Then conform to `CustomStringConvertible`
 enum AccountType: Int, CaseIterable, RawStringValueRepresentable, CustomStringConvertible {
-
     case guest = 0
     case member = 1
     case admin = 2
-    
+
     var description: String {
         switch self {
         case .guest:
