@@ -26,12 +26,12 @@ final class SnapshotTests: XCTestCase {
     }
 
     func testhOverrideEnabledButWithEmptyKeyValueStore() throws {
-        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), keyValueStore: EmptyKeyValueStore())
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), keyValueStore: nil)
         defaultConfigUseCase.isOverriden = true
         let vc = XConfigs.configsViewController()
         assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
     }
-    
+
     // BUG: https://github.com/pointfreeco/swift-snapshot-testing/discussions/502
     func testhOverrideEnabled() throws {
         defaultConfigUseCase.isOverriden = true
@@ -43,19 +43,19 @@ final class SnapshotTests: XCTestCase {
         let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image)
     }
-    
+
     func testInputValueViewControllerJSON() throws {
         let vc = InputValueViewController(viewModel: .init(model: .init(key: "JSON", value: "{\"name\":\"Kel\", \"city\": \"Melbourne\"        }"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image)
     }
-    
+
     func testInputValueViewControllerURL() throws {
         let vc = InputValueViewController(viewModel: .init(model: .init(key: "URL", value: "https://google.com"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image)
     }
 
     func testOptionViewController() throws {
-        let choices = [1...4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
+        let choices = [1 ... 4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
         let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image(precision: 0.95))
     }

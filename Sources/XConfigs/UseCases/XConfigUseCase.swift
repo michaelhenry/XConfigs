@@ -5,21 +5,21 @@ public class XConfigUseCase {
 
     var isOverriden: Bool {
         get {
-            keyValueStore.get(for: isOverridenKey) ?? false
+            keyValueStore?.get(for: isOverridenKey) ?? false
         }
 
         set {
-            keyValueStore.set(value: newValue, for: isOverridenKey)
+            keyValueStore?.set(value: newValue, for: isOverridenKey)
         }
     }
 
-    private let keyValueStore: KeyValueStore
+    private let keyValueStore: KeyValueStore?
     private let keyValueProvider: KeyValueProvider
     private let configsSpec: XConfigsSpec.Type
     private let logicHandler: XConfigsLogicHandler
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore, logicHandler: XConfigsLogicHandler) {
+    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, logicHandler: XConfigsLogicHandler, keyValueStore: KeyValueStore?) {
         configsSpec = spec
         self.keyValueProvider = keyValueProvider
         self.keyValueStore = keyValueStore
@@ -34,18 +34,18 @@ public class XConfigUseCase {
     }
 
     func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value, group: XConfigGroup) -> Value {
-        logicHandler.handle(isOverriden: isOverriden, key: key, defaultValue: defaultValue, keyValueStore: keyValueStore, keyValueProvider: keyValueProvider, group: group)
+        logicHandler.handle(isOverriden: isOverriden, key: key, defaultValue: defaultValue, group: group, keyValueProvider: keyValueProvider, keyValueStore: keyValueStore)
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
         guard isOverriden else { return }
-        keyValueStore.set(value: value, for: key)
+        keyValueStore?.set(value: value, for: key)
     }
 
     func reset() {
         guard isOverriden else { return }
         getConfigs().forEach {
-            keyValueStore.remove(key: $0.configKey)
+            keyValueStore?.remove(key: $0.configKey)
         }
     }
 }

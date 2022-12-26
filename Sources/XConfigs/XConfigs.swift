@@ -10,10 +10,10 @@ public struct XConfigs {
     public static func configure(
         with spec: XConfigsSpec.Type,
         keyValueProvider: KeyValueProvider,
-        keyValueStore: KeyValueStore = EmptyKeyValueStore(),
-        logicHandler: XConfigsLogicHandler = OverrideFromRemoteLogicHandler()
+        logicHandler: XConfigsLogicHandler = OverrideFromRemoteLogicHandler(),
+        keyValueStore: KeyValueStore? = nil
     ) {
-        defaultConfigUseCase = XConfigUseCase(spec: spec, keyValueProvider: keyValueProvider, keyValueStore: keyValueStore, logicHandler: logicHandler)
+        defaultConfigUseCase = XConfigUseCase(spec: spec, keyValueProvider: keyValueProvider, logicHandler: logicHandler, keyValueStore: keyValueStore)
     }
 
     public static func configsViewController() -> UIViewController {
