@@ -20,7 +20,7 @@ public struct XConfigs {
         XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
     }
 
-    public function show(from vc: UIViewController) {
-        vc.present(configsViewController(), animated: true)
+    public static function show(from vc: UIViewController) {
+        vc.present(configsViewController(), animated: true, completion: nil)
     }
 }
