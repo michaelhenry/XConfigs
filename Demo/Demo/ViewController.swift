@@ -22,7 +22,6 @@ class ViewController: UIViewController {
     }
 
     @objc func didTap() {
-        let vc = XConfigs.configsViewController()
-        present(UINavigationController(rootViewController: vc), animated: true)
+        XConfigs.show(from: self)
     }
 }

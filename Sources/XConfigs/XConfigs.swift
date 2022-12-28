@@ -19,4 +19,8 @@ public struct XConfigs {
     public static func configsViewController() -> UIViewController {
         XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
     }
+
+    public static func show(from vc: UIViewController) {
+        vc.present(configsViewController().wrapInsideNavVC(), animated: true, completion: nil)
+    }
 }
