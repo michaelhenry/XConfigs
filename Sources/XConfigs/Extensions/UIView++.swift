@@ -49,7 +49,7 @@ protocol ConfigurableView: UIView {
 final class UIViewTableWrapperCell<MainView: ConfigurableView>: UITableViewCell {
     let mainView: MainView
 
-    var disposeBag = DisposeBag()
+    private(set) var disposeBag = DisposeBag()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         mainView = MainView()

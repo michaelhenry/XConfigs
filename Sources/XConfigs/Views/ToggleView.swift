@@ -6,10 +6,13 @@ final class ToggleView: UIView, ConfigurableView {
     typealias ViewModel = (String, Bool)
 
     private let switchView = UISwitch()
-    private let keyLabel = UILabel()
+    private let keyLabel = UILabel().apply {
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        $0.numberOfLines = 0
+    }
 
     var valueChangedPublisher: Observable<Bool> {
-        switchView.rx.isOn.asObservable()
+        switchView.rx.isOn.asObservable().skip(1)
     }
 
     init() {

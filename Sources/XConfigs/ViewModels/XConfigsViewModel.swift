@@ -12,8 +12,8 @@ struct XConfigsViewModel: ViewModelType {
         case toggle(ToggleModel)
         case textInput(TextInputModel)
         case optionSelection(OptionSelectionModel)
-        case action(String)
-        case overrideConfig(Bool)
+        case actionButton(title: String, action: Action)
+        case overrideConfig(title: String, value: Bool)
     }
 
     struct Input {
@@ -21,11 +21,19 @@ struct XConfigsViewModel: ViewModelType {
         let updateValuePublisher: Observable<KeyValue>
         let overrideConfigPublisher: Observable<Bool>
         let resetPublisher: Observable<Void>
+        let selectItemPublisher: Observable<Item>
     }
 
     struct Output {
         let title: Driver<String>
         let sectionItemsModels: Driver<[SectionItemsModel<Section, Item>]>
+        let action: Driver<Action>
+    }
+
+    enum Action: Hashable {
+        case showResetConfirmation(String)
+        case showTextInput(TextInputModel)
+        case showOptionSelection(OptionSelectionModel)
     }
 
     private let useCase: XConfigUseCase
@@ -39,26 +47,43 @@ struct XConfigsViewModel: ViewModelType {
         let reload = input.reloadPublisher
         let reset = input.resetPublisher.map { useCase.reset() }
         let overrideConfig = input.overrideConfigPublisher.map { val in useCase.isOverriden = val }
+        let action = input.selectItemPublisher.compactMap { item -> Action? in
+            switch item {
+            case let .optionSelection(model):
+                return .showOptionSelection(model)
+            case let .textInput(model):
+                return .showTextInput(model)
+            case let .actionButton(_, action):
+                return action
+            default:
+                return nil
+            }
+        }.asDriver(onErrorDriveWith: .empty())
 
         let configs = Observable.merge(update, reload, overrideConfig, reset)
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
 
         let sectionItemsModels = configs.compactMap(mapConfigInfosToSectionItemsModels)
+            .distinctUntilChanged()
             .asDriver(onErrorDriveWith: .empty())
 
         return .init(
-            title: .just("Configs"),
-            sectionItemsModels: sectionItemsModels
+            title: .just(NSLocalizedString("🛠Configs", comment: "")),
+            sectionItemsModels: sectionItemsModels,
+            action: action
         )
     }
 
     // Transform [ConfigInfo] to [SectionItemModel]
     func mapConfigInfosToSectionItemsModels(infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
-        var mainItems: [Item] = [.overrideConfig(useCase.isOverriden)]
+        var mainItems: [Item] = [.overrideConfig(title: "Override", value: useCase.isOverriden)]
 
         if useCase.isOverriden {
-            mainItems.append(.action("Reset"))
+            mainItems.append(.actionButton(
+                title: NSLocalizedString("Reset", comment: ""),
+                action: .showResetConfirmation("Are you sure you want to reset these values?")
+            ))
         }
 
         var sections = [SectionItemsModel<Section, Item>(section: .main, items: mainItems)]

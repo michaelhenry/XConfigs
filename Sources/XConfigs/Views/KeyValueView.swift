@@ -3,11 +3,14 @@ import UIKit
 final class KeyValueView: UIView, ConfigurableView {
     typealias ViewModel = (String, String)
 
-    private let keyLabel = UILabel()
+    private let keyLabel = UILabel().apply {
+        $0.numberOfLines = 0
+    }
 
     private let valueLabel = UILabel().apply {
         $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         $0.textAlignment = .right
+        $0.widthAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
     }
 
     init() {

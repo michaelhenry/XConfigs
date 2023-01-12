@@ -7,6 +7,7 @@ final class ActionView: UIView, ConfigurableView {
         if #available(iOS 13.0, *) {
             $0.textColor = .link
         }
+        $0.numberOfLines = 0
     }
 
     init() {

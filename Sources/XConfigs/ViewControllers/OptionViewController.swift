@@ -77,10 +77,6 @@ final class OptionViewController: UITableViewController {
             .disposed(by: disposeBag)
     }
 
-    override func tableView(_: UITableView, didSelectRowAt _: IndexPath) {
-        dismiss(animated: true)
-    }
-
     private func setupUI() {
         tableView.registerCell(UITableViewCell.self)
 
