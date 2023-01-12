@@ -22,6 +22,7 @@ struct XConfigsViewModel: ViewModelType {
         let overrideConfigPublisher: Observable<Bool>
         let resetPublisher: Observable<Void>
         let selectItemPublisher: Observable<Item>
+        let dismissPublisher: Observable<Void>
     }
 
     struct Output {
@@ -34,6 +35,7 @@ struct XConfigsViewModel: ViewModelType {
         case showResetConfirmation(String)
         case showTextInput(TextInputModel)
         case showOptionSelection(OptionSelectionModel)
+        case dismiss
     }
 
     private let useCase: XConfigUseCase
@@ -47,7 +49,7 @@ struct XConfigsViewModel: ViewModelType {
         let reload = input.reloadPublisher
         let reset = input.resetPublisher.map { useCase.reset() }
         let overrideConfig = input.overrideConfigPublisher.map { val in useCase.isOverriden = val }
-        let action = input.selectItemPublisher.compactMap { item -> Action? in
+        let selectionAction = input.selectItemPublisher.compactMap { item -> Action? in
             switch item {
             case let .optionSelection(model):
                 return .showOptionSelection(model)
@@ -58,7 +60,12 @@ struct XConfigsViewModel: ViewModelType {
             default:
                 return nil
             }
-        }.asDriver(onErrorDriveWith: .empty())
+        }
+
+        let dismissAction = input.dismissPublisher.map { _ in Action.dismiss }
+
+        let action = Observable.merge(dismissAction, selectionAction)
+            .asDriver(onErrorDriveWith: .empty())
 
         let configs = Observable.merge(update, reload, overrideConfig, reset)
             .map { _ in useCase.getConfigs() }

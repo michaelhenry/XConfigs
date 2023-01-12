@@ -66,7 +66,7 @@ final class XConfigsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissMe))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
         navigationItem.rightBarButtonItem = doneButton
         setupTableView()
         handleViewModelOutput()
@@ -87,6 +87,7 @@ final class XConfigsViewController: UITableViewController {
     }
 
     private func handleViewModelOutput() {
+        guard let doneButton = navigationItem.rightBarButtonItem else { return }
         let output = viewModel.transform(
             input: .init(
                 reloadPublisher: .just(()),
@@ -97,7 +98,8 @@ final class XConfigsViewController: UITableViewController {
                     guard let self = self else { return nil }
                     self.tableView.deselectRow(at: indexPath, animated: false)
                     return self.datasource.itemIdentifier(for: indexPath)
-                }
+                },
+                dismissPublisher: doneButton.rx.tap.map { _ in () }
             ))
 
         output.sectionItemsModels
@@ -131,6 +133,8 @@ final class XConfigsViewController: UITableViewController {
             }))
             alertConfirmation.addAction(.init(title: "Cancel", style: .cancel))
             present(alertConfirmation, animated: true)
+        case .dismiss:
+            dismiss(animated: true)
         }
     }
 
@@ -150,11 +154,6 @@ final class XConfigsViewController: UITableViewController {
             .bind(to: updateValueSubject)
             .disposed(by: disposeBag)
         present(optionVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
-    }
-
-    @objc
-    private func dismissMe() {
-        dismiss(animated: true)
     }
 
     @available(iOS 13.0, *)
