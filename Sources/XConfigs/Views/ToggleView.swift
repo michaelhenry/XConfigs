@@ -12,7 +12,7 @@ final class ToggleView: UIView, ConfigurableView {
     }
 
     var valueChangedPublisher: Observable<Bool> {
-        switchView.rx.isOn.asObservable().skip(1)
+        switchView.rx.controlEvent(.valueChanged).map { self.switchView.isOn }
     }
 
     init() {
@@ -31,8 +31,12 @@ final class ToggleView: UIView, ConfigurableView {
         translatesAutoresizingMaskIntoConstraints = false
         let stackview = UIStackView(arrangedSubviews: [
             keyLabel,
-            switchView,
-        ])
+            switchView
+        ]).apply {
+            $0.distribution = .fill
+            $0.spacing = 10
+            $0.alignment = .center
+        }
         addSubview(stackview)
         stackview.bindToSuperview(margins: .init(top: 7, left: 20, bottom: 7, right: 20))
     }
@@ -42,5 +46,6 @@ final class ToggleView: UIView, ConfigurableView {
     func configure(with viewModel: ViewModel) {
         keyLabel.text = viewModel.0
         switchView.isOn = viewModel.1
+        keyLabel.layoutIfNeeded()
     }
 }
