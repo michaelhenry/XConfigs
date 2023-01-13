@@ -18,9 +18,18 @@ extension Bool: RawStringValueRepresentable {
     }
 }
 
-// MARK: - Int + RawStringValueRepresentable
+// MARK: - Int + RawStringValueRepresentable, thought Codable + RawStringValueRepresentable can pick this up, but JSONDecoder on ios 12 is not supporting fragment values.
 
-extension Int: RawStringValueRepresentable {} // Codable + RawStringValueRepresentable can pick this up
+extension Int: RawStringValueRepresentable {
+    public var rawString: String {
+        "\(self)"
+    }
+
+  public init?(rawString: String) {
+      guard let val = Int(rawString) else { return nil }
+      self = val
+  }
+}
 
 // MARK: - Double + RawStringValueRepresentable
 
@@ -85,6 +94,25 @@ public extension RawStringValueRepresentable where Self: Codable {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(self), let str = String(data: data, encoding: .utf8) else { return "" }
         return str
+    }
+}
+
+// MARK: - RawRepresentable. thought Codable + RawStringValueRepresentable can pick this up, but JSONDecoder on ios 12 is not supporting fragment values.
+public extension RawStringValueRepresentable where Self: RawRepresentable {
+    init?(rawString: String) {
+        if let a = Int(rawString: rawString) as? Self.RawValue, let rawValue = Self.init(rawValue: a) {
+            self = rawValue
+        } else if let a = Double(rawString: rawString) as? Self.RawValue, let rawValue = Self.init(rawValue: a) {
+            self = rawValue
+        } else if let str = rawString as? Self.RawValue, let rawValue = Self.init(rawValue: str) {
+            self = rawValue
+        } else {
+            return nil
+        }
+    }
+
+    var rawString: String {
+       "\(rawValue)"
     }
 }
 
