@@ -17,6 +17,8 @@ final class XConfigsTests: XCTestCase {
     let updateValuePublisher = PublishSubject<KeyValue>()
     let overrideConfigPublisher = PublishSubject<Bool>()
     let resetPublisher = PublishSubject<Void>()
+    let selectItemPublisher = PublishSubject<ViewModel.Item>()
+    let dismissPublisher = PublishSubject<Void>()
 
     private var output: XConfigsViewModel.Output!
 
@@ -34,7 +36,9 @@ final class XConfigsTests: XCTestCase {
             reloadPublisher: reloadPublisher,
             updateValuePublisher: updateValuePublisher,
             overrideConfigPublisher: overrideConfigPublisher,
-            resetPublisher: resetPublisher
+            resetPublisher: resetPublisher,
+            selectItemPublisher: selectItemPublisher,
+            dismissPublisher: dismissPublisher
         ))
     }
 
@@ -66,7 +70,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(false),
+                    .overrideConfig(title: "Override", value: false),
                 ]),
             ]),
         ])
@@ -96,8 +100,8 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -156,8 +160,8 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -180,8 +184,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(1, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -204,8 +208,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(2, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -228,8 +232,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(3, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -290,17 +294,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(false),
-                ]),
-            ]),
-            .next(1, [
-                .init(section: .main, items: [
-                    .overrideConfig(false),
-                ]),
-            ]),
-            .next(2, [
-                .init(section: .main, items: [
-                    .overrideConfig(false),
+                    .overrideConfig(title: "Override", value: false),
                 ]),
             ]),
         ])
@@ -316,7 +310,6 @@ final class XConfigsTests: XCTestCase {
             "apiURL": "https://prod.google.com",
         ])
 
-        let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = true
 
         let title = scheduler.createObserver(String.self)
@@ -357,8 +350,8 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -381,8 +374,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(1, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -405,8 +398,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(2, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -429,8 +422,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(3, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -453,8 +446,8 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(4, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)), // uses remote
