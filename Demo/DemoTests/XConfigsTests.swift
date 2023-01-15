@@ -470,4 +470,40 @@ final class XConfigsTests: XCTestCase {
             ]),
         ])
     }
+    
+    func testOutputAction() throws {
+        defaultConfigUseCase.isOverriden = true
+
+        let action = scheduler.createObserver(ViewModel.Action.self)
+
+        output.action.drive(action).disposed(by: disposeBag)
+
+        // MARK: INPUTS
+
+        scheduler
+           .createColdObservable([
+               .next(0, .textInput(.init(key: "textInputA", value: "Text Input A"))),
+               .next(1, .toggle(.init(key: "toggleA", value: false))),
+               .next(2, .optionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
+               .next(3, .actionButton(title: "Reset", action: .showResetConfirmation("Do you want to reset?"))),
+            ]).bind(to: selectItemPublisher)
+              .disposed(by: disposeBag)
+
+        scheduler
+            .createColdObservable([
+                .next(4, ())
+            ]).bind(to: dismissPublisher)
+              .disposed(by: disposeBag)
+
+        scheduler.start()
+
+        // MARK: OUTPUTS
+
+        XCTAssertEqual(action.events, [
+            .next(0, .showTextInput(.init(key: "textInputA", value: "Text Input A"))),
+            .next(2, .showOptionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
+            .next(3, .showResetConfirmation("Do you want to reset?")),
+            .next(4, .dismiss)
+        ])
+    }
 }
