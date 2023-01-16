@@ -55,7 +55,7 @@ final class SnapshotTests: XCTestCase {
     }
 
     func testOptionViewController() throws {
-        let choices = [1 ... 4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
+        let choices = [1, 2, 3, 4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
         let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image(precision: 0.95))
     }

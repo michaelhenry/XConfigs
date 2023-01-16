@@ -39,11 +39,18 @@ struct MockConfigs: XConfigsSpec {
 
     @XConfig(key: "width", defaultValue: 320, group: .feature2)
     var width: Double
+
+    @XConfig(key: "accountType", defaultValue: .guest, group: .feature3)
+    var accountType: AccountType
+
+    @XConfig(key: "contact", defaultValue: .default, group: .feature3)
+    var contact: Contact
 }
 
 extension XConfigGroup {
     static let feature1 = Self(name: "Feature 1", sort: 1)
     static let feature2 = Self(name: "Feature 2", sort: 2)
+    static let feature3 = Self(name: "Feature 3", sort: 3)
 }
 
 enum Region: String, CaseIterable, RawStringValueRepresentable {
@@ -59,4 +66,28 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
     var rawString: String {
         rawValue
     }
+}
+
+enum AccountType: Int, CaseIterable, RawStringValueRepresentable, CustomStringConvertible {
+    case guest = 0
+    case member = 1
+    case admin = 2
+
+    var description: String {
+        switch self {
+        case .guest:
+            return "Guest"
+        case .member:
+            return "Member"
+        case .admin:
+            return "Admin"
+        }
+    }
+}
+
+struct Contact: RawStringValueRepresentable {
+    let name: String
+    let phoneNumber: String
+
+    static let `default` = Contact(name: "Ken", phoneNumber: "1234 5678")
 }

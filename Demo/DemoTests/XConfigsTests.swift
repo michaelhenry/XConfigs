@@ -121,6 +121,14 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
         ])
     }
@@ -181,6 +189,14 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(1, [
                 .init(section: .main, items: [
@@ -204,6 +220,14 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 2"), items: [
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
                 ]),
             ]),
             .next(2, [
@@ -229,6 +253,14 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(3, [
                 .init(section: .main, items: [
@@ -252,6 +284,14 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 2"), items: [
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
                 ]),
             ]),
         ])
@@ -371,6 +411,14 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(1, [
                 .init(section: .main, items: [
@@ -394,6 +442,14 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 2"), items: [
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
                 ]),
             ]),
             .next(2, [
@@ -419,6 +475,14 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(3, [
                 .init(section: .main, items: [
@@ -443,6 +507,14 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(4, [
                 .init(section: .main, items: [
@@ -466,6 +538,14 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 2"), items: [
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
                 ]),
             ]),
         ])
