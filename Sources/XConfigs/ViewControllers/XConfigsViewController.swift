@@ -33,13 +33,13 @@ final class XConfigsViewController: UITableViewController {
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
                 cell.configure(with: (vm.key, vm.value))
                 return cell
-            case let .action(vm):
+            case let .actionButton(title, _):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ActionView>.self, for: indexPath)
-                cell.configure(with: vm)
+                cell.configure(with: title)
                 return cell
-            case let .overrideConfig(vm):
+            case let .overrideConfig(title, val):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
-                cell.configure(with: ("Override", vm))
+                cell.configure(with: (title, val))
                 cell.mainView.valueChangedPublisher
                     .bind(to: self.overrideConfigSubject)
                     .disposed(by: cell.disposeBag)
@@ -66,6 +66,8 @@ final class XConfigsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
+        navigationItem.rightBarButtonItem = doneButton
         setupTableView()
         handleViewModelOutput()
     }
@@ -74,11 +76,9 @@ final class XConfigsViewController: UITableViewController {
         tableView.registerCell(UIViewTableWrapperCell<ToggleView>.self)
         tableView.registerCell(UIViewTableWrapperCell<KeyValueView>.self)
         tableView.registerCell(UIViewTableWrapperCell<ActionView>.self)
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        handleItemSelection(indexPath)
-        tableView.deselectRow(at: indexPath, animated: false)
+        if #available(iOS 15.0, *) {
+            tableView.isPrefetchingEnabled = false
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -87,12 +87,19 @@ final class XConfigsViewController: UITableViewController {
     }
 
     private func handleViewModelOutput() {
+        guard let doneButton = navigationItem.rightBarButtonItem else { return }
         let output = viewModel.transform(
             input: .init(
                 reloadPublisher: .just(()),
                 updateValuePublisher: updateValueSubject,
                 overrideConfigPublisher: overrideConfigSubject,
-                resetPublisher: resetSubject
+                resetPublisher: resetSubject,
+                selectItemPublisher: tableView.rx.itemSelected.compactMap { [weak self] indexPath -> ViewModel.Item? in
+                    guard let self = self else { return nil }
+                    self.tableView.deselectRow(at: indexPath, animated: false)
+                    return self.datasource.itemIdentifier(for: indexPath)
+                },
+                dismissPublisher: doneButton.rx.tap.map { _ in () }
             ))
 
         output.sectionItemsModels
@@ -106,19 +113,28 @@ final class XConfigsViewController: UITableViewController {
             self?.title = title
         })
         .disposed(by: disposeBag)
+
+        output.action.drive(onNext: { [weak self] action in
+            self?.handleAction(action)
+        })
+        .disposed(by: disposeBag)
     }
 
-    private func handleItemSelection(_ indexPath: IndexPath) {
-        guard let item = datasource.itemIdentifier(for: indexPath) else { return }
-        switch item {
-        case let .optionSelection(model):
+    private func handleAction(_ action: ViewModel.Action) {
+        switch action {
+        case let .showOptionSelection(model):
             showOptionSelection(for: model)
-        case let .textInput(model):
+        case let .showTextInput(model):
             showTextInputViewController(model: model)
-        case .action:
-            resetSubject.onNext(())
-        default:
-            break
+        case let .showResetConfirmation(title):
+            let alertConfirmation = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+            alertConfirmation.addAction(.init(title: "Reset", style: .destructive, handler: { [weak self] _ in
+                self?.resetSubject.onNext(())
+            }))
+            alertConfirmation.addAction(.init(title: "Cancel", style: .cancel))
+            present(alertConfirmation, animated: true)
+        case .dismiss:
+            dismiss(animated: true)
         }
     }
 
@@ -138,5 +154,36 @@ final class XConfigsViewController: UITableViewController {
             .bind(to: updateValueSubject)
             .disposed(by: disposeBag)
         present(optionVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
+    }
+
+    @available(iOS 13.0, *)
+    override func tableView(_: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point _: CGPoint) -> UIContextMenuConfiguration? {
+        guard let item = datasource.itemIdentifier(for: indexPath) else { return nil }
+        switch item {
+        case let .toggle(vm):
+            return createContextMenuConfiguration(title: vm.key, actions: [createCopyAction(vm.key)])
+        case let .textInput(vm):
+            return createContextMenuConfiguration(title: vm.key, actions: [createCopyAction(vm.key), createCopyAction(vm.value)])
+        case let .optionSelection(vm):
+            return createContextMenuConfiguration(title: vm.key, actions: [createCopyAction(vm.key), createCopyAction(vm.value)])
+        default:
+            return nil
+        }
+    }
+
+    @available(iOS 13.0, *)
+    private func createCopyAction(_ value: String) -> UIAction {
+        let copyAction = UIAction(title: "Copy \"\(value)\"") { _ in
+            let pasteboard = UIPasteboard.general
+            pasteboard.string = value
+        }
+        return copyAction
+    }
+
+    @available(iOS 13.0, *)
+    private func createContextMenuConfiguration(title: String, actions: [UIAction]) -> UIContextMenuConfiguration {
+        UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { _ in
+            UIMenu(title: title, children: actions)
+        })
     }
 }

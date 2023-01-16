@@ -17,6 +17,8 @@ final class XConfigsTests: XCTestCase {
     let updateValuePublisher = PublishSubject<KeyValue>()
     let overrideConfigPublisher = PublishSubject<Bool>()
     let resetPublisher = PublishSubject<Void>()
+    let selectItemPublisher = PublishSubject<ViewModel.Item>()
+    let dismissPublisher = PublishSubject<Void>()
 
     private var output: XConfigsViewModel.Output!
 
@@ -34,7 +36,9 @@ final class XConfigsTests: XCTestCase {
             reloadPublisher: reloadPublisher,
             updateValuePublisher: updateValuePublisher,
             overrideConfigPublisher: overrideConfigPublisher,
-            resetPublisher: resetPublisher
+            resetPublisher: resetPublisher,
+            selectItemPublisher: selectItemPublisher,
+            dismissPublisher: dismissPublisher
         ))
     }
 
@@ -66,7 +70,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(false),
+                    .overrideConfig(title: "Override", value: false),
                 ]),
             ]),
         ])
@@ -96,8 +100,8 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -116,6 +120,14 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 2"), items: [
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
                 ]),
             ]),
         ])
@@ -146,6 +158,8 @@ final class XConfigsTests: XCTestCase {
                 .next(1, .init(key: "maxRetry", value: "20")),
                 .next(2, .init(key: "maxRate", value: "0.99")),
                 .next(3, .init(key: "apiURL", value: "https://stage.google.com")),
+                .next(4, .init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"2222 5678\"}")),
+                .next(5, .init(key: "accountType", value: "2")),
             ]).bind(to: updateValuePublisher)
             .disposed(by: disposeBag)
 
@@ -156,8 +170,8 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -177,11 +191,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(1, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -201,11 +223,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(2, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -225,11 +255,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(3, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: false)),
@@ -248,6 +286,78 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 2"), items: [
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
+            ]),
+            .next(4, [
+                .init(section: .main, items: [
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
+                ]),
+                .init(section: .group(""), items: [
+                    .toggle(.init(key: "isOnboardingEnabled", value: false)),
+                    .textInput(.init(key: "apiURL", value: "https://stage.google.com")),
+                    .textInput(.init(key: "apiVersion", value: "v1.2.3")),
+                    .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
+                    .textInput(.init(key: "maxRetry", value: "20")),
+                    .textInput(.init(key: "threshold", value: "1")),
+                    .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .textInput(.init(key: "maxScore", value: "100")),
+                    .textInput(.init(key: "maxRate", value: "0.99")),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .textInput(.init(key: "height", value: "44.0")),
+                    .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"2222 5678\"}")),
+                ]),
+            ]),
+            .next(5, [
+                .init(section: .main, items: [
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
+                ]),
+                .init(section: .group(""), items: [
+                    .toggle(.init(key: "isOnboardingEnabled", value: false)),
+                    .textInput(.init(key: "apiURL", value: "https://stage.google.com")),
+                    .textInput(.init(key: "apiVersion", value: "v1.2.3")),
+                    .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
+                    .textInput(.init(key: "maxRetry", value: "20")),
+                    .textInput(.init(key: "threshold", value: "1")),
+                    .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .textInput(.init(key: "maxScore", value: "100")),
+                    .textInput(.init(key: "maxRate", value: "0.99")),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .textInput(.init(key: "height", value: "44.0")),
+                    .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Admin", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"2222 5678\"}")),
                 ]),
             ]),
         ])
@@ -290,17 +400,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(false),
-                ]),
-            ]),
-            .next(1, [
-                .init(section: .main, items: [
-                    .overrideConfig(false),
-                ]),
-            ]),
-            .next(2, [
-                .init(section: .main, items: [
-                    .overrideConfig(false),
+                    .overrideConfig(title: "Override", value: false),
                 ]),
             ]),
         ])
@@ -316,7 +416,6 @@ final class XConfigsTests: XCTestCase {
             "apiURL": "https://prod.google.com",
         ])
 
-        let viewModel = XConfigsViewModel()
         defaultConfigUseCase.isOverriden = true
 
         let title = scheduler.createObserver(String.self)
@@ -357,8 +456,8 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -378,11 +477,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(1, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -402,11 +509,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(2, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -426,11 +541,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(3, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)),
@@ -450,11 +573,19 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
             .next(4, [
                 .init(section: .main, items: [
-                    .overrideConfig(true),
-                    .action("Reset"),
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
                     .toggle(.init(key: "isOnboardingEnabled", value: true)), // uses remote
@@ -474,7 +605,51 @@ final class XConfigsTests: XCTestCase {
                     .textInput(.init(key: "height", value: "44.0")),
                     .textInput(.init(key: "width", value: "320.0")),
                 ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
             ]),
+        ])
+    }
+
+    func testOutputAction() throws {
+        defaultConfigUseCase.isOverriden = true
+
+        let action = scheduler.createObserver(ViewModel.Action.self)
+
+        output.action.drive(action).disposed(by: disposeBag)
+
+        // MARK: INPUTS
+
+        scheduler
+            .createColdObservable([
+                .next(0, .textInput(.init(key: "textInputA", value: "Text Input A"))),
+                .next(1, .toggle(.init(key: "toggleA", value: false))),
+                .next(2, .optionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
+                .next(3, .actionButton(title: "Reset", action: .showResetConfirmation("Do you want to reset?"))),
+            ]).bind(to: selectItemPublisher)
+            .disposed(by: disposeBag)
+
+        scheduler
+            .createColdObservable([
+                .next(4, ()),
+            ]).bind(to: dismissPublisher)
+            .disposed(by: disposeBag)
+
+        scheduler.start()
+
+        // MARK: OUTPUTS
+
+        XCTAssertEqual(action.events, [
+            .next(0, .showTextInput(.init(key: "textInputA", value: "Text Input A"))),
+            .next(2, .showOptionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
+            .next(3, .showResetConfirmation("Do you want to reset?")),
+            .next(4, .dismiss),
         ])
     }
 }
