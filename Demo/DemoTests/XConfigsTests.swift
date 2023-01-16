@@ -158,6 +158,8 @@ final class XConfigsTests: XCTestCase {
                 .next(1, .init(key: "maxRetry", value: "20")),
                 .next(2, .init(key: "maxRate", value: "0.99")),
                 .next(3, .init(key: "apiURL", value: "https://stage.google.com")),
+                .next(4, .init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"2222 5678\"}")),
+                .next(5, .init(key: "accountType", value: "2")),
             ]).bind(to: updateValuePublisher)
             .disposed(by: disposeBag)
 
@@ -292,6 +294,70 @@ final class XConfigsTests: XCTestCase {
                         .init(displayName: "Admin", value: "2"),
                     ])),
                     .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}")),
+                ]),
+            ]),
+            .next(4, [
+                .init(section: .main, items: [
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
+                ]),
+                .init(section: .group(""), items: [
+                    .toggle(.init(key: "isOnboardingEnabled", value: false)),
+                    .textInput(.init(key: "apiURL", value: "https://stage.google.com")),
+                    .textInput(.init(key: "apiVersion", value: "v1.2.3")),
+                    .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
+                    .textInput(.init(key: "maxRetry", value: "20")),
+                    .textInput(.init(key: "threshold", value: "1")),
+                    .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .textInput(.init(key: "maxScore", value: "100")),
+                    .textInput(.init(key: "maxRate", value: "0.99")),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .textInput(.init(key: "height", value: "44.0")),
+                    .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Guest", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"2222 5678\"}")),
+                ]),
+            ]),
+            .next(5, [
+                .init(section: .main, items: [
+                    .overrideConfig(title: "Override", value: true),
+                    .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
+                ]),
+                .init(section: .group(""), items: [
+                    .toggle(.init(key: "isOnboardingEnabled", value: false)),
+                    .textInput(.init(key: "apiURL", value: "https://stage.google.com")),
+                    .textInput(.init(key: "apiVersion", value: "v1.2.3")),
+                    .optionSelection(.init(key: "region", value: "north", choices: regionChoices)),
+                    .textInput(.init(key: "maxRetry", value: "20")),
+                    .textInput(.init(key: "threshold", value: "1")),
+                    .textInput(.init(key: "rate", value: "2.5")),
+                    .textInput(.init(key: "tags", value: "apple,banana,mango")),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .textInput(.init(key: "maxScore", value: "100")),
+                    .textInput(.init(key: "maxRate", value: "0.99")),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .textInput(.init(key: "height", value: "44.0")),
+                    .textInput(.init(key: "width", value: "320.0")),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .optionSelection(.init(key: "accountType", value: "Admin", choices: [
+                        .init(displayName: "Guest", value: "0"),
+                        .init(displayName: "Member", value: "1"),
+                        .init(displayName: "Admin", value: "2"),
+                    ])),
+                    .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"2222 5678\"}")),
                 ]),
             ]),
         ])
@@ -550,7 +616,7 @@ final class XConfigsTests: XCTestCase {
             ]),
         ])
     }
-    
+
     func testOutputAction() throws {
         defaultConfigUseCase.isOverriden = true
 
@@ -561,19 +627,19 @@ final class XConfigsTests: XCTestCase {
         // MARK: INPUTS
 
         scheduler
-           .createColdObservable([
-               .next(0, .textInput(.init(key: "textInputA", value: "Text Input A"))),
-               .next(1, .toggle(.init(key: "toggleA", value: false))),
-               .next(2, .optionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
-               .next(3, .actionButton(title: "Reset", action: .showResetConfirmation("Do you want to reset?"))),
+            .createColdObservable([
+                .next(0, .textInput(.init(key: "textInputA", value: "Text Input A"))),
+                .next(1, .toggle(.init(key: "toggleA", value: false))),
+                .next(2, .optionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
+                .next(3, .actionButton(title: "Reset", action: .showResetConfirmation("Do you want to reset?"))),
             ]).bind(to: selectItemPublisher)
-              .disposed(by: disposeBag)
+            .disposed(by: disposeBag)
 
         scheduler
             .createColdObservable([
-                .next(4, ())
+                .next(4, ()),
             ]).bind(to: dismissPublisher)
-              .disposed(by: disposeBag)
+            .disposed(by: disposeBag)
 
         scheduler.start()
 
@@ -583,7 +649,7 @@ final class XConfigsTests: XCTestCase {
             .next(0, .showTextInput(.init(key: "textInputA", value: "Text Input A"))),
             .next(2, .showOptionSelection(.init(key: "options", value: "optionA", choices: [.init(displayName: "Option A", value: "optionA"), .init(displayName: "Option B", value: "optionB")]))),
             .next(3, .showResetConfirmation("Do you want to reset?")),
-            .next(4, .dismiss)
+            .next(4, .dismiss),
         ])
     }
 }
