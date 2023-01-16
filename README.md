@@ -57,7 +57,7 @@ Eg.
 
 Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift)ification and then use the `@XConfig` property wrapper inside it.
 
-If you have some custom datatype, you can simply conform them to `RawStringValueRepresentable`.
+If you have some custom datatype, you can simply conform them to `RawStringValueRepresentable`. So the key thing is as long as a value can be represented as a string, it should be fine.
 
 ```swift
 struct AppConfigs: XConfigSpec {
