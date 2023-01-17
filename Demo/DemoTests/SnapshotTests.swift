@@ -40,23 +40,23 @@ final class SnapshotTests: XCTestCase {
     }
 
     func testInputValueViewController() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World"))).wrapInsideNavVC()
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World", displayName: "Hello"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image)
     }
 
     func testInputValueViewControllerJSON() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "JSON", value: "{\"name\":\"Kel\", \"city\": \"Melbourne\"        }"))).wrapInsideNavVC()
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "JSON", value: "{\"name\":\"Kel\", \"city\": \"Melbourne\"        }", displayName: "Contact"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image)
     }
 
     func testInputValueViewControllerURL() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "URL", value: "https://google.com"))).wrapInsideNavVC()
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "URL", value: "https://google.com", displayName: "URL"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image)
     }
 
     func testOptionViewController() throws {
         let choices = [1, 2, 3, 4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
-        let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices))).wrapInsideNavVC()
+        let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices, displayName: "Name"))).wrapInsideNavVC()
         assertSnapshot(matching: vc, as: .image(precision: 0.95))
     }
 
