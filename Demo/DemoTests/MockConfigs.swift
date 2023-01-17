@@ -40,10 +40,10 @@ struct MockConfigs: XConfigsSpec {
     @XConfig(key: "width", defaultValue: 320, group: .feature2)
     var width: Double
 
-    @XConfig(key: "accountType", defaultValue: .guest, group: .feature3)
+    @XConfig(key: "accountType", displayName: "Account Type", defaultValue: .guest, group: .feature3)
     var accountType: AccountType
 
-    @XConfig(key: "contact", defaultValue: .default, group: .feature3)
+    @XConfig(key: "contact", displayName: "Contact", defaultValue: .default, group: .feature3)
     var contact: Contact
 }
 

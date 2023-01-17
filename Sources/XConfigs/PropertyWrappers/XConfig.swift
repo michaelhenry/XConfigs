@@ -3,6 +3,7 @@ import Foundation
 @propertyWrapper
 public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
     public let key: String
+    public let displayName: String?
     public let defaultValue: Value
     public let group: XConfigGroup
 
@@ -10,8 +11,9 @@ public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
         defaultConfigUseCase.get(for: key, defaultValue: defaultValue, group: group)
     }
 
-    public init(key: String, defaultValue: Value, group: XConfigGroup = .default) {
+    public init(key: String, displayName: String? = nil, defaultValue: Value, group: XConfigGroup = .default) {
         self.key = key
+        self.displayName = displayName
         self.defaultValue = defaultValue
         self.group = group
     }

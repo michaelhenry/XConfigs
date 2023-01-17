@@ -18,7 +18,7 @@ final class XConfigsViewController: UITableViewController {
             switch item {
             case let .toggle(vm):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
-                cell.configure(with: (vm.key, vm.value))
+                cell.configure(with: (vm.displayName, vm.value))
                 cell.mainView.valueChangedPublisher
                     .map { KeyValue(key: vm.key, value: $0) }
                     .bind(to: self.updateValueSubject)
@@ -27,11 +27,11 @@ final class XConfigsViewController: UITableViewController {
                 return cell
             case let .textInput(vm):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
-                cell.configure(with: (vm.key, vm.value))
+                cell.configure(with: (vm.displayName, vm.value))
                 return cell
             case let .optionSelection(vm):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
-                cell.configure(with: (vm.key, vm.value))
+                cell.configure(with: (vm.displayName, vm.value))
                 return cell
             case let .actionButton(title, _):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ActionView>.self, for: indexPath)
