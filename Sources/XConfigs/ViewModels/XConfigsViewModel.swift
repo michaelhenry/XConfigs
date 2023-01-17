@@ -116,15 +116,16 @@ struct XConfigsViewModel: ViewModelType {
         let key = info.configKey
         switch info.configValue {
         case let val as Bool:
-            return .toggle(.init(key: key, value: val))
+            return .toggle(.init(key: key, value: val, displayName: info.displayName ?? info.configKey))
         case let val as any CaseIterable & RawStringValueRepresentable:
             return .optionSelection(.init(
                 key: key,
                 value: (val as? CustomStringConvertible)?.description ?? val.rawString,
-                choices: val.allChoices
+                choices: val.allChoices,
+                displayName: info.displayName ?? info.configKey
             ))
         default:
-            return .textInput(.init(key: key, value: info.configValue.rawString))
+            return .textInput(.init(key: key, value: info.configValue.rawString, displayName: info.displayName ?? info.configKey))
         }
     }
 }
