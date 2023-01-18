@@ -6,4 +6,5 @@ public protocol ConfigInfo {
     var configValue: RawStringValueRepresentable { get }
 
     var group: XConfigGroup { get }
+    var readonly: Bool { get }
 }

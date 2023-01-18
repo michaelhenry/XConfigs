@@ -14,6 +14,7 @@ struct XConfigsViewModel: ViewModelType {
         case optionSelection(OptionSelectionModel)
         case actionButton(title: String, action: Action)
         case overrideConfig(title: String, value: Bool)
+        case nameValue(name: String, value: String)
     }
 
     struct Input {
@@ -113,19 +114,25 @@ struct XConfigsViewModel: ViewModelType {
 
     // Transform ConfigInfo to Item
     func mapConfigInfoToItem(_ info: ConfigInfo) -> Item? {
-        let key = info.configKey
+        guard !info.readonly else {
+            var value = info.configValue.rawString
+            if let val = info.configValue as? any CaseIterable & RawStringValueRepresentable {
+                value = (val as? CustomStringConvertible)?.description ?? val.rawString
+            }
+            return .nameValue(name: info.displayName ?? info.configKey, value: value)
+        }
         switch info.configValue {
         case let val as Bool:
-            return .toggle(.init(key: key, value: val, displayName: info.displayName ?? info.configKey))
+            return .toggle(.init(key: info.configKey, value: val, displayName: info.displayName ?? info.configKey))
         case let val as any CaseIterable & RawStringValueRepresentable:
             return .optionSelection(.init(
-                key: key,
+                key: info.configKey,
                 value: (val as? CustomStringConvertible)?.description ?? val.rawString,
                 choices: val.allChoices,
                 displayName: info.displayName ?? info.configKey
             ))
         default:
-            return .textInput(.init(key: key, value: info.configValue.rawString, displayName: info.displayName ?? info.configKey))
+            return .textInput(.init(key: info.configKey, value: info.configValue.rawString, displayName: info.displayName ?? info.configKey))
         }
     }
 }

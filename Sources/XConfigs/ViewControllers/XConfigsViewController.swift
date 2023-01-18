@@ -32,6 +32,7 @@ final class XConfigsViewController: UITableViewController {
             case let .optionSelection(vm):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
                 cell.configure(with: (vm.displayName, vm.value))
+                cell.selectionStyle = .default
                 return cell
             case let .actionButton(title, _):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ActionView>.self, for: indexPath)
@@ -43,6 +44,11 @@ final class XConfigsViewController: UITableViewController {
                 cell.mainView.valueChangedPublisher
                     .bind(to: self.overrideConfigSubject)
                     .disposed(by: cell.disposeBag)
+                cell.selectionStyle = .none
+                return cell
+            case let .nameValue(name, val):
+                let cell = tableView.dequeueCell(UIViewTableWrapperCell<KeyValueView>.self, for: indexPath)
+                cell.configure(with: (name, val))
                 cell.selectionStyle = .none
                 return cell
             }
