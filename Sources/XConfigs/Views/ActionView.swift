@@ -7,6 +7,7 @@ final class ActionView: UIView, ConfigurableView {
         if #available(iOS 13.0, *) {
             $0.textColor = .link
         }
+        $0.heightAnchor.constraint(greaterThanOrEqualToConstant: 31).isActive = true
         $0.numberOfLines = 0
     }
 
@@ -27,6 +28,6 @@ final class ActionView: UIView, ConfigurableView {
     private func setupUI() {
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(keyLabel)
-        keyLabel.bindToSuperview(margins: .init(top: 10, left: 20, bottom: 10, right: 20))
+        keyLabel.bindToSuperview(margins: .init(top: 7, left: 20, bottom: 7, right: 20))
     }
 }

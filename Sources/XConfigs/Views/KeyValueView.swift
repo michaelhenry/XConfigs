@@ -8,9 +8,10 @@ final class KeyValueView: UIView, ConfigurableView {
     }
 
     private let valueLabel = UILabel().apply {
-        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         $0.textAlignment = .right
-        $0.widthAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
+        $0.widthAnchor.constraint(lessThanOrEqualToConstant: 160).isActive = true
+        $0.heightAnchor.constraint(greaterThanOrEqualToConstant: 31).isActive = true
     }
 
     init() {
@@ -37,6 +38,6 @@ final class KeyValueView: UIView, ConfigurableView {
             $0.spacing = 10
         }
         addSubview(stackview)
-        stackview.bindToSuperview(margins: .init(top: 10, left: 20, bottom: 10, right: 20))
+        stackview.bindToSuperview(margins: .init(top: 7, left: 20, bottom: 7, right: 20))
     }
 }

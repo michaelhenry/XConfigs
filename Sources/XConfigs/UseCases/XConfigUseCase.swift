@@ -27,13 +27,12 @@ public class XConfigUseCase {
     }
 
     func getConfigs() -> [ConfigInfo] {
-        guard isOverriden else { return [] }
         let instance = configsSpec.init()
         let mirror = Mirror(reflecting: instance)
         return mirror.children.compactMap { $0.value as? ConfigInfo }
     }
 
-    func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value, group: XConfigGroup) -> Value {
+    func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value, group: XConfigGroup) -> ValueWithPermission<Value> {
         logicHandler.handle(isOverriden: isOverriden, key: key, defaultValue: defaultValue, group: group, keyValueProvider: keyValueProvider, keyValueStore: keyValueStore)
     }
 

@@ -8,7 +8,7 @@ public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
     public let group: XConfigGroup
 
     public var wrappedValue: Value {
-        defaultConfigUseCase.get(for: key, defaultValue: defaultValue, group: group)
+        defaultConfigUseCase.get(for: key, defaultValue: defaultValue, group: group).value
     }
 
     public init(key: String, displayName: String? = nil, defaultValue: Value, group: XConfigGroup = .default) {
@@ -24,6 +24,10 @@ public struct XConfig<Value: RawStringValueRepresentable>: ConfigInfo {
 
     public var configValue: RawStringValueRepresentable {
         wrappedValue
+    }
+
+    public var readonly: Bool {
+        defaultConfigUseCase.get(for: key, defaultValue: defaultValue, group: group).readonly
     }
 }
 

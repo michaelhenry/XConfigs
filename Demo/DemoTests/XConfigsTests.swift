@@ -72,6 +72,28 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .main, items: [
                     .overrideConfig(title: "Override", value: false),
                 ]),
+                .init(section: .group(""), items: [
+                    .nameValue(name: "isOnboardingEnabled", value: "false"),
+                    .nameValue(name: "apiURL", value: "https://prod.google.com"),
+                    .nameValue(name: "apiVersion", value: "v1.2.3"),
+                    .nameValue(name: "region", value: "north"),
+                    .nameValue(name: "maxRetry", value: "10"),
+                    .nameValue(name: "threshold", value: "1"),
+                    .nameValue(name: "rate", value: "2.5"),
+                    .nameValue(name: "tags", value: "apple,banana,mango"),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .nameValue(name: "maxScore", value: "100"),
+                    .nameValue(name: "maxRate", value: "1.0"),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .nameValue(name: "height", value: "44.0"),
+                    .nameValue(name: "width", value: "320.0"),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .nameValue(name: "Account Type", value: "Guest"),
+                    .nameValue(name: "Contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}"),
+                ]),
             ]),
         ])
     }
@@ -401,6 +423,28 @@ final class XConfigsTests: XCTestCase {
             .next(0, [
                 .init(section: .main, items: [
                     .overrideConfig(title: "Override", value: false),
+                ]),
+                .init(section: .group(""), items: [
+                    .nameValue(name: "isOnboardingEnabled", value: "false"),
+                    .nameValue(name: "apiURL", value: "https://prod.google.com"),
+                    .nameValue(name: "apiVersion", value: "v1.2.3"),
+                    .nameValue(name: "region", value: "north"),
+                    .nameValue(name: "maxRetry", value: "10"),
+                    .nameValue(name: "threshold", value: "1"),
+                    .nameValue(name: "rate", value: "2.5"),
+                    .nameValue(name: "tags", value: "apple,banana,mango"),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .nameValue(name: "maxScore", value: "100"),
+                    .nameValue(name: "maxRate", value: "1.0"),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .nameValue(name: "height", value: "44.0"),
+                    .nameValue(name: "width", value: "320.0"),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .nameValue(name: "Account Type", value: "Guest"),
+                    .nameValue(name: "Contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}"),
                 ]),
             ]),
         ])
