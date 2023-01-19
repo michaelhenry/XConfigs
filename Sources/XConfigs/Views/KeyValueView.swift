@@ -5,6 +5,7 @@ final class KeyValueView: UIView, ConfigurableView {
 
     private let keyLabel = UILabel().apply {
         $0.numberOfLines = 0
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 
     private let valueLabel = UILabel().apply {
@@ -27,6 +28,7 @@ final class KeyValueView: UIView, ConfigurableView {
     func configure(with viewModel: ViewModel) {
         keyLabel.text = viewModel.0
         valueLabel.text = viewModel.1
+        keyLabel.layoutIfNeeded()
     }
 
     private func setupUI() {
