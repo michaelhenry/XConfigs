@@ -4,7 +4,7 @@
   <a href="https://codecov.io/gh/michaelhenry/XConfigs"><img alt="codecov" src="https://codecov.io/gh/michaelhenry/XConfigs/branch/main/graph/badge.svg?token=WLH8VVA19I"/></a>
   <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/actions/workflows/test.yml/badge.svg"></a>
   <a href="https://github.com/michaelhenry/XConfigs/releases/latest"><img alt="release" src="https://img.shields.io/github/v/release/michaelhenry/XConfigs.svg"/></a>
-  <a href="https://developer.apple.com/swift"><img alt="Swift5.7" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
+  <a href="https://developer.apple.com/swift"><img alt="Swift5.7" src="https://img.shields.io/badge/language-Swift5.7-orange.svg"></a>
   <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS-green.svg"></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-black.svg"></a>
 </p>
@@ -92,8 +92,7 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 For the complete example, please refer to the [Demo](Demo) project which auto-generated the screen(below) using the [AppConfigs.swift](https://github.com/michaelhenry/XConfigs/blob/main/Demo/Demo/AppConfigs.swift) config specification.
 
 
-
-https://user-images.githubusercontent.com/717992/213166918-98539a84-a207-43aa-8e77-e2e562946839.mp4
+https://user-images.githubusercontent.com/717992/213901399-d4429d63-83fb-4770-ac9c-a016e2128084.mp4
 
 
 ## Other Related
