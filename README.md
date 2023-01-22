@@ -37,8 +37,8 @@ Install using SPM
 ```swift
 let kvProvider = SampleKeyValueProvider()
 
-// Register the AppConfigs and set which keyValueProvider and keyValueStore to use.
-XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+// Register the AppConfigs and set which keyValueProvider and option to use. Note that `.allowInAppModification(KeyValueStore)` option accepts a `KeyValueStore`.
+XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, option: .allowInAppModification(UserDefaults.standard))
 ```
 
 Please note that on production build, it is recommend that the in-app modification is disabled (`option is set to readonly`), so XConfigs will just use either the value from the **keyValueProvider** or the default value assigned inside the property wrapper as fallback.
