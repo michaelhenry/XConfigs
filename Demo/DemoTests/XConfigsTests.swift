@@ -29,7 +29,7 @@ final class XConfigsTests: XCTestCase {
         disposeBag = DisposeBag()
         provider = MockKeyValueProvider()
         store = MockKeyValueStore()
-        XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, keyValueStore: store)
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, option: .allowInAppModification(store))
 
         let viewModel = XConfigsViewModel()
         output = viewModel.transform(input: .init(
@@ -46,9 +46,13 @@ final class XConfigsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testhOverrideDisabled() throws {
-        defaultConfigUseCase.isOverriden = false
+    func testInAppModificationEnabledWhenOptionIsReadonly() throws {
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, option: .readonly)
+        XCTAssertThrowsError(try XConfigs.setInAppModification(enable: true))
+    }
 
+    func testInAppModificationDisabled() throws {
+        try XConfigs.setInAppModification(enable: false)
         let title = scheduler.createObserver(String.self)
         let sectionItemsModels = scheduler.createObserver([SecItemsModel].self)
 
@@ -70,7 +74,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: false),
+                    .inAppModification(title: "Enable In-app modification?", value: false),
                 ]),
                 .init(section: .group(""), items: [
                     .nameValue(name: "isOnboardingEnabled", value: "false"),
@@ -98,8 +102,8 @@ final class XConfigsTests: XCTestCase {
         ])
     }
 
-    func testhOverrideEnabled() throws {
-        defaultConfigUseCase.isOverriden = true
+    func testInAppModificationEnabled() throws {
+        try XConfigs.setInAppModification(enable: true)
 
         let title = scheduler.createObserver(String.self)
         let sectionItemsModels = scheduler.createObserver([SecItemsModel].self)
@@ -122,7 +126,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -156,7 +160,7 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testhOverridingUpdateValues() throws {
-        defaultConfigUseCase.isOverriden = true
+        try XConfigs.setInAppModification(enable: true)
 
         XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
         XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
@@ -192,7 +196,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -224,7 +228,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(1, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -256,7 +260,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(2, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -288,7 +292,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(3, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -320,7 +324,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(4, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -352,7 +356,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(5, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -389,7 +393,7 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testTryToOverrideValueButNotOverridable() throws {
-        defaultConfigUseCase.isOverriden = false
+        try XConfigs.setInAppModification(enable: false)
 
         XCTAssertEqual(MockConfigs.shared.maxRetry, 10)
         XCTAssertEqual(MockConfigs.shared.maxRate, 1.0)
@@ -422,7 +426,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: false),
+                    .inAppModification(title: "Enable In-app modification?", value: false),
                 ]),
                 .init(section: .group(""), items: [
                     .nameValue(name: "isOnboardingEnabled", value: "false"),
@@ -460,7 +464,7 @@ final class XConfigsTests: XCTestCase {
             "apiURL": "https://prod.google.com",
         ])
 
-        defaultConfigUseCase.isOverriden = true
+        try XConfigs.setInAppModification(enable: true)
 
         let title = scheduler.createObserver(String.self)
         let sectionItemsModels = scheduler.createObserver([SecItemsModel].self)
@@ -500,7 +504,7 @@ final class XConfigsTests: XCTestCase {
         XCTAssertEqual(sectionItemsModels.events, [
             .next(0, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -532,7 +536,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(1, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -564,7 +568,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(2, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -596,7 +600,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(3, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -628,7 +632,7 @@ final class XConfigsTests: XCTestCase {
             ]),
             .next(4, [
                 .init(section: .main, items: [
-                    .overrideConfig(title: "Override", value: true),
+                    .inAppModification(title: "Enable In-app modification?", value: true),
                     .actionButton(title: "Reset", action: .showResetConfirmation("Are you sure you want to reset these values?")),
                 ]),
                 .init(section: .group(""), items: [
@@ -662,7 +666,7 @@ final class XConfigsTests: XCTestCase {
     }
 
     func testOutputAction() throws {
-        defaultConfigUseCase.isOverriden = true
+        try XConfigs.setInAppModification(enable: true)
 
         let action = scheduler.createObserver(ViewModel.Action.self)
 

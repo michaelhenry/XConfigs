@@ -38,7 +38,7 @@ final class XConfigsViewController: UITableViewController {
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ActionView>.self, for: indexPath)
                 cell.configure(with: title)
                 return cell
-            case let .overrideConfig(title, val):
+            case let .inAppModification(title, val):
                 let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
                 cell.configure(with: (title, val))
                 cell.mainView.valueChangedPublisher

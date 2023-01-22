@@ -4,7 +4,7 @@
   <a href="https://codecov.io/gh/michaelhenry/XConfigs"><img alt="codecov" src="https://codecov.io/gh/michaelhenry/XConfigs/branch/main/graph/badge.svg?token=WLH8VVA19I"/></a>
   <a href="https://github.com/michaelhenry/XConfigs/actions"><img alt="test" src="https://github.com/michaelhenry/XConfigs/actions/workflows/test.yml/badge.svg"></a>
   <a href="https://github.com/michaelhenry/XConfigs/releases/latest"><img alt="release" src="https://img.shields.io/github/v/release/michaelhenry/XConfigs.svg"/></a>
-  <a href="https://developer.apple.com/swift"><img alt="Swift5.7" src="https://img.shields.io/badge/language-Swift5-orange.svg"></a>
+  <a href="https://developer.apple.com/swift"><img alt="Swift5.7" src="https://img.shields.io/badge/language-Swift5.7-orange.svg"></a>
   <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS-green.svg"></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-black.svg"></a>
 </p>
@@ -41,15 +41,15 @@ let kvProvider = SampleKeyValueProvider()
 XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
 ```
 
-Please note that on production build, it is recommended to **DON'T put** any **keyValueStore**, so it will keep using either the value from the **keyValueProvider** or the default value assigned inside the property wrapper as fallback.
+Please note that on production build, it is recommend that the in-app modification is disabled (`option is set to readonly`), so XConfigs will just use either the value from the **keyValueProvider** or the default value assigned inside the property wrapper as fallback.
 
 Eg.
 
 ```swift
 #if DEBUG
-    XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+    XConfigs.configure(with: MockConfigs.self, keyValueProvider: kvProvider, option: .allowInAppModification(UserDefaults.standard))
 #else
-    XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider)
+    XConfigs.configure(with: MockConfigs.self, keyValueProvider: kvProvider, option: .readonly)
 #endif
 ```
 
@@ -92,8 +92,7 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
 For the complete example, please refer to the [Demo](Demo) project which auto-generated the screen(below) using the [AppConfigs.swift](https://github.com/michaelhenry/XConfigs/blob/main/Demo/Demo/AppConfigs.swift) config specification.
 
 
-
-https://user-images.githubusercontent.com/717992/213166918-98539a84-a207-43aa-8e77-e2e562946839.mp4
+https://user-images.githubusercontent.com/717992/213901399-d4429d63-83fb-4770-ac9c-a016e2128084.mp4
 
 
 ## Other Related
@@ -102,7 +101,7 @@ https://user-images.githubusercontent.com/717992/213166918-98539a84-a207-43aa-8e
 
 You can backed [XConfigs](https://github.com/michaelhenry/XConfigs) by [FirebaseRemoteConfig](https://firebase.google.com/docs/remote-config) by simply implementing the [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
 
-TODO: 
+TODO:
 - [ ] Sample implementation
 
 ## LICENSE

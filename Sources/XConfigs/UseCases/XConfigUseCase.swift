@@ -1,19 +1,19 @@
 import Foundation
 
 public class XConfigUseCase {
-    private let isOverridenKey = "XConfigs.Debug.isOverriden"
+    private let isInAppModificationEnabledKey = "XConfigs.Debug.isInAppModificationEnabled"
 
-    var isOverriden: Bool {
+    var isInAppModificationEnabled: Bool {
         get {
-            keyValueStore?.get(for: isOverridenKey) ?? false
+            keyValueStore?.get(for: isInAppModificationEnabledKey) ?? false
         }
 
         set {
-            keyValueStore?.set(value: newValue, for: isOverridenKey)
+            keyValueStore?.set(value: newValue, for: isInAppModificationEnabledKey)
         }
     }
 
-    private let keyValueStore: KeyValueStore?
+    private(set) var keyValueStore: KeyValueStore?
     private let keyValueProvider: KeyValueProvider
     private let configsSpec: XConfigsSpec.Type
     private let logicHandler: XConfigsLogicHandler
@@ -33,16 +33,16 @@ public class XConfigUseCase {
     }
 
     func get<Value: RawStringValueRepresentable>(for key: String, defaultValue: Value, group: XConfigGroup) -> ValueWithPermission<Value> {
-        logicHandler.handle(isOverriden: isOverriden, key: key, defaultValue: defaultValue, group: group, keyValueProvider: keyValueProvider, keyValueStore: keyValueStore)
+        logicHandler.handle(isInAppModificationEnabled: isInAppModificationEnabled, key: key, defaultValue: defaultValue, group: group, keyValueProvider: keyValueProvider, keyValueStore: keyValueStore)
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
-        guard isOverriden else { return }
+        guard isInAppModificationEnabled else { return }
         keyValueStore?.set(value: value, for: key)
     }
 
     func reset() {
-        guard isOverriden else { return }
+        guard isInAppModificationEnabled else { return }
         getConfigs().forEach {
             keyValueStore?.remove(key: $0.configKey)
         }
