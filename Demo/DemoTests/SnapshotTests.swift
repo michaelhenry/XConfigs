@@ -59,6 +59,15 @@ final class SnapshotTests: XCTestCase {
         assertSnapshot(matching: vc, as: .image(precision: 0.95))
     }
 
+    func testShowShortcutFunction() throws {
+        try XConfigs.setInAppModification(enable: true)
+        let hostVC = UIViewController()
+        try XConfigs.show(from: hostVC, animated: false)
+        assertSnapshot(matching: hostVC, as: Snapshotting.windowsImageWithAction {
+            try? XConfigs.show(from: hostVC)
+        })
+    }
+
     // MARK: - Snapshots - Views
 
     func testActionView() throws {

@@ -16,6 +16,7 @@
 		9920819328F844EA009263C5 /* AppConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819228F844EA009263C5 /* AppConfigs.swift */; };
 		992081A0290189BB009263C5 /* MockConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920819D290189BB009263C5 /* MockConfigs.swift */; };
 		992081A429018B1C009263C5 /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 992081A329018B1C009263C5 /* XConfigs */; };
+		997FDA3F297D1326005FFBBF /* Snapshotting+WindowImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997FDA3E297D1326005FFBBF /* Snapshotting+WindowImage.swift */; };
 		998E8BBC2907F99F00B79EEF /* XConfigs in Frameworks */ = {isa = PBXBuildFile; productRef = 998E8BBB2907F99F00B79EEF /* XConfigs */; };
 		999353C5290EDFB700E79302 /* SampleKeyValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */; };
 		999353C72911646400E79302 /* MockKeyValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999353C62911646400E79302 /* MockKeyValueProvider.swift */; };
@@ -49,6 +50,7 @@
 		9920819228F844EA009263C5 /* AppConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigs.swift; sourceTree = "<group>"; };
 		9920819528F8457F009263C5 /* XConfigs */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = XConfigs; path = ..; sourceTree = "<group>"; };
 		9920819D290189BB009263C5 /* MockConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConfigs.swift; sourceTree = "<group>"; };
+		997FDA3E297D1326005FFBBF /* Snapshotting+WindowImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snapshotting+WindowImage.swift"; sourceTree = "<group>"; };
 		999353C4290EDFB700E79302 /* SampleKeyValueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleKeyValueProvider.swift; sourceTree = "<group>"; };
 		999353C62911646400E79302 /* MockKeyValueProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeyValueProvider.swift; sourceTree = "<group>"; };
 		999353C82911647B00E79302 /* MockKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKeyValueStore.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				999353C62911646400E79302 /* MockKeyValueProvider.swift */,
 				999353C82911647B00E79302 /* MockKeyValueStore.swift */,
+				997FDA3E297D1326005FFBBF /* Snapshotting+WindowImage.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				999353C72911646400E79302 /* MockKeyValueProvider.swift in Sources */,
+				997FDA3F297D1326005FFBBF /* Snapshotting+WindowImage.swift in Sources */,
 				9920817328F837DD009263C5 /* XConfigsTests.swift in Sources */,
 				99CD39772902EC92003CE496 /* SnapshotTests.swift in Sources */,
 				999353C92911647B00E79302 /* MockKeyValueStore.swift in Sources */,

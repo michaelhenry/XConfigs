@@ -21,8 +21,8 @@ public struct XConfigs {
         return XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
     }
 
-    public static func show(from vc: UIViewController) throws {
-        vc.present(try configsViewController().wrapInsideNavVC(), animated: true, completion: nil)
+    public static func show(from vc: UIViewController, animated: Bool = true) throws {
+        vc.present(try configsViewController().wrapInsideNavVC(), animated: animated, completion: nil)
     }
 
     public static func setInAppModification(enable: Bool) throws {
