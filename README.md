@@ -41,15 +41,15 @@ let kvProvider = SampleKeyValueProvider()
 XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
 ```
 
-Please note that on production build, it is recommended to **DON'T put** any **keyValueStore**, so it will keep using either the value from the **keyValueProvider** or the default value assigned inside the property wrapper as fallback.
+Please note that on production build, it is recommend that the in-app modification is disabled (`option is set to readonly`), so XConfigs will just use either the value from the **keyValueProvider** or the default value assigned inside the property wrapper as fallback.
 
 Eg.
 
 ```swift
 #if DEBUG
-    XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+    XConfigs.configure(with: MockConfigs.self, keyValueProvider: kvProvider, option: .allowInAppModification(UserDefaults.standard))
 #else
-    XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider)
+    XConfigs.configure(with: MockConfigs.self, keyValueProvider: kvProvider, option: .readonly)
 #endif
 ```
 
@@ -102,7 +102,7 @@ https://user-images.githubusercontent.com/717992/213166918-98539a84-a207-43aa-8e
 
 You can backed [XConfigs](https://github.com/michaelhenry/XConfigs) by [FirebaseRemoteConfig](https://firebase.google.com/docs/remote-config) by simply implementing the [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
 
-TODO: 
+TODO:
 - [ ] Sample implementation
 
 ## LICENSE
