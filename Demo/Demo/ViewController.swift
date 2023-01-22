@@ -22,6 +22,6 @@ class ViewController: UIViewController {
     }
 
     @objc func didTap() {
-        XConfigs.show(from: self)
+        try? XConfigs.show(from: self)
     }
 }

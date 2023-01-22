@@ -11,14 +11,14 @@ public struct ValueWithPermission<Value> {
 }
 
 public protocol XConfigsLogicHandler {
-    func handle<Value: RawStringValueRepresentable>(isOverriden: Bool, key: String, defaultValue: Value, group: XConfigGroup, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore?) -> ValueWithPermission<Value>
+    func handle<Value: RawStringValueRepresentable>(isInAppModificationEnabled: Bool, key: String, defaultValue: Value, group: XConfigGroup, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore?) -> ValueWithPermission<Value>
 }
 
 public struct OverrideFromRemoteLogicHandler: XConfigsLogicHandler {
     public init() {}
 
-    public func handle<Value: RawStringValueRepresentable>(isOverriden: Bool, key: String, defaultValue: Value, group _: XConfigGroup, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore?) -> ValueWithPermission<Value> {
-        guard isOverriden else { return .init(readonly: true, value: keyValueProvider.get(for: key) ?? defaultValue) }
+    public func handle<Value: RawStringValueRepresentable>(isInAppModificationEnabled: Bool, key: String, defaultValue: Value, group _: XConfigGroup, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore?) -> ValueWithPermission<Value> {
+        guard isInAppModificationEnabled else { return .init(readonly: true, value: keyValueProvider.get(for: key) ?? defaultValue) }
         return .init(readonly: false, value: keyValueStore?.get(for: key) ?? keyValueProvider.get(for: key) ?? defaultValue)
     }
 }

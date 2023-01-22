@@ -11,7 +11,7 @@ final class SnapshotTests: XCTestCase {
     override func setUpWithError() throws {
         SnapshotTesting.diffTool = "ksdiff"
         subscriptions = Set<AnyCancellable>()
-        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), keyValueStore: MockKeyValueStore())
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .allowInAppModification(MockKeyValueStore()))
     }
 
     override func tearDownWithError() throws {
@@ -20,22 +20,21 @@ final class SnapshotTests: XCTestCase {
 
     // MARK: - Snapshots ViewControllers
 
-    func testhOverrideDisabled() throws {
-        let vc = XConfigs.configsViewController()
+    func testInAppModificationDisabled() throws {
+        let vc = try XConfigs.configsViewController()
         assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
     }
 
-    func testhOverrideEnabledButWithEmptyKeyValueStore() throws {
-        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), keyValueStore: nil)
-        defaultConfigUseCase.isOverriden = true
-        let vc = XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
+    func testInAppModificationEnabledButWithReadonlyOption() throws {
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .readonly)
+        XCTAssertThrowsError(try XConfigs.setInAppModification(enable: true))
+        XCTAssertThrowsError(try XConfigs.configsViewController())
     }
 
     // BUG: https://github.com/pointfreeco/swift-snapshot-testing/discussions/502
-    func testhOverrideEnabled() throws {
-        defaultConfigUseCase.isOverriden = true
-        let vc = XConfigs.configsViewController()
+    func testInAppModificationEnabled() throws {
+        try XConfigs.setInAppModification(enable: true)
+        let vc = try XConfigs.configsViewController()
         assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
     }
 

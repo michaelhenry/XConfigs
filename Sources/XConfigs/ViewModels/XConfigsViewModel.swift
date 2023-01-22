@@ -13,7 +13,7 @@ struct XConfigsViewModel: ViewModelType {
         case textInput(TextInputModel)
         case optionSelection(OptionSelectionModel)
         case actionButton(title: String, action: Action)
-        case overrideConfig(title: String, value: Bool)
+        case inAppModification(title: String, value: Bool)
         case nameValue(name: String, value: String)
     }
 
@@ -49,7 +49,7 @@ struct XConfigsViewModel: ViewModelType {
         let update = input.updateValuePublisher.map { useCase.set(value: $0.value, for: $0.key) }
         let reload = input.reloadPublisher
         let reset = input.resetPublisher.map { useCase.reset() }
-        let overrideConfig = input.overrideConfigPublisher.map { val in useCase.isOverriden = val }
+        let isInAppModificationEnabled = input.overrideConfigPublisher.map { val in useCase.isInAppModificationEnabled = val }
         let selectionAction = input.selectItemPublisher.compactMap { item -> Action? in
             switch item {
             case let .optionSelection(model):
@@ -68,7 +68,7 @@ struct XConfigsViewModel: ViewModelType {
         let action = Observable.merge(dismissAction, selectionAction)
             .asDriver(onErrorDriveWith: .empty())
 
-        let configs = Observable.merge(update, reload, overrideConfig, reset)
+        let configs = Observable.merge(update, reload, isInAppModificationEnabled, reset)
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
 
@@ -85,9 +85,12 @@ struct XConfigsViewModel: ViewModelType {
 
     // Transform [ConfigInfo] to [SectionItemModel]
     func mapConfigInfosToSectionItemsModels(infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
-        var mainItems: [Item] = [.overrideConfig(title: "Override", value: useCase.isOverriden)]
+        var mainItems: [Item] = [.inAppModification(
+            title: NSLocalizedString("Enable In-app modification?", comment: ""),
+            value: useCase.isInAppModificationEnabled
+        )]
 
-        if useCase.isOverriden {
+        if useCase.isInAppModificationEnabled {
             mainItems.append(.actionButton(
                 title: NSLocalizedString("Reset", comment: ""),
                 action: .showResetConfirmation("Are you sure you want to reset these values?")

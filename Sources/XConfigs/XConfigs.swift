@@ -11,16 +11,42 @@ public struct XConfigs {
         with spec: XConfigsSpec.Type,
         keyValueProvider: KeyValueProvider,
         logicHandler: XConfigsLogicHandler = OverrideFromRemoteLogicHandler(),
-        keyValueStore: KeyValueStore? = nil
+        option: Option = .readonly
     ) {
-        defaultConfigUseCase = XConfigUseCase(spec: spec, keyValueProvider: keyValueProvider, logicHandler: logicHandler, keyValueStore: keyValueStore)
+        defaultConfigUseCase = XConfigUseCase(spec: spec, keyValueProvider: keyValueProvider, logicHandler: logicHandler, keyValueStore: option.kvStore)
     }
 
-    public static func configsViewController() -> UIViewController {
-        XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
+    public static func configsViewController() throws -> UIViewController {
+        guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
+        return XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
     }
 
-    public static func show(from vc: UIViewController) {
-        vc.present(configsViewController().wrapInsideNavVC(), animated: true, completion: nil)
+    public static func show(from vc: UIViewController) throws {
+        vc.present(try configsViewController().wrapInsideNavVC(), animated: true, completion: nil)
+    }
+
+    public static func setInAppModification(enable: Bool) throws {
+        guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
+        defaultConfigUseCase.isInAppModificationEnabled = enable
+    }
+}
+
+public extension XConfigs {
+    enum Option {
+        case allowInAppModification(KeyValueStore)
+        case readonly
+
+        var kvStore: KeyValueStore? {
+            switch self {
+            case let .allowInAppModification(store):
+                return store
+            default:
+                return nil
+            }
+        }
+    }
+
+    enum ConfigError: Error {
+        case inAppModificationIsNotAllowed
     }
 }

@@ -7,7 +7,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let kvProvider = SampleKeyValueProvider()
-        XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, keyValueStore: UserDefaults.standard)
+        XConfigs.configure(with: AppConfigs.self, keyValueProvider: kvProvider, option: .allowInAppModification(UserDefaults.standard))
         kvProvider.download { _ in
             print("is onboarding enabled? \(AppConfigs.shared.isOnboardingEnabled)")
             print("API URL is \(AppConfigs.shared.apiURL)")
