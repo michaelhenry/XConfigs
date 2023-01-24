@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import RxSwift
 import UIKit
 
@@ -76,3 +77,4 @@ final class UIViewTableWrapperCell<MainView: ConfigurableView>: UITableViewCell 
         disposeBag = DisposeBag()
     }
 }
+#endif

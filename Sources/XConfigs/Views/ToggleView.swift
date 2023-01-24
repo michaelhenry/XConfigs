@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import RxCocoa
 import RxSwift
 import UIKit
@@ -49,3 +50,4 @@ final class ToggleView: UIView, ConfigurableView {
         keyLabel.layoutIfNeeded()
     }
 }
+#endif

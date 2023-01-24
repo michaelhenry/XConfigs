@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 final class KeyValueView: UIView, ConfigurableView {
@@ -43,3 +44,4 @@ final class KeyValueView: UIView, ConfigurableView {
         stackview.bindToSuperview(margins: .init(top: 7, left: 20, bottom: 7, right: 20))
     }
 }
+#endif
