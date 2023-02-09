@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Highlightr
 import RxSwift
 import UIKit
@@ -90,3 +91,4 @@ final class InputValueViewController: UIViewController, UITextViewDelegate {
         .disposed(by: disposeBag)
     }
 }
+#endif

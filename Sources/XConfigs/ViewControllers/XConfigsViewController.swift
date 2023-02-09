@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import RxSwift
 import UIKit
 
@@ -193,3 +194,4 @@ final class XConfigsViewController: UITableViewController {
         })
     }
 }
+#endif

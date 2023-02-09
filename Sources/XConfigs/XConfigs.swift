@@ -1,6 +1,8 @@
+#if canImport(UIKit)
+import UIKit
+#endif
 import Combine
 import Foundation
-import UIKit
 
 internal var defaultConfigUseCase: XConfigUseCase!
 
@@ -16,6 +18,7 @@ public struct XConfigs {
         defaultConfigUseCase = XConfigUseCase(spec: spec, keyValueProvider: keyValueProvider, logicHandler: logicHandler, keyValueStore: option.kvStore)
     }
 
+#if canImport(UIKit)
     public static func configsViewController() throws -> UIViewController {
         guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
         return XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
@@ -24,7 +27,7 @@ public struct XConfigs {
     public static func show(from vc: UIViewController, animated: Bool = true) throws {
         vc.present(try configsViewController().wrapInsideNavVC(), animated: animated, completion: nil)
     }
-
+#endif
     public static func setInAppModification(enable: Bool) throws {
         guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
         defaultConfigUseCase.isInAppModificationEnabled = enable

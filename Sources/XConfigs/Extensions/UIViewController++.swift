@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 extension UIViewController {
@@ -16,3 +17,4 @@ extension UIViewController {
         UINavigationController(rootViewController: self)
     }
 }
+#endif

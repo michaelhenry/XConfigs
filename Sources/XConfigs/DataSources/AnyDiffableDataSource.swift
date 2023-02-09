@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import DiffableDataSources
 import Foundation
 import UIKit
@@ -73,3 +74,4 @@ extension Sequence {
         }
     }
 }
+#endif

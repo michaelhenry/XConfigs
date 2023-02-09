@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import DiffableDataSources
 import RxSwift
 import UIKit
@@ -87,3 +88,4 @@ final class OptionViewController: UITableViewController {
         }
     }
 }
+#endif
