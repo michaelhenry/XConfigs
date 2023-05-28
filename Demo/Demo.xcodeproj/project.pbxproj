@@ -562,7 +562,7 @@
 			repositoryURL = "https://github.com/ReactiveX/RxSwift";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 6.5.0;
+				minimumVersion = 6.6.0;
 			};
 		};
 		99CD39732902EC7E003CE496 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
