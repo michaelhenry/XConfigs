@@ -35,21 +35,21 @@ public struct XConfigs {
 }
 
 public extension XConfigs {
-  enum Option {
-    case allowInAppModification(InAppModificationOption)
-    case readonly
+    enum Option {
+        case allowInAppModification(InAppModificationOption)
+        case readonly
 
-    var kvStore: KeyValueStore? {
-      switch self {
-      case let .allowInAppModification(option):
-        return option.store
-      default:
-        return nil
-      }
+        var kvStore: KeyValueStore? {
+            switch self {
+            case let .allowInAppModification(option):
+                return option.store
+            default:
+                return nil
+            }
+        }
     }
-  }
 
-  enum ConfigError: Error {
-    case inAppModificationIsNotAllowed
-  }
+    enum ConfigError: Error {
+        case inAppModificationIsNotAllowed
+    }
 }
