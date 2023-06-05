@@ -29,7 +29,7 @@ final class XConfigsTests: XCTestCase {
         disposeBag = DisposeBag()
         provider = MockKeyValueProvider()
         store = MockKeyValueStore()
-        XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, option: .allowInAppModification(store))
+      XConfigs.configure(with: MockConfigs.self, keyValueProvider: provider, option: .allowInAppModification(.init(store: store)))
 
         let viewModel = XConfigsViewModel()
         output = viewModel.transform(input: .init(
