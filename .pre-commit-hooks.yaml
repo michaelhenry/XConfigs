@@ -1,6 +1,0 @@
--   id: swiftformat
-    name: SwiftFormat
-    description: "format swift files."
-    entry: swiftformat
-    language: swift
-    types: [swift]
