@@ -21,8 +21,9 @@ final class SnapshotTests: XCTestCase {
     // MARK: - Snapshots ViewControllers
 
     func testInAppModificationDisabled() throws {
-        let vc = try XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
+        assertVCSnapshotWithActionFromHost {
+            try? XConfigs.show(from: $0, animated: false)
+        }
     }
 
     func testInAppModificationEnabledButWithReadonlyOption() throws {
@@ -31,41 +32,40 @@ final class SnapshotTests: XCTestCase {
         XCTAssertThrowsError(try XConfigs.configsViewController())
     }
 
-    // BUG: https://github.com/pointfreeco/swift-snapshot-testing/discussions/502
     func testInAppModificationEnabled() throws {
         try XConfigs.setInAppModification(enable: true)
-        let vc = try XConfigs.configsViewController()
-        assertSnapshot(matching: vc.wrapInsideNavVC(), as: .image(precision: 0.95))
+        assertVCSnapshotWithActionFromHost {
+            try? XConfigs.show(from: $0, animated: false)
+        }
     }
 
     func testInputValueViewController() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World", displayName: "Hello"))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image)
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World", displayName: "Hello"))).wrapInsideNavVC().preferAsHalfSheet()
+        assertVCSnapshotWithActionFromHost {
+            $0.present(vc, animated: false)
+        }
     }
 
     func testInputValueViewControllerJSON() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "JSON", value: "{\"name\":\"Kel\", \"city\": \"Melbourne\"        }", displayName: "Contact"))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image)
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "JSON", value: "{\"name\":\"Kel\", \"city\": \"Melbourne\"        }", displayName: "Contact"))).wrapInsideNavVC().preferAsHalfSheet()
+        assertVCSnapshotWithActionFromHost {
+            $0.present(vc, animated: false)
+        }
     }
 
     func testInputValueViewControllerURL() throws {
-        let vc = InputValueViewController(viewModel: .init(model: .init(key: "URL", value: "https://google.com", displayName: "URL"))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image)
+        let vc = InputValueViewController(viewModel: .init(model: .init(key: "URL", value: "https://google.com", displayName: "URL"))).wrapInsideNavVC().preferAsHalfSheet()
+        assertVCSnapshotWithActionFromHost {
+            $0.present(vc, animated: false)
+        }
     }
 
     func testOptionViewController() throws {
         let choices = [1, 2, 3, 4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
-        let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices, displayName: "Name"))).wrapInsideNavVC()
-        assertSnapshot(matching: vc, as: .image(precision: 0.95))
-    }
-
-    func testShowShortcutFunction() throws {
-        try XConfigs.setInAppModification(enable: true)
-        let hostVC = UIViewController()
-        try XConfigs.show(from: hostVC, animated: false)
-        assertSnapshot(matching: hostVC, as: Snapshotting.windowsImageWithAction {
-            try? XConfigs.show(from: hostVC)
-        })
+        let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices, displayName: "Name"))).wrapInsideNavVC().preferAsHalfSheet()
+        assertVCSnapshotWithActionFromHost {
+            $0.present(vc, animated: false)
+        }
     }
 
     // MARK: - Snapshots - Views
@@ -109,4 +109,15 @@ final class SnapshotTests: XCTestCase {
         }
         assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
+
+    private func assertVCSnapshotWithActionFromHost(
+        _ action: @escaping(UIViewController) -> Void,
+        file: StaticString = #file,
+        testName: String = #function,
+        line: UInt = #line) {
+            let hostVC = UIViewController()
+            assertSnapshot(matching: hostVC, as: Snapshotting.windowsImageWithAction {
+                action(hostVC)
+            }, file: file, testName: testName, line: line)
+        }
 }
