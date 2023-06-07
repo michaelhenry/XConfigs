@@ -731,7 +731,7 @@ final class XConfigsTests: XCTestCase {
 
         scheduler
             .createColdObservable([
-                .next(1, .init(key: "environment", value: "stage"))
+                .next(1, .init(key: "environment", value: "stage")),
             ]).bind(to: updateValuePublisher)
             .disposed(by: disposeBag)
 
@@ -805,10 +805,9 @@ final class XConfigsTests: XCTestCase {
                     ], displayName: "Account Type")),
                     .textInput(.init(key: "contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}", displayName: "Contact")),
                 ]),
-            ])
+            ]),
         ])
     }
-
 }
 
 extension XConfigsTests: InAppConfigUpdateDelegate {
