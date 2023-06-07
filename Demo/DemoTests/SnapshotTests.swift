@@ -111,13 +111,14 @@ final class SnapshotTests: XCTestCase {
     }
 
     private func assertVCSnapshotWithActionFromHost(
-        _ action: @escaping(UIViewController) -> Void,
+        _ action: @escaping (UIViewController) -> Void,
         file: StaticString = #file,
         testName: String = #function,
-        line: UInt = #line) {
-            let hostVC = UIViewController()
-            assertSnapshot(matching: hostVC, as: Snapshotting.windowsImageWithAction {
-                action(hostVC)
-            }, file: file, testName: testName, line: line)
-        }
+        line: UInt = #line
+    ) {
+        let hostVC = UIViewController()
+        assertSnapshot(matching: hostVC, as: Snapshotting.windowsImageWithAction {
+            action(hostVC)
+        }, file: file, testName: testName, line: line)
+    }
 }
