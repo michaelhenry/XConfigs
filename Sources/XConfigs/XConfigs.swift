@@ -15,7 +15,13 @@ public struct XConfigs {
         logicHandler: XConfigsLogicHandler = OverrideFromRemoteLogicHandler(),
         option: Option = .readonly
     ) {
-        defaultConfigUseCase = XConfigUseCase(spec: spec, keyValueProvider: keyValueProvider, logicHandler: logicHandler, keyValueStore: option.kvStore)
+        defaultConfigUseCase = XConfigUseCase(
+            spec: spec,
+            keyValueProvider: keyValueProvider,
+            logicHandler: logicHandler,
+            keyValueStore: option.kvStore,
+            updateDelegate: option.updateDelegate
+        )
     }
 
     #if canImport(UIKit)
@@ -36,13 +42,22 @@ public struct XConfigs {
 
 public extension XConfigs {
     enum Option {
-        case allowInAppModification(KeyValueStore)
+        case allowInAppModification(InAppModificationOption)
         case readonly
 
         var kvStore: KeyValueStore? {
             switch self {
-            case let .allowInAppModification(store):
-                return store
+            case let .allowInAppModification(option):
+                return option.store
+            default:
+                return nil
+            }
+        }
+
+        var updateDelegate: InAppConfigUpdateDelegate? {
+            switch self {
+            case let .allowInAppModification(option):
+                return option.updateDelegate
             default:
                 return nil
             }

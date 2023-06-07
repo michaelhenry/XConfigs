@@ -4,10 +4,13 @@ import XCTest
 struct MockConfigs: XConfigsSpec {
     static let shared = Self()
 
+    @XConfig(key: "environment", defaultValue: .dev)
+    var environment: Environment
+
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
 
-    @XConfig(key: "apiURL", defaultValue: URL(string: "https://prod.google.com")!)
+    @XConfig(key: "apiURL", defaultValue: URL(string: "https://dev.google.com")!)
     var apiURL: URL
 
     @XConfig(key: "apiVersion", defaultValue: "v1.2.3")
@@ -90,4 +93,10 @@ struct Contact: RawStringValueRepresentable {
     let phoneNumber: String
 
     static let `default` = Contact(name: "Ken", phoneNumber: "1234 5678")
+}
+
+enum Environment: String, RawStringValueRepresentable, CaseIterable {
+    case dev
+    case stage
+    case prod
 }

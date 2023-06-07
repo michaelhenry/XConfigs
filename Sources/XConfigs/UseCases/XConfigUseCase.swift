@@ -17,13 +17,15 @@ public class XConfigUseCase {
     private let keyValueProvider: KeyValueProvider
     private let configsSpec: XConfigsSpec.Type
     private let logicHandler: XConfigsLogicHandler
+    private let updateDelegate: InAppConfigUpdateDelegate?
 
     // To update the local kv store and remote kv provider, please use the assigned method for it.
-    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, logicHandler: XConfigsLogicHandler, keyValueStore: KeyValueStore?) {
+    init(spec: XConfigsSpec.Type, keyValueProvider: KeyValueProvider, logicHandler: XConfigsLogicHandler, keyValueStore: KeyValueStore?, updateDelegate: InAppConfigUpdateDelegate?) {
         configsSpec = spec
         self.keyValueProvider = keyValueProvider
         self.keyValueStore = keyValueStore
         self.logicHandler = logicHandler
+        self.updateDelegate = updateDelegate
     }
 
     func getConfigs() -> [ConfigInfo] {
@@ -37,7 +39,8 @@ public class XConfigUseCase {
     }
 
     func set<Value: RawStringValueRepresentable>(value: Value, for key: String) {
-        guard isInAppModificationEnabled else { return }
+        guard isInAppModificationEnabled, let store = keyValueStore else { return }
+        updateDelegate?.configWillUpdate(key: key, value: value, store: store)
         keyValueStore?.set(value: value, for: key)
     }
 

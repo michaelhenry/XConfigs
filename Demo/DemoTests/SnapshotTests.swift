@@ -11,7 +11,7 @@ final class SnapshotTests: XCTestCase {
     override func setUpWithError() throws {
         SnapshotTesting.diffTool = "ksdiff"
         subscriptions = Set<AnyCancellable>()
-        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .allowInAppModification(MockKeyValueStore()))
+        XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .allowInAppModification(.init(store: MockKeyValueStore())))
     }
 
     override func tearDownWithError() throws {

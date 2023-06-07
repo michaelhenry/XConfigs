@@ -4,6 +4,9 @@ import XConfigs
 struct AppConfigs: XConfigsSpec {
     static let shared = Self()
 
+    @XConfig(key: "environment", defaultValue: .dev)
+    var environment: Environment
+
     @XConfig(key: "isOnboardingEnabled", defaultValue: false)
     var isOnboardingEnabled: Bool
 
@@ -94,6 +97,12 @@ enum AccountType: Int, CaseIterable, RawStringValueRepresentable, CustomStringCo
             return "Admin"
         }
     }
+}
+
+enum Environment: String, RawStringValueRepresentable, CaseIterable {
+    case dev
+    case stage
+    case prod
 }
 
 struct Contact: RawStringValueRepresentable {
