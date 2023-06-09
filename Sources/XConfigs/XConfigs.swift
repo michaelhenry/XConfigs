@@ -6,8 +6,7 @@ import Foundation
 
 internal var defaultConfigUseCase: XConfigUseCase!
 
-public struct XConfigs {
-    private init() {}
+public enum XConfigs {
 
     public static func configure(
         with spec: XConfigsSpec.Type,
