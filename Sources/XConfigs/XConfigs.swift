@@ -7,7 +7,6 @@ import Foundation
 internal var defaultConfigUseCase: XConfigUseCase!
 
 public enum XConfigs {
-
     public static func configure(
         with spec: XConfigsSpec.Type,
         keyValueProvider: KeyValueProvider,
