@@ -106,6 +106,7 @@ You can backed [XConfigs](https://github.com/michaelhenry/XConfigs) by [Firebase
 Example:
 
 ```swift
+import FirebaseRemoteConfig
 
 struct FirebaseKeyValueProvider: KeyValueProvider {
 
