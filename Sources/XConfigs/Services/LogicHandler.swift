@@ -10,6 +10,7 @@ public struct ValueWithPermission<Value> {
     }
 }
 
+/// A protocol that handles the actual logic for the configuration.
 public protocol XConfigsLogicHandler {
     func handle<Value: RawStringValueRepresentable>(isInAppModificationEnabled: Bool, key: String, defaultValue: Value, group: XConfigGroup, keyValueProvider: KeyValueProvider, keyValueStore: KeyValueStore?) -> ValueWithPermission<Value>
 }

@@ -15,6 +15,7 @@
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
 - [How to use](#how-to-use)
+- [Documentation](#-documentation)
 - [Example](#example)
 - [Other Related](#other-related)
 - [License](#license)
@@ -53,6 +54,10 @@ Eg.
     XConfigs.configure(with: MockConfigs.self, keyValueProvider: kvProvider, option: .readonly)
 #endif
 ```
+
+## 📄 Documentation
+
+Please refer to [XConfigs's docs](https://michaelhenry.github.io/XConfigs/documentation/xconfigs/).
 
 ## Example
 
