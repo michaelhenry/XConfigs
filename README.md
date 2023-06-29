@@ -15,6 +15,7 @@
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
 - [How to use](#how-to-use)
+- [📄 Documentation](#-documentation)
 - [Example](#example)
 - [Other Related](#other-related)
 - [License](#license)
