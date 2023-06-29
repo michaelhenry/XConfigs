@@ -30,7 +30,7 @@ jobs:
           --disable-indexing \
           --transform-for-static-hosting \
           --output-path ./docs \
-          --hosting-base-path XConfigs
+          --hosting-base-path xconfigs
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
