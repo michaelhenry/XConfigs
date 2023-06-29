@@ -1,5 +1,6 @@
 import Foundation
 
+/// A protocol for representing any object or data type into a string or vise versa via `rawString` property.
 public protocol RawStringValueRepresentable: Codable {
     var rawString: String { get }
 
