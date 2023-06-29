@@ -6,6 +6,7 @@
   <a href="https://github.com/michaelhenry/XConfigs/releases/latest"><img alt="release" src="https://img.shields.io/github/v/release/michaelhenry/XConfigs.svg"/></a>
   <a href="https://developer.apple.com/swift"><img alt="Swift5.7" src="https://img.shields.io/badge/language-Swift5.7-orange.svg"></a>
   <a href="https://developer.apple.com"><img alt="Platform" src="https://img.shields.io/badge/platform-iOS-green.svg"></a>
+  <a href="https://developer.apple.com"><img alt="Support" src="https://img.shields.io/badge/support-iOS%2011+-red.svg"></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-black.svg"></a>
 </p>
 
@@ -105,8 +106,45 @@ https://github.com/michaelhenry/XConfigs/assets/717992/2b1ef692-647e-4fb0-aea4-a
 
 You can backed [XConfigs](https://github.com/michaelhenry/XConfigs) by [FirebaseRemoteConfig](https://firebase.google.com/docs/remote-config) by simply implementing the [KeyValueProvider](Sources/XConfigs/Protocols/KeyValueProvider.swift) protocol.
 
-TODO:
-- [ ] Sample implementation
+
+Example:
+
+```swift
+import FirebaseRemoteConfig
+
+struct FirebaseKeyValueProvider: KeyValueProvider {
+
+    private let remoteConfig: RemoteConfig = {
+        let rconfig = RemoteConfig.remoteConfig()
+        let settings = RemoteConfigSettings()
+        settings.minimumFetchInterval = 0
+        rconfig.configSettings = settings
+        return rconfig
+    }()
+    
+    // Please refer to https://firebase.google.com/docs/remote-config/get-started?platform=ios
+    func fetch() {
+        remoteConfig.fetch { (status, error) -> Void in
+            if status == .success {
+                print("Config fetched!")
+                self.remoteConfig.activate { changed, error in
+                    // ...
+                }
+            } else {
+                print("Config not fetched")
+                print("Error: \(error?.localizedDescription ?? "No error available.")")
+            }
+        }
+    }
+
+    // XConfigs KeyValueProvider protocol
+    func get<Value>(for key: String) -> Value? where Value : RawStringValueRepresentable {
+        guard let rawValue = remoteConfig.configValue(forKey: key).stringValue, let value = Value(rawString: rawValue) else { return nil }
+        return value
+    }
+}
+
+```
 
 ## LICENSE
 
