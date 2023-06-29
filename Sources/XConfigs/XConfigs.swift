@@ -7,6 +7,7 @@ import Foundation
 internal var defaultConfigUseCase: XConfigUseCase!
 
 public enum XConfigs {
+    /// Use this method the configure the XConfigs into your app.
     public static func configure(
         with spec: XConfigsSpec.Type,
         keyValueProvider: KeyValueProvider,
@@ -32,6 +33,8 @@ public enum XConfigs {
             try vc.present(configsViewController().wrapInsideNavVC(), animated: animated, completion: nil)
         }
     #endif
+
+    /// A method to allow in-app modification or not.
     public static func setInAppModification(enable: Bool) throws {
         guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
         defaultConfigUseCase.isInAppModificationEnabled = enable
