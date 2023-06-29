@@ -53,6 +53,10 @@ Eg.
 #endif
 ```
 
+## 📄 Documentation
+
+Please refer to [XConfigs's docs](https://michaelhenry.github.io/XConfigs/documentation/xconfigs/).
+
 ## Example
 
 Similar with logger tool such as [swift-log](https://github.com/apple/swift-log), You can simply create a single global variable or just a singleton, as long as the it conforms to [XConfigSpec](Sources/XConfigs/Protocols/XConfigsSpec.swift)ification and then use the `@XConfig` property wrapper inside it.
