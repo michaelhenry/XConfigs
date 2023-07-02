@@ -6,7 +6,9 @@ import Foundation
 
 internal var defaultConfigUseCase: XConfigUseCase!
 
-public enum XConfigs {
+public struct XConfigs {
+    private init() {}
+
     /// Use this method the configure the XConfigs into your app.
     public static func configure(
         with spec: XConfigsSpec.Type,
