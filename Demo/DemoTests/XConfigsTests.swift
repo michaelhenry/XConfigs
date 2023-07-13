@@ -34,6 +34,7 @@ final class XConfigsTests: XCTestCase {
 
         let viewModel = XConfigsViewModel()
         output = viewModel.transform(input: .init(
+            searchPublisher: .just(""),
             reloadPublisher: reloadPublisher,
             updateValuePublisher: updateValuePublisher,
             overrideConfigPublisher: overrideConfigPublisher,

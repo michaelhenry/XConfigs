@@ -18,6 +18,7 @@ struct XConfigsViewModel: ViewModelType {
     }
 
     struct Input {
+        let searchPublisher: Observable<String>
         let reloadPublisher: Observable<Void>
         let updateValuePublisher: Observable<KeyValue>
         let overrideConfigPublisher: Observable<Bool>
@@ -28,6 +29,7 @@ struct XConfigsViewModel: ViewModelType {
 
     struct Output {
         let title: Driver<String>
+        let searchPlaceholderTitle: Driver<String>
         let sectionItemsModels: Driver<[SectionItemsModel<Section, Item>]>
         let action: Driver<Action>
     }
@@ -72,19 +74,25 @@ struct XConfigsViewModel: ViewModelType {
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
 
-        let sectionItemsModels = configs.compactMap(mapConfigInfosToSectionItemsModels)
+        let sectionItemsModels = configs
+            .flatMapLatest { configs -> Observable<[SectionItemsModel<Section, Item>]> in
+                input.searchPublisher.compactMap {
+                    mapConfigInfosToSectionItemsModels(searchText: $0, infos: configs)
+                }
+            }
             .distinctUntilChanged()
             .asDriver(onErrorDriveWith: .empty())
 
         return .init(
             title: .just(NSLocalizedString("🛠Configs", comment: "")),
+            searchPlaceholderTitle: .just(NSLocalizedString("Search", comment: "Search placeholder")),
             sectionItemsModels: sectionItemsModels,
             action: action
         )
     }
 
     // Transform [ConfigInfo] to [SectionItemModel]
-    func mapConfigInfosToSectionItemsModels(infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
+    func mapConfigInfosToSectionItemsModels(searchText: String, infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
         var mainItems: [Item] = [.inAppModification(
             title: NSLocalizedString("Enable In-app modification?", comment: ""),
             value: useCase.isInAppModificationEnabled
@@ -99,15 +107,19 @@ struct XConfigsViewModel: ViewModelType {
 
         var sections = [SectionItemsModel<Section, Item>(section: .main, items: mainItems)]
 
-        let groups = infos.reduce(into: [XConfigGroup: [Item]]()) { group, info in
-            var items = group[info.group] ?? []
-            if let item = mapConfigInfoToItem(info) {
-                items.append(item)
+        let groups = infos
+            .filter {
+                searchText.isEmpty ? true : $0.configKey.range(of: searchText, options: .caseInsensitive) != nil || $0.displayName?.range(of: searchText, options: .caseInsensitive) != nil
             }
-            group[info.group] = items
-        }.sorted {
-            $0.key.sort < $1.key.sort
-        }
+            .reduce(into: [XConfigGroup: [Item]]()) { group, info in
+                var items = group[info.group] ?? []
+                if let item = mapConfigInfoToItem(info) {
+                    items.append(item)
+                }
+                group[info.group] = items
+            }.sorted {
+                $0.key.sort < $1.key.sort
+            }
 
         sections.append(contentsOf: groups.map {
             SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
