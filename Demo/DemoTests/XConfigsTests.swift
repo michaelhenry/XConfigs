@@ -13,6 +13,7 @@ final class XConfigsTests: XCTestCase {
     private var store: MockKeyValueStore!
     private var scheduler: TestScheduler!
 
+    let searchPublisher = BehaviorSubject<String>(value: "")
     let reloadPublisher = PublishSubject<Void>()
     let updateValuePublisher = PublishSubject<KeyValue>()
     let overrideConfigPublisher = PublishSubject<Bool>()
@@ -34,7 +35,7 @@ final class XConfigsTests: XCTestCase {
 
         let viewModel = XConfigsViewModel()
         output = viewModel.transform(input: .init(
-            searchPublisher: .just(""),
+            searchPublisher: searchPublisher,
             reloadPublisher: reloadPublisher,
             updateValuePublisher: updateValuePublisher,
             overrideConfigPublisher: overrideConfigPublisher,
@@ -100,6 +101,72 @@ final class XConfigsTests: XCTestCase {
                 .init(section: .group("Feature 3"), items: [
                     .nameValue(name: "Account Type", value: "Guest"),
                     .nameValue(name: "Contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}"),
+                ]),
+            ]),
+        ])
+    }
+
+    func testFilter() throws {
+        try XConfigs.setInAppModification(enable: false)
+        let title = scheduler.createObserver(String.self)
+        let sectionItemsModels = scheduler.createObserver([SecItemsModel].self)
+
+        output.title.drive(title).disposed(by: disposeBag)
+        output.sectionItemsModels.drive(sectionItemsModels).disposed(by: disposeBag)
+
+        // MARK: INPUTS
+
+        scheduler
+            .createColdObservable([
+                .next(0, ()),
+            ]).bind(to: reloadPublisher)
+            .disposed(by: disposeBag)
+
+        scheduler
+            .createColdObservable([
+                .next(1, "env"),
+            ]).bind(to: searchPublisher)
+            .disposed(by: disposeBag)
+
+        scheduler.start()
+
+        // MARK: OUTPUTS
+
+        XCTAssertEqual(sectionItemsModels.events, [
+            .next(0, [
+                .init(section: .main, items: [
+                    .inAppModification(title: "Enable In-app modification?", value: false),
+                ]),
+                .init(section: .group(""), items: [
+                    .nameValue(name: "environment", value: "dev"),
+                    .nameValue(name: "isOnboardingEnabled", value: "false"),
+                    .nameValue(name: "apiURL", value: "https://dev.google.com"),
+                    .nameValue(name: "apiVersion", value: "v1.2.3"),
+                    .nameValue(name: "region", value: "north"),
+                    .nameValue(name: "maxRetry", value: "10"),
+                    .nameValue(name: "threshold", value: "1"),
+                    .nameValue(name: "rate", value: "2.5"),
+                    .nameValue(name: "tags", value: "apple,banana,mango"),
+                ]),
+                .init(section: .group("Feature 1"), items: [
+                    .nameValue(name: "maxScore", value: "100"),
+                    .nameValue(name: "maxRate", value: "1.0"),
+                ]),
+                .init(section: .group("Feature 2"), items: [
+                    .nameValue(name: "height", value: "44.0"),
+                    .nameValue(name: "width", value: "320.0"),
+                ]),
+                .init(section: .group("Feature 3"), items: [
+                    .nameValue(name: "Account Type", value: "Guest"),
+                    .nameValue(name: "Contact", value: "{\"name\":\"Ken\",\"phoneNumber\":\"1234 5678\"}"),
+                ]),
+            ]),
+            .next(1, [
+                .init(section: .main, items: [
+                    .inAppModification(title: "Enable In-app modification?", value: false),
+                ]),
+                .init(section: .group(""), items: [
+                    .nameValue(name: "environment", value: "dev"),
                 ]),
             ]),
         ])
