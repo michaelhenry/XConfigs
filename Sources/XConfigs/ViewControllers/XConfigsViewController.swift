@@ -57,6 +57,10 @@
             return ds
         }()
 
+        private lazy var searchController = UISearchController(searchResultsController: nil).apply {
+            $0.obscuresBackgroundDuringPresentation = false
+        }
+
         init(viewModel: XConfigsViewModel) {
             self.viewModel = viewModel
             if #available(iOS 13.0, *) {
@@ -75,8 +79,13 @@
             super.viewDidLoad()
             let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: nil)
             navigationItem.rightBarButtonItem = doneButton
-            setupTableView()
+            setupUI()
             handleViewModelOutput()
+        }
+
+        private func setupUI() {
+            navigationItem.searchController = searchController
+            setupTableView()
         }
 
         private func setupTableView() {
@@ -97,6 +106,7 @@
             guard let doneButton = navigationItem.rightBarButtonItem else { return }
             let output = viewModel.transform(
                 input: .init(
+                    searchPublisher: searchController.searchBar.rx.text.asObservable().compactMap { $0 }.startWith(""),
                     reloadPublisher: .just(()),
                     updateValuePublisher: updateValueSubject,
                     overrideConfigPublisher: overrideConfigSubject,
@@ -109,17 +119,15 @@
                     dismissPublisher: doneButton.rx.tap.map { _ in () }
                 ))
 
+            output.searchPlaceholderTitle.drive(searchController.searchBar.rx.placeholder).disposed(by: disposeBag)
+            output.title.drive(rx.title).disposed(by: disposeBag)
+
             output.sectionItemsModels
                 .drive(onNext: { [weak self] secItems in
                     guard let self else { return }
                     self.datasource.applyAnySnapshot(secItems.anySnapshot(), animatingDifferences: self.shouldAnimate)
                 })
                 .disposed(by: disposeBag)
-
-            output.title.drive(onNext: { [weak self] title in
-                self?.title = title
-            })
-            .disposed(by: disposeBag)
 
             output.action.drive(onNext: { [weak self] action in
                 self?.handleAction(action)
