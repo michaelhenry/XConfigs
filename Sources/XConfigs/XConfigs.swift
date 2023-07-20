@@ -1,7 +1,6 @@
 #if canImport(UIKit)
     import UIKit
 #endif
-import Combine
 import Foundation
 
 internal var defaultConfigUseCase: XConfigUseCase!

@@ -3,6 +3,8 @@ import CombineExt
 import Foundation
 import Prettier_swift
 
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
 struct InputValueViewModel: ViewModelType {
     struct Input {
         let textPublisher: AnyPublisher<String, Never>
