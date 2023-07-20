@@ -2,6 +2,8 @@ import Combine
 import CombineExt
 import Foundation
 
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
 struct OptionViewModel: ViewModelType {
     typealias Section = String?
 

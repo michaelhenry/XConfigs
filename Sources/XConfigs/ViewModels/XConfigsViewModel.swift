@@ -2,6 +2,8 @@ import Combine
 import CombineExt
 import Foundation
 
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
 struct XConfigsViewModel: ViewModelType {
     enum Section: Hashable {
         case main
@@ -150,6 +152,8 @@ struct XConfigsViewModel: ViewModelType {
     }
 }
 
+@available(macOS 10.15, *)
+@available(iOS 13.0, *)
 extension XConfigsViewModel.Section: CustomStringConvertible {
     var description: String {
         switch self {

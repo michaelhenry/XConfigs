@@ -1,7 +1,9 @@
-import UIKit
+#if canImport(UIKit)
+    import UIKit
 
-final class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<Section, Item> {
-    override func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
-        (snapshot().sectionIdentifiers[section] as? CustomStringConvertible)?.description
+    final class TableViewDataSource<Section: Hashable, Item: Hashable>: UITableViewDiffableDataSource<Section, Item> {
+        override func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
+            (snapshot().sectionIdentifiers[section] as? CustomStringConvertible)?.description
+        }
     }
-}
+#endif

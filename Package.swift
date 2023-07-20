@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1"),
-        .package(url: "https://github.com/CombineCommunity/CombineCocoa", from: "0.4.1"),
+        .package(url: "https://github.com/michaelhenry/CombineCocoa", from: "1.0.1"),
         .package(url: "https://github.com/michaelhenry/Prettier.swift", from: "1.1.1"),
         .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
