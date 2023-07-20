@@ -1,4 +1,4 @@
-import DiffableDataSources
+import Foundation
 
 struct SectionItemsModel<Section: Hashable, Item: Hashable>: Hashable {
     var section: Section

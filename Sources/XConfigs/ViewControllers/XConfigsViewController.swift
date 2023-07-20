@@ -1,16 +1,17 @@
 #if canImport(UIKit)
-    import RxSwift
+    import Combine
+    import CombineCocoa
     import UIKit
 
     final class XConfigsViewController: UITableViewController {
         typealias ViewModel = XConfigsViewModel
-        typealias DataSource = AnyDiffableDataSource<ViewModel.Section, ViewModel.Item>
+        typealias DataSource = TableViewDataSource<ViewModel.Section, ViewModel.Item>
 
         private let viewModel: ViewModel
-        private var disposeBag = DisposeBag()
-        private var updateValueSubject = PublishSubject<KeyValue>()
-        private var overrideConfigSubject = PublishSubject<Bool>()
-        private var resetSubject = PublishSubject<Void>()
+        private var subscriptions = Set<AnyCancellable>()
+        private var updateValueSubject = PassthroughSubject<KeyValue, Never>()
+        private var overrideConfigSubject = PassthroughSubject<Bool, Never>()
+        private var resetSubject = PassthroughSubject<Void, Never>()
         private var shouldAnimate = false
 
         private lazy var datasource: DataSource = {
@@ -22,8 +23,8 @@
                     cell.configure(with: (vm.displayName, vm.value))
                     cell.mainView.valueChangedPublisher
                         .map { KeyValue(key: vm.key, value: $0) }
-                        .bind(to: self.updateValueSubject)
-                        .disposed(by: cell.disposeBag)
+                        .subscribe(self.updateValueSubject)
+                        .store(in: &cell.subscriptions)
                     cell.selectionStyle = .none
                     return cell
                 case let .textInput(vm):
@@ -43,8 +44,8 @@
                     let cell = tableView.dequeueCell(UIViewTableWrapperCell<ToggleView>.self, for: indexPath)
                     cell.configure(with: (title, val))
                     cell.mainView.valueChangedPublisher
-                        .bind(to: self.overrideConfigSubject)
-                        .disposed(by: cell.disposeBag)
+                        .subscribe(self.overrideConfigSubject)
+                        .store(in: &cell.subscriptions)
                     cell.selectionStyle = .none
                     return cell
                 case let .nameValue(name, val):
@@ -54,6 +55,7 @@
                     return cell
                 }
             }
+            ds.defaultRowAnimation = .fade
             return ds
         }()
 
@@ -106,33 +108,33 @@
             guard let doneButton = navigationItem.rightBarButtonItem else { return }
             let output = viewModel.transform(
                 input: .init(
-                    searchPublisher: searchController.searchBar.rx.text.asObservable().compactMap { $0 }.startWith(""),
-                    reloadPublisher: .just(()),
-                    updateValuePublisher: updateValueSubject,
-                    overrideConfigPublisher: overrideConfigSubject,
-                    resetPublisher: resetSubject,
-                    selectItemPublisher: tableView.rx.itemSelected.compactMap { [weak self] indexPath -> ViewModel.Item? in
+                    searchPublisher: searchController.searchBar.textDidChangePublisher.prepend("").eraseToAnyPublisher(),
+                    reloadPublisher: Just(()).eraseToAnyPublisher(),
+                    updateValuePublisher: updateValueSubject.eraseToAnyPublisher(),
+                    overrideConfigPublisher: overrideConfigSubject.eraseToAnyPublisher(),
+                    resetPublisher: resetSubject.eraseToAnyPublisher(),
+                    selectItemPublisher: tableView.didSelectRowPublisher.compactMap { [weak self] indexPath -> ViewModel.Item? in
                         guard let self = self else { return nil }
                         self.tableView.deselectRow(at: indexPath, animated: false)
                         return self.datasource.itemIdentifier(for: indexPath)
-                    },
-                    dismissPublisher: doneButton.rx.tap.map { _ in () }
+                    }.eraseToAnyPublisher(),
+                    dismissPublisher: doneButton.tapPublisher
                 ))
 
-            output.searchPlaceholderTitle.drive(searchController.searchBar.rx.placeholder).disposed(by: disposeBag)
-            output.title.drive(rx.title).disposed(by: disposeBag)
+            output.searchPlaceholderTitle.compactMap { $0 }.assign(to: \UISearchBar.placeholder, on: searchController.searchBar).store(in: &subscriptions)
+            output.title.compactMap { $0 }.assign(to: \UIViewController.title, on: self).store(in: &subscriptions)
 
             output.sectionItemsModels
-                .drive(onNext: { [weak self] secItems in
-                    guard let self else { return }
-                    self.datasource.applyAnySnapshot(secItems.anySnapshot(), animatingDifferences: self.shouldAnimate)
-                })
-                .disposed(by: disposeBag)
+                .sink { [weak self] secItems in
+                    guard let self = self else { return }
+                    self.datasource.apply(secItems.snapshot(), animatingDifferences: self.shouldAnimate)
+                }
+                .store(in: &subscriptions)
 
-            output.action.drive(onNext: { [weak self] action in
+            output.action.sink { [weak self] action in
                 self?.handleAction(action)
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &subscriptions)
         }
 
         private func handleAction(_ action: ViewModel.Action) {
@@ -144,7 +146,7 @@
             case let .showResetConfirmation(title):
                 let alertConfirmation = UIAlertController(title: title, message: nil, preferredStyle: .alert)
                 alertConfirmation.addAction(.init(title: "Reset", style: .destructive, handler: { [weak self] _ in
-                    self?.resetSubject.onNext(())
+                    self?.resetSubject.send(())
                 }))
                 alertConfirmation.addAction(.init(title: "Cancel", style: .cancel))
                 present(alertConfirmation, animated: true)
@@ -157,8 +159,8 @@
             let textInputVC = InputValueViewController(viewModel: .init(model: model))
             textInputVC.valuePublisher
                 .map { KeyValue(key: model.key, value: $0) }
-                .bind(to: updateValueSubject)
-                .disposed(by: disposeBag)
+                .subscribe(updateValueSubject)
+                .store(in: &subscriptions)
             present(textInputVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
         }
 
@@ -166,12 +168,11 @@
             let optionVC = OptionViewController(viewModel: .init(model: model))
             optionVC.selectedItemPublisher
                 .map { KeyValue(key: model.key, value: $0) }
-                .bind(to: updateValueSubject)
-                .disposed(by: disposeBag)
+                .subscribe(updateValueSubject)
+                .store(in: &subscriptions)
             present(optionVC.wrapInsideNavVC().preferAsHalfSheet(), animated: true)
         }
 
-        @available(iOS 13.0, *)
         override func tableView(_: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point _: CGPoint) -> UIContextMenuConfiguration? {
             guard let item = datasource.itemIdentifier(for: indexPath) else { return nil }
             switch item {
@@ -186,7 +187,6 @@
             }
         }
 
-        @available(iOS 13.0, *)
         private func createCopyAction(_ value: String) -> UIAction {
             let copyAction = UIAction(title: "Copy \"\(value)\"") { _ in
                 let pasteboard = UIPasteboard.general

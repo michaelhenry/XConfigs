@@ -1,6 +1,7 @@
 #if canImport(UIKit)
-    import RxCocoa
-    import RxSwift
+    import Combine
+    import CombineCocoa
+    import CombineExt
     import UIKit
 
     final class ToggleView: UIView, ConfigurableView {
@@ -12,8 +13,8 @@
             $0.numberOfLines = 0
         }
 
-        var valueChangedPublisher: Observable<Bool> {
-            switchView.rx.controlEvent(.valueChanged).map { self.switchView.isOn }
+        var valueChangedPublisher: AnyPublisher<Bool, Never> {
+            switchView.controlEventPublisher(for: .valueChanged).map { self.switchView.isOn }.eraseToAnyPublisher()
         }
 
         init() {

@@ -94,6 +94,7 @@ public extension RawStringValueRepresentable where Self: Codable {
 
     var rawString: String {
         let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
         guard let data = try? encoder.encode(self), let str = String(data: data, encoding: .utf8) else { return "" }
         return str
     }

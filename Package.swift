@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "XConfigs",
     platforms: [
-        .iOS(.v11),
+        .iOS(.v14),
     ],
     products: [
         .library(
@@ -15,8 +15,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/ReactiveX/RxSwift", from: "6.6.0"),
-        .package(url: "https://github.com/ra1028/DiffableDataSources", from: "0.5.0"),
+        .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1"),
+        .package(url: "https://github.com/CombineCommunity/CombineCocoa", from: "0.4.1"),
         .package(url: "https://github.com/michaelhenry/Prettier.swift", from: "1.1.1"),
         .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
@@ -25,9 +25,8 @@ let package = Package(
         .target(
             name: "XConfigs",
             dependencies: [
-                .product(name: "RxSwift", package: "RxSwift"),
-                .product(name: "RxCocoa", package: "RxSwift"),
-                .product(name: "DiffableDataSources", package: "DiffableDataSources"),
+                .product(name: "CombineExt", package: "CombineExt"),
+                .product(name: "CombineCocoa", package: "CombineCocoa"),
                 .product(name: "Prettier_swift", package: "Prettier.swift"),
                 .product(name: "Highlightr", package: "Highlightr"),
             ]
