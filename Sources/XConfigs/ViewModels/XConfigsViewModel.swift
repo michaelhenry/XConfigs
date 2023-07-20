@@ -1,6 +1,6 @@
+import Combine
+import CombineExt
 import Foundation
-import RxCocoa
-import RxSwift
 
 struct XConfigsViewModel: ViewModelType {
     enum Section: Hashable {
@@ -18,20 +18,20 @@ struct XConfigsViewModel: ViewModelType {
     }
 
     struct Input {
-        let searchPublisher: Observable<String>
-        let reloadPublisher: Observable<Void>
-        let updateValuePublisher: Observable<KeyValue>
-        let overrideConfigPublisher: Observable<Bool>
-        let resetPublisher: Observable<Void>
-        let selectItemPublisher: Observable<Item>
-        let dismissPublisher: Observable<Void>
+        let searchPublisher: AnyPublisher<String, Never>
+        let reloadPublisher: AnyPublisher<Void, Never>
+        let updateValuePublisher: AnyPublisher<KeyValue, Never>
+        let overrideConfigPublisher: AnyPublisher<Bool, Never>
+        let resetPublisher: AnyPublisher<Void, Never>
+        let selectItemPublisher: AnyPublisher<Item, Never>
+        let dismissPublisher: AnyPublisher<Void, Never>
     }
 
     struct Output {
-        let title: Driver<String>
-        let searchPlaceholderTitle: Driver<String>
-        let sectionItemsModels: Driver<[SectionItemsModel<Section, Item>]>
-        let action: Driver<Action>
+        let title: AnyPublisher<String, Never>
+        let searchPlaceholderTitle: AnyPublisher<String, Never>
+        let sectionItemsModels: AnyPublisher<[SectionItemsModel<Section, Item>], Never>
+        let action: AnyPublisher<Action, Never>
     }
 
     enum Action: Hashable {
@@ -67,25 +67,24 @@ struct XConfigsViewModel: ViewModelType {
 
         let dismissAction = input.dismissPublisher.map { _ in Action.dismiss }
 
-        let action = Observable.merge(dismissAction, selectionAction)
-            .asDriver(onErrorDriveWith: .empty())
+        let action = Publishers.Merge(dismissAction, selectionAction).eraseToAnyPublisher()
 
-        let configs = Observable.merge(update, reload, isInAppModificationEnabled, reset)
+        let configs = Publishers.Merge4(update, reload, isInAppModificationEnabled, reset)
             .map { _ in useCase.getConfigs() }
             .share(replay: 1)
 
         let sectionItemsModels = configs
-            .flatMapLatest { configs -> Observable<[SectionItemsModel<Section, Item>]> in
+            .flatMapLatest { configs -> AnyPublisher<[SectionItemsModel<Section, Item>], Never> in
                 input.searchPublisher.compactMap {
                     mapConfigInfosToSectionItemsModels(searchText: $0, infos: configs)
-                }
+                }.eraseToAnyPublisher()
             }
-            .distinctUntilChanged()
-            .asDriver(onErrorDriveWith: .empty())
+            .removeAllDuplicates()
+            .eraseToAnyPublisher()
 
         return .init(
-            title: .just(NSLocalizedString("🛠Configs", comment: "")),
-            searchPlaceholderTitle: .just(NSLocalizedString("Search", comment: "Search placeholder")),
+            title: Just(NSLocalizedString("🛠Configs", comment: "")).eraseToAnyPublisher(),
+            searchPlaceholderTitle: Just(NSLocalizedString("Search", comment: "Search placeholder")).eraseToAnyPublisher(),
             sectionItemsModels: sectionItemsModels,
             action: action
         )

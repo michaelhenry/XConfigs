@@ -1,6 +1,7 @@
 #if canImport(UIKit)
+    import Combine
+    import CombineCocoa
     import Highlightr
-    import RxSwift
     import UIKit
 
     final class InputValueViewController: UIViewController, UITextViewDelegate {
@@ -21,12 +22,12 @@
         }
 
         private let viewModel: ViewModel
-        private var disposeBag = DisposeBag()
+        private var subscriptions = Set<AnyCancellable>()
 
-        private var textSubject = PublishSubject<String>()
+        private var textSubject = PassthroughSubject<String, Never>()
 
-        var valuePublisher: Observable<String> {
-            textSubject
+        var valuePublisher: AnyPublisher<String, Never> {
+            textSubject.eraseToAnyPublisher()
         }
 
         init(viewModel: ViewModel) {
@@ -46,16 +47,9 @@
         }
 
         private func setupUI() {
-            if #available(iOS 14.0, *) {
-                navigationItem.rightBarButtonItem = .init(systemItem: .done)
-                navigationItem.leftBarButtonItem = .init(systemItem: .cancel)
-            } else {
-                navigationItem.rightBarButtonItem = .init(title: "Done", style: .done, target: self, action: nil)
-                navigationItem.leftBarButtonItem = .init(title: "Cancel", style: .plain, target: self, action: nil)
-            }
-            if #available(iOS 13.0, *) {
-                view.backgroundColor = .systemBackground
-            }
+            navigationItem.rightBarButtonItem = .init(systemItem: .done)
+            navigationItem.leftBarButtonItem = .init(systemItem: .cancel)
+            view.backgroundColor = .systemBackground
             view.addSubview(textView)
             textView.bindToSuperview(margins: .init(top: 20, left: 20, bottom: 20, right: 5))
         }
@@ -65,30 +59,30 @@
                   let rightNavITem = navigationItem.rightBarButtonItem
             else { return }
             let output = viewModel.transform(input: .init(
-                textPublisher: textView.rx.text.compactMap { $0 }.asObservable(),
-                dismissPublisher: leftNavItem.rx.tap.asObservable(),
-                donePublisher: rightNavITem.rx.tap.asObservable()
+                textPublisher: textView.textPublisher.compactMap { $0 }.eraseToAnyPublisher(),
+                dismissPublisher: leftNavItem.tapPublisher,
+                donePublisher: rightNavITem.tapPublisher
             ))
-            output.title.drive(onNext: { [weak self] title in
+            output.title.sink { [weak self] title in
                 self?.title = title
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &subscriptions)
 
-            output.value.drive(onNext: { [weak self] value in
+            output.value.sink { [weak self] value in
                 self?.textView.text = value
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &subscriptions)
 
-            output.action.drive(onNext: { [weak self] action in
+            output.action.sink { [weak self] action in
                 switch action {
                 case .cancel:
                     self?.dismiss(animated: true)
                 case let .done(text):
-                    self?.textSubject.onNext(text)
+                    self?.textSubject.send(text)
                     self?.dismiss(animated: true)
                 }
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &subscriptions)
         }
     }
 #endif

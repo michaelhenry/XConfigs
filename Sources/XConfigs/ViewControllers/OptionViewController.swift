@@ -1,18 +1,17 @@
 #if canImport(UIKit)
-    import DiffableDataSources
-    import RxSwift
+    import Combine
     import UIKit
 
     final class OptionViewController: UITableViewController {
         typealias ViewModel = OptionViewModel
-        typealias DataSource = AnyDiffableDataSource<ViewModel.Section, ViewModel.Item>
+        typealias DataSource = UITableViewDiffableDataSource<ViewModel.Section, ViewModel.Item>
 
         private let viewModel: ViewModel
-        private var disposeBag = DisposeBag()
+        private var subscriptions = Set<AnyCancellable>()
 
-        private let itemSubject = PublishSubject<String>()
-        var selectedItemPublisher: Observable<String> {
-            itemSubject
+        private let itemSubject = PassthroughSubject<String, Never>()
+        var selectedItemPublisher: AnyPublisher<String, Never> {
+            itemSubject.eraseToAnyPublisher()
         }
 
         private lazy var datasource: DataSource = {
@@ -22,6 +21,7 @@
                 cell.textLabel?.text = item.displayName
                 return cell
             }
+            ds.defaultRowAnimation = .fade
             return ds
         }()
 
@@ -44,48 +44,47 @@
         private func handleViewModelOutput() {
             guard let leftNavItem = navigationItem.leftBarButtonItem else { return }
             let output = viewModel.transform(input: .init(
-                reloadPublisher: .just(()),
-                dismissPublisher: leftNavItem.rx.tap.map { _ in () }.asObservable(),
-                selectItemPublisher: tableView.rx.itemSelected.compactMap { [weak self] indexPath -> ViewModel.Item? in
+                reloadPublisher: Just(()).eraseToAnyPublisher(),
+                dismissPublisher: leftNavItem.tapPublisher,
+                selectItemPublisher: tableView.didSelectRowPublisher.compactMap { [weak self] indexPath -> ViewModel.Item? in
                     guard let self = self else { return nil }
                     return self.datasource.itemIdentifier(for: indexPath)
-                }
+                }.eraseToAnyPublisher()
             ))
 
-            output.title.drive(onNext: { [weak self] title in
+            output.title.sink { [weak self] title in
                 self?.title = title
-            })
-            .disposed(by: disposeBag)
+            }
+            .store(in: &subscriptions)
 
             output.sectionItemsModels
-                .drive(onNext: { [weak self] secItems in
+                .sink { [weak self] secItems in
                     guard let self = self else { return }
-                    self.datasource.applyAnySnapshot(secItems.anySnapshot(), animatingDifferences: false)
-                })
-                .disposed(by: disposeBag)
+                    self.datasource.apply(secItems.snapshot(), animatingDifferences: false)
+                }
+                .store(in: &subscriptions)
 
             output.action
-                .drive(onNext: { [weak self] action in
+                .sink { [weak self] action in
                     guard let self = self else { return }
                     switch action {
                     case .cancel:
                         self.dismiss(animated: true)
                     case let .select(item):
-                        self.itemSubject.onNext(item.value)
+                        self.itemSubject.send(item.value)
                         self.dismiss(animated: true)
                     }
-                })
-                .disposed(by: disposeBag)
+                }
+                .store(in: &subscriptions)
+        }
+
+        override func tableView(_: UITableView, didSelectRowAt _: IndexPath) {
+            dismiss(animated: true)
         }
 
         private func setupUI() {
             tableView.registerCell(UITableViewCell.self)
-
-            if #available(iOS 14.0, *) {
-                navigationItem.leftBarButtonItem = .init(systemItem: .cancel)
-            } else {
-                navigationItem.leftBarButtonItem = .init(title: "Cancel", style: .plain, target: self, action: nil)
-            }
+            navigationItem.leftBarButtonItem = .init(systemItem: .cancel)
         }
     }
 #endif
