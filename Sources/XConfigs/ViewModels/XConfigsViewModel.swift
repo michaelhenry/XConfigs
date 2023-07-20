@@ -79,7 +79,6 @@ struct XConfigsViewModel: ViewModelType {
                     mapConfigInfosToSectionItemsModels(searchText: $0, infos: configs)
                 }.eraseToAnyPublisher()
             }
-            .removeAllDuplicates()
             .eraseToAnyPublisher()
 
         return .init(
