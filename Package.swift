@@ -17,7 +17,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1"),
         .package(url: "https://github.com/CombineCommunity/CombineCocoa", from: "0.4.1"),
-        .package(url: "https://github.com/ra1028/DiffableDataSources", from: "0.5.0"),
         .package(url: "https://github.com/michaelhenry/Prettier.swift", from: "1.1.1"),
         .package(url: "https://github.com/raspu/Highlightr", from: "2.1.2"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
@@ -28,7 +27,6 @@ let package = Package(
             dependencies: [
                 .product(name: "CombineExt", package: "CombineExt"),
                 .product(name: "CombineCocoa", package: "CombineCocoa"),
-                .product(name: "DiffableDataSources", package: "DiffableDataSources"),
                 .product(name: "Prettier_swift", package: "Prettier.swift"),
                 .product(name: "Highlightr", package: "Highlightr"),
             ]

@@ -20,24 +20,6 @@
         }
       },
       {
-        "package": "DiffableDataSources",
-        "repositoryURL": "https://github.com/ra1028/DiffableDataSources",
-        "state": {
-          "branch": null,
-          "revision": "a457cf63456b3aeec2a3626af0230c98b0733927",
-          "version": "0.5.0"
-        }
-      },
-      {
-        "package": "DifferenceKit",
-        "repositoryURL": "https://github.com/ra1028/DifferenceKit.git",
-        "state": {
-          "branch": null,
-          "revision": "62745d7780deef4a023a792a1f8f763ec7bf9705",
-          "version": "1.2.0"
-        }
-      },
-      {
         "package": "Highlightr",
         "repositoryURL": "https://github.com/raspu/Highlightr",
         "state": {
