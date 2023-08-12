@@ -32,7 +32,7 @@ jobs:
           ${{ env.DERIVEDDATA_PATH }}/SourcePackages/checkouts/
         key: ${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
 
-    - run: set -o pipefail && xcodebuild test -project Demo/Demo.xcodeproj -scheme Demo -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13' -enableCodeCoverage YES -derivedDataPath ${{ env.DERIVEDDATA_PATH }} | xcpretty
+    - run: set -o pipefail && xcodebuild test -project Demo/Demo.xcodeproj -scheme Demo -configuration Debug -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 14' -enableCodeCoverage YES -derivedDataPath ${{ env.DERIVEDDATA_PATH }} | xcpretty
     - uses: michaelhenry/swifty-code-coverage@v1.0.1
       with:
         build-path: ${{ env.DERIVEDDATA_PATH }}
