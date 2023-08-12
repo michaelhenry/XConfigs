@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "CombineCocoa",
-        "repositoryURL": "https://github.com/CombineCommunity/CombineCocoa",
+        "repositoryURL": "https://github.com/michaelhenry/CombineCocoa",
         "state": {
           "branch": null,
-          "revision": "7300c75ff9e072aa7fd0fccefcc88f74aae9bf56",
-          "version": "0.4.1"
+          "revision": "67ced1e40b4277e0743b9eaf56b556b99b9561b3",
+          "version": "1.0.1"
         }
       },
       {
