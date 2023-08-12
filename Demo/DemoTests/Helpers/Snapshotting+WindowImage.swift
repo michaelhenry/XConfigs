@@ -3,8 +3,8 @@ import SnapshotTesting
 import UIKit
 
 extension Snapshotting where Value: UIViewController, Format == UIImage {
-  static func windowsImageWithAction(precision: Float = 0.98, action: @escaping () -> Void) -> Snapshotting {
-      Snapshotting<UIImage, UIImage>.image(precision: precision).asyncPullback { vc in
+    static func windowsImageWithAction(precision: Float = 0.98, action: @escaping () -> Void) -> Snapshotting {
+        Snapshotting<UIImage, UIImage>.image(precision: precision).asyncPullback { vc in
             Async<UIImage> { callback in
                 UIView.setAnimationsEnabled(false)
                 let window = UIApplication.shared.windows[0]
