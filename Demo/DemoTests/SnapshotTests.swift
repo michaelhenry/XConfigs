@@ -14,10 +14,6 @@ final class SnapshotTests: XCTestCase {
         XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .allowInAppModification(.init(store: MockKeyValueStore())))
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     // MARK: - Snapshots ViewControllers
 
     func testInAppModificationDisabled() throws {
@@ -111,14 +107,15 @@ final class SnapshotTests: XCTestCase {
     }
 
     private func assertVCSnapshotWithActionFromHost(
+        timeout: TimeInterval = 10,
         _ action: @escaping (UIViewController) -> Void,
         file: StaticString = #file,
         testName: String = #function,
         line: UInt = #line
     ) {
         let hostVC = UIViewController()
-        assertSnapshot(matching: hostVC, as: Snapshotting.windowsImageWithAction {
+        assertSnapshot(matching: hostVC, as: .windowsImageWithAction {
             action(hostVC)
-        }, file: file, testName: testName, line: line)
+        }, timeout: timeout, file: file, testName: testName, line: line)
     }
 }
