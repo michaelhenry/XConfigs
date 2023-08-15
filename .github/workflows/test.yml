@@ -17,7 +17,7 @@ concurrency:
 env:
   SNAPSHOT_ARTIFACTS: "/tmp/SNAPSHOTS"
   DERIVEDDATA_PATH: "/tmp/DerivedData"
-  DEVELOPER_DIR: "/Applications/Xcode_14.3.app"
+  DEVELOPER_DIR: "/Applications/Xcode_14.3.1.app"
 
 jobs:
   build:
