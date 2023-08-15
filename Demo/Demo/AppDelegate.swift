@@ -1,7 +1,7 @@
 import UIKit
 import XConfigs
 
-@UIApplicationMain
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
