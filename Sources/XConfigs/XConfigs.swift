@@ -3,7 +3,7 @@
 #endif
 import Foundation
 
-internal var defaultConfigUseCase: XConfigUseCase!
+var defaultConfigUseCase: XConfigUseCase!
 
 public struct XConfigs {
     private init() {}
