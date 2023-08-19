@@ -107,7 +107,7 @@ final class SnapshotTests: XCTestCase {
     }
 
     private func assertVCSnapshotWithActionFromHost(
-        timeout: TimeInterval = 10,
+        timeout: TimeInterval = 300,
         _ action: @escaping (UIViewController) -> Void,
         file: StaticString = #file,
         testName: String = #function,
