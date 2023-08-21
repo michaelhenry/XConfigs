@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "main"
+    tags:
+     - "*"
 
 permissions:
   contents: read
@@ -24,11 +26,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Generate Documentation
         run: |
-          swift package --allow-writing-to-directory ./docs \
+          swift package --allow-writing-to-directory "./docs/${GITHUB_REF}" \
           generate-documentation --target XConfigs \
           --disable-indexing \
           --transform-for-static-hosting \
-          --output-path ./docs \
+          --output-path "./docs/${GITHUB_REF}" \
           --hosting-base-path XConfigs
 
       - name: Setup Pages
