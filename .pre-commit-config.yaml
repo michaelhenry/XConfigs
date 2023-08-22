@@ -1,5 +1,5 @@
 repos:
 - repo: https://github.com/nicklockwood/SwiftFormat
-  rev: 0.52.0
+  rev: 0.52.2
   hooks:
     - id: swiftformat
