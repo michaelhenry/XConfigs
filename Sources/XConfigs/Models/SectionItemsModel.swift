@@ -17,6 +17,7 @@ extension SectionItemsModel: Equatable {
 
 #if canImport(UIKit)
     import UIKit
+
     extension Sequence {
         @available(iOS 13.0, *)
         func snapshot<Section: Hashable, Item: Hashable>() -> NSDiffableDataSourceSnapshot<Section, Item> where Element == SectionItemsModel<Section, Item> {

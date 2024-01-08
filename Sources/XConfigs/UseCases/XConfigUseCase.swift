@@ -51,8 +51,8 @@ public class XConfigUseCase {
     /// Reset the store (needed for the in-app modification).
     func reset() {
         guard isInAppModificationEnabled else { return }
-        getConfigs().forEach {
-            keyValueStore?.remove(key: $0.configKey)
+        for getConfig in getConfigs() {
+            keyValueStore?.remove(key: getConfig.configKey)
         }
     }
 }
