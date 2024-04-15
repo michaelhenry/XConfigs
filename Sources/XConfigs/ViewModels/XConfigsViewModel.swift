@@ -122,7 +122,7 @@ struct XConfigsViewModel: ViewModelType {
             }
 
         sections.append(contentsOf: groups.map {
-            SectionItemsModel<Section, Item>.init(section: .group($0.key.name), items: $0.value)
+            SectionItemsModel<Section, Item>(section: .group($0.key.name), items: $0.value)
         })
         return sections
     }
