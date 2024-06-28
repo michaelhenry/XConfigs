@@ -1,5 +1,4 @@
-#if canImport(UIKit)
-    import UIKit
+import UIKit
 
     final class ActionView: UIView, ConfigurableView {
         typealias ViewModel = String
@@ -23,13 +22,12 @@
         }
 
         func configure(with viewModel: ViewModel) {
-            keyLabel.text = viewModel
-        }
-
-        private func setupUI() {
-            translatesAutoresizingMaskIntoConstraints = false
-            addSubview(keyLabel)
-            keyLabel.bindToSuperview(margins: .init(top: 7, left: 20, bottom: 7, right: 20))
-        }
+        keyLabel.text = viewModel
     }
-#endif
+
+    private func setupUI() {
+        translatesAutoresizingMaskIntoConstraints = false
+        addSubview(keyLabel)
+        keyLabel.bindToSuperview(margins: .init(top: 7, left: 20, bottom: 7, right: 20))
+    }
+}

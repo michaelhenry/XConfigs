@@ -7,14 +7,16 @@ extension Snapshotting where Value: UIViewController, Format == UIImage {
         Snapshotting<UIImage, UIImage>.image(precision: precision).asyncPullback { vc in
             Async<UIImage> { callback in
                 UIView.setAnimationsEnabled(false)
-                let window = UIApplication.shared.windows[0]
+                guard let window = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first?.windows.first else { return }
                 window.rootViewController = vc
                 action()
                 DispatchQueue.main.async {
+
                     let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
                         window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
                     }
                     callback(image)
+                    window.rootViewController = UIViewController()
                     UIView.setAnimationsEnabled(true)
                 }
             }

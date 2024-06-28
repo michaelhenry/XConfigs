@@ -1,6 +1,5 @@
-#if canImport(UIKit)
-    import UIKit
-#endif
+
+import UIKit
 import Foundation
 
 var defaultConfigUseCase: XConfigUseCase!
@@ -24,16 +23,14 @@ public struct XConfigs {
         )
     }
 
-    #if canImport(UIKit)
-        public static func configsViewController() throws -> UIViewController {
-            guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
-            return XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
-        }
+    public static func configsViewController() throws -> UIViewController {
+        guard defaultConfigUseCase.keyValueStore != nil else { throw ConfigError.inAppModificationIsNotAllowed }
+        return XConfigsViewController(viewModel: .init(useCase: defaultConfigUseCase))
+    }
 
-        public static func show(from vc: UIViewController, animated: Bool = true) throws {
-            try vc.present(configsViewController().wrapInsideNavVC(), animated: animated, completion: nil)
-        }
-    #endif
+    public static func show(from vc: UIViewController, animated: Bool = true) throws {
+        try vc.present(configsViewController().wrapInsideNavVC(), animated: animated, completion: nil)
+    }
 
     /// A method to allow in-app modification or not.
     public static func setInAppModification(enable: Bool) throws {

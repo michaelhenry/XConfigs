@@ -1,4 +1,5 @@
 import Foundation
+import UIKit.NSDiffableDataSourceSectionSnapshot
 
 struct SectionItemsModel<Section: Hashable, Item: Hashable>: Hashable {
     var section: Section
@@ -15,16 +16,12 @@ extension SectionItemsModel: Equatable {
 
 // MARK: - SectionItemsModel + NSDiffableDataSourceSnapshot
 
-#if canImport(UIKit)
-    import UIKit
-
-    extension Sequence {
-        @available(iOS 13.0, *)
-        func snapshot<Section: Hashable, Item: Hashable>() -> NSDiffableDataSourceSnapshot<Section, Item> where Element == SectionItemsModel<Section, Item> {
-            reduce(into: NSDiffableDataSourceSnapshot<Section, Item>()) { snapshot, sectionModel in
-                snapshot.appendSections([sectionModel.section])
-                snapshot.appendItems(sectionModel.items, toSection: sectionModel.section)
-            }
+extension Sequence {
+    @available(iOS 13.0, *)
+    func snapshot<Section: Hashable, Item: Hashable>() -> NSDiffableDataSourceSnapshot<Section, Item> where Element == SectionItemsModel<Section, Item> {
+        reduce(into: NSDiffableDataSourceSnapshot<Section, Item>()) { snapshot, sectionModel in
+            snapshot.appendSections([sectionModel.section])
+            snapshot.appendItems(sectionModel.items, toSection: sectionModel.section)
         }
     }
-#endif
+}
