@@ -1,4 +1,3 @@
-import Combine
 import Foundation
 import SnapshotTesting
 import XCTest
@@ -6,11 +5,14 @@ import XCTest
 
 final class SnapshotTests: XCTestCase {
     typealias ViewModel = XConfigsViewModel
-    private var subscriptions: Set<AnyCancellable>!
 
     override func setUpWithError() throws {
-        subscriptions = Set<AnyCancellable>()
+        try super.setUpWithError()
         XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .allowInAppModification(.init(store: MockKeyValueStore())))
+    }
+
+    override func tearDownWithError() throws {
+        try super.tearDownWithError()
     }
 
     // MARK: - Snapshots ViewControllers
@@ -106,7 +108,7 @@ final class SnapshotTests: XCTestCase {
     }
 
     private func assertVCSnapshotWithActionFromHost(
-        timeout: TimeInterval = 300,
+        timeout: TimeInterval = 2,
         _ action: @escaping (UIViewController) -> Void,
         file: StaticString = #file,
         testName: String = #function,

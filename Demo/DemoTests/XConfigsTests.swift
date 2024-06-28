@@ -24,6 +24,7 @@ final class XConfigsTests: XCTestCase {
     private let envChoices = ["dev", "stage", "prod"].map { Choice(displayName: $0, value: $0) }
 
     override func setUpWithError() throws {
+        try super.setUpWithError()
         subscriptions = .init()
         provider = MockKeyValueProvider()
         store = MockKeyValueStore()
