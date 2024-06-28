@@ -1,6 +1,6 @@
 
-import UIKit
 import Foundation
+import UIKit
 
 var defaultConfigUseCase: XConfigUseCase!
 

@@ -11,7 +11,6 @@ extension Snapshotting where Value: UIViewController, Format == UIImage {
                 window.rootViewController = vc
                 action()
                 DispatchQueue.main.async {
-
                     let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
                         window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
                     }
