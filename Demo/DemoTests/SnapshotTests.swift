@@ -9,7 +9,6 @@ final class SnapshotTests: XCTestCase {
     private var subscriptions: Set<AnyCancellable>!
 
     override func setUpWithError() throws {
-        SnapshotTesting.diffTool = "ksdiff"
         subscriptions = Set<AnyCancellable>()
         XConfigs.configure(with: MockConfigs.self, keyValueProvider: MockKeyValueProvider(), option: .allowInAppModification(.init(store: MockKeyValueStore())))
     }
