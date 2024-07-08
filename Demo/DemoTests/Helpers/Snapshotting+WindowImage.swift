@@ -17,6 +17,7 @@ extension Snapshotting where Value: UIViewController, Format == UIImage {
                     callback(image)
                     UIView.setAnimationsEnabled(true)
                 }
+                window.removeFromSuperview()
             }
         }
     }
