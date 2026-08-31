@@ -119,7 +119,8 @@
                         return self.datasource.itemIdentifier(for: indexPath)
                     }.eraseToAnyPublisher(),
                     dismissPublisher: doneButton.tapPublisher
-                ))
+                )
+            )
 
             output.searchPlaceholderTitle.compactMap { $0 }.assign(to: \UISearchBar.placeholder, on: searchController.searchBar).store(in: &subscriptions)
             output.title.compactMap { $0 }.assign(to: \UIViewController.title, on: self).store(in: &subscriptions)
@@ -188,11 +189,10 @@
         }
 
         private func createCopyAction(_ value: String) -> UIAction {
-            let copyAction = UIAction(title: "Copy \"\(value)\"") { _ in
+            UIAction(title: "Copy \"\(value)\"") { _ in
                 let pasteboard = UIPasteboard.general
                 pasteboard.string = value
             }
-            return copyAction
         }
 
         @available(iOS 13.0, *)

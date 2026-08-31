@@ -2,7 +2,7 @@
     import Combine
     import UIKit
 
-    // Provide a default `reuseIdentifier` equal to the class name.
+    /// Provide a default `reuseIdentifier` equal to the class name.
     private extension UITableViewCell {
         static var reuseIdentifier: String {
             String(describing: self)

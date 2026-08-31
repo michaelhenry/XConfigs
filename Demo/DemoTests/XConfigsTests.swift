@@ -49,7 +49,7 @@ final class XConfigsTests: XCTestCase {
         ))
     }
 
-    func testTitles() throws {
+    func testTitles() {
         var title = ""
         var searchPlaceholderTitle = ""
         output.title.sink { title = $0 }.store(in: &subscriptions)
