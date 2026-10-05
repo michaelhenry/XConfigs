@@ -7,11 +7,7 @@ struct SectionItemsModel<Section: Hashable, Item: Hashable>: Hashable {
 
 // MARK: Equatable
 
-extension SectionItemsModel: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.section == rhs.section && lhs.items == rhs.items
-    }
-}
+extension SectionItemsModel: Equatable {}
 
 // MARK: - SectionItemsModel + NSDiffableDataSourceSnapshot
 

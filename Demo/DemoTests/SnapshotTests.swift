@@ -13,7 +13,7 @@ final class SnapshotTests: XCTestCase {
 
     // MARK: - Snapshots ViewControllers
 
-    func testInAppModificationDisabled() throws {
+    func testInAppModificationDisabled() {
         assertVCSnapshotWithActionFromHost {
             try? XConfigs.show(from: $0, animated: false)
         }
@@ -32,28 +32,28 @@ final class SnapshotTests: XCTestCase {
         }
     }
 
-    func testInputValueViewController() throws {
+    func testInputValueViewController() {
         let vc = InputValueViewController(viewModel: .init(model: .init(key: "Hello", value: "World", displayName: "Hello"))).wrapInsideNavVC().preferAsHalfSheet()
         assertVCSnapshotWithActionFromHost {
             $0.present(vc, animated: false)
         }
     }
 
-    func testInputValueViewControllerJSON() throws {
+    func testInputValueViewControllerJSON() {
         let vc = InputValueViewController(viewModel: .init(model: .init(key: "JSON", value: "{\"name\":\"Kel\", \"city\": \"Melbourne\"        }", displayName: "Contact"))).wrapInsideNavVC().preferAsHalfSheet()
         assertVCSnapshotWithActionFromHost {
             $0.present(vc, animated: false)
         }
     }
 
-    func testInputValueViewControllerURL() throws {
+    func testInputValueViewControllerURL() {
         let vc = InputValueViewController(viewModel: .init(model: .init(key: "URL", value: "https://google.com", displayName: "URL"))).wrapInsideNavVC().preferAsHalfSheet()
         assertVCSnapshotWithActionFromHost {
             $0.present(vc, animated: false)
         }
     }
 
-    func testOptionViewController() throws {
+    func testOptionViewController() {
         let choices = [1, 2, 3, 4].map { "Value\($0)" }.map { Choice(displayName: $0, value: $0) }
         let vc = OptionViewController(viewModel: .init(model: .init(key: "Name", value: "Value1", choices: choices, displayName: "Name"))).wrapInsideNavVC().preferAsHalfSheet()
         assertVCSnapshotWithActionFromHost {
@@ -63,7 +63,7 @@ final class SnapshotTests: XCTestCase {
 
     // MARK: - Snapshots - Views
 
-    func testActionView() throws {
+    func testActionView() {
         let view = ActionView().apply {
             $0.configure(with: "Action name")
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
@@ -71,7 +71,7 @@ final class SnapshotTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
-    func testKeyValueView() throws {
+    func testKeyValueView() {
         let view = KeyValueView().apply {
             $0.configure(with: ("Name", "Value"))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
@@ -79,7 +79,7 @@ final class SnapshotTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
-    func testKeyValueViewWithLongValue() throws {
+    func testKeyValueViewWithLongValue() {
         let view = KeyValueView().apply {
             $0.configure(with: ("Name", "This a long value. Lorem ipsum sit dolor amet."))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
@@ -87,7 +87,7 @@ final class SnapshotTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
-    func testToggleView() throws {
+    func testToggleView() {
         let view = ToggleView().apply {
             $0.configure(with: ("Name", false))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
@@ -95,7 +95,7 @@ final class SnapshotTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(precision: 0.95))
     }
 
-    func testToggleViewWithOnValue() throws {
+    func testToggleViewWithOnValue() {
         let view = ToggleView().apply {
             $0.configure(with: ("Name", true))
             $0.widthAnchor.constraint(equalToConstant: 320).isActive = true
