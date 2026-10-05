@@ -80,8 +80,8 @@ enum Region: String, CaseIterable, RawStringValueRepresentable {
     case west
 }
 
-// Wanna make it more readable instead of just showing integer values?
-// Then conform to `CustomStringConvertible`
+/// Wanna make it more readable instead of just showing integer values?
+/// Then conform to `CustomStringConvertible`
 enum AccountType: Int, CaseIterable, RawStringValueRepresentable, CustomStringConvertible {
     case guest = 0
     case member = 1

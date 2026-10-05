@@ -91,7 +91,7 @@ struct XConfigsViewModel: ViewModelType {
         )
     }
 
-    // Transform [ConfigInfo] to [SectionItemModel]
+    /// Transform [ConfigInfo] to [SectionItemModel]
     func mapConfigInfosToSectionItemsModels(searchText: String, infos: [ConfigInfo]) -> [SectionItemsModel<Section, Item>] {
         var mainItems: [Item] = [.inAppModification(
             title: NSLocalizedString("Enable In-app modification?", comment: ""),
@@ -127,7 +127,7 @@ struct XConfigsViewModel: ViewModelType {
         return sections
     }
 
-    // Transform ConfigInfo to Item
+    /// Transform ConfigInfo to Item
     func mapConfigInfoToItem(_ info: ConfigInfo) -> Item? {
         guard !info.readonly else {
             var value = info.configValue.rawString
